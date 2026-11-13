@@ -103,6 +103,12 @@
       .x-appt[data-t="lesion"] { border-left-color: var(--x-les); }
       .x-appt[data-t="estetica"] { border-left-color: var(--x-est); }
       .x-appt--hl { box-shadow: 0 0 0 2px var(--x-accent); }
+      .x-appt { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+      .x-appt--src { opacity: .35; }
+      .x-ghost { position: fixed; z-index: 9999; pointer-events: none; margin: 0; box-shadow: 0 10px 28px rgba(80,50,30,.28); transform: scale(1.03); }
+      .x-slot.is-drop .x-slot__c { outline: 2px dashed var(--x-accent); outline-offset: 2px; border-radius: var(--r-s); background: rgba(196,106,74,.08); }
+      .x-slot.is-nodrop .x-slot__c { outline: 2px dashed #b9a99a; outline-offset: 2px; border-radius: var(--r-s); opacity: .6; }
+      body.is-dragging { overflow: hidden; }
       .x-appt__top { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
       .x-appt__top b { font: var(--type-body-strong); }
       .x-meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font: var(--type-caption); color: var(--x-ink2); }
@@ -423,6 +429,7 @@ V.agenda = function () {
   h += "</div>";
   var cs = citasDe(S.dia);
   h += '<div class="x-dayhead"><p class="x-fine">' + fechaCorta(S.dia) + " · " + cs.length + " pacientes</p>" + (cs.length ? '<button class="x-btn" data-act="atrasar">⏱ Atrasar</button>' : "") + "</div>";
+  if (cs.length) h += '<p class="x-fine" style="margin:4px 0 0">☝️ Mantén presionado un paciente y arrástralo a otra hora libre.</p>';
   h += '<div class="x-tl">';
   bloques().forEach(function (hh) {
     var inner = "";
@@ -431,7 +438,7 @@ V.agenda = function () {
       inner += '<button class="x-appt' + (c.id === S.hl ? " x-appt--hl" : "") + '" data-t="' + p.tipo + '" data-act="cita" data-id="' + c.id + '"><span class="x-appt__top"><b>' + esc(p.nom) + "</b>" + estadoChip(c.estado) + '</span><span class="x-meta">' + c.hora + " · " + badge(p.tipo) + " Sesión " + c.n + " de " + p.plan + "</span></button>";
     });
     if (!inner) inner = '<div class="x-free"><span>Libre</span><button class="x-add" data-act="nueva" data-h="' + hh + '" aria-label="Agendar a las ' + hh + '">+</button></div>';
-    h += '<div class="x-slot"><span class="x-slot__h">' + hh + '</span><div class="x-slot__c">' + inner + "</div></div>";
+    h += '<div class="x-slot" data-h="' + hh + '"><span class="x-slot__h">' + hh + '</span><div class="x-slot__c">' + inner + "</div></div>";
   });
   return h + '<div class="x-slot"><span class="x-slot__h">' + deMin(DIA_FIN) + '</span><div class="x-free"><span>Cierre</span></div></div></div>';
 };
@@ -962,6 +969,58 @@ function hojaEnviarA(tid) {
     return '<a class="x-li" href="' + waApp(wa(p.tel, conNombre(t.txt, p))) + '" data-act="close"><b>' + esc(p.nom) + '</b><span class="x-btn x-btn--wa">Enviar</span><span class="x-meta">' + badge(p.tipo) + " " + esc(p.det) + "</span></a>";
   }).join("") + "</div>");
 }
+
+
+/* ---------- arrastrar citas con el dedo ---------- */
+(function () {
+  var D = null, timer = null, sx = 0, sy = 0, justDragged = 0;
+  function pt(e) { var t = e.touches ? (e.touches[0] || e.changedTouches[0]) : e; return { x: t.clientX, y: t.clientY }; }
+  function slotAt(x, y) { D.ghost.style.display = "none"; var n = document.elementFromPoint(x, y); D.ghost.style.display = ""; return n && n.closest ? n.closest(".x-slot[data-h]") : null; }
+  function libreEn(h) { return !citasDe(S.dia).some(function (c) { return c.id !== D.c.id && hslot(c.hora) === h; }); }
+  function start(e) {
+    if (e.button > 0 || S.vista !== "agenda") return;
+    var a = e.target.closest && e.target.closest(".x-appt[data-id]"); if (!a) return;
+    var p = pt(e); sx = p.x; sy = p.y; clearTimeout(timer);
+    timer = setTimeout(function () { timer = null; begin(a, p); }, 380);
+  }
+  function begin(a, p) {
+    var c = S.citas.filter(function (x) { return x.id === a.dataset.id; })[0]; if (!c) return;
+    var r = a.getBoundingClientRect(), g = a.cloneNode(true);
+    g.classList.add("x-ghost"); g.style.width = r.width + "px"; g.style.left = r.left + "px"; g.style.top = r.top + "px";
+    document.body.appendChild(g); a.classList.add("x-appt--src"); document.body.classList.add("is-dragging");
+    D = { c: c, a: a, ghost: g, dx: sx - r.left, dy: sy - r.top, over: null };
+    if (navigator.vibrate) navigator.vibrate(15);
+  }
+  function move(e) {
+    var p = pt(e);
+    if (!D) { if (timer && (Math.abs(p.x - sx) > 8 || Math.abs(p.y - sy) > 8)) { clearTimeout(timer); timer = null; } return; }
+    if (e.cancelable) e.preventDefault();
+    D.ghost.style.left = (p.x - D.dx) + "px"; D.ghost.style.top = (p.y - D.dy) + "px";
+    var s = slotAt(p.x, p.y);
+    if (D.over && D.over !== s) D.over.classList.remove("is-drop", "is-nodrop");
+    D.over = s; if (s) s.classList.add(libreEn(s.dataset.h) ? "is-drop" : "is-nodrop");
+    var H = window.innerHeight; if (p.y < 80) window.scrollBy(0, -14); else if (p.y > H - 100) window.scrollBy(0, 14);
+  }
+  function end() {
+    clearTimeout(timer); timer = null; if (!D) return;
+    var s = D.over, c = D.c;
+    D.ghost.remove(); D.a.classList.remove("x-appt--src"); document.body.classList.remove("is-dragging");
+    if (s) s.classList.remove("is-drop", "is-nodrop");
+    var ok = s && libreEn(s.dataset.h); D = null; justDragged = Date.now();
+    if (!s) return;
+    var h = s.dataset.h; if (h === hslot(c.hora)) return;
+    if (!ok) { toast("Esa hora está ocupada"); return; }
+    var r = { pid: c.pid, ant: c.hora, nueva: h, fAnt: c.fecha, fNueva: c.fecha };
+    c.hora = h; c.estado = "pend"; S.hl = c.id; render(); setTimeout(function () { S.hl = null; }, 4000); hojaAvisar([r], "Hora movida · avisar");
+    toast(pac(c.pid).nom.split(" ")[0] + " movida a las " + h);
+  }
+  document.addEventListener("touchstart", start, { passive: true });
+  document.addEventListener("touchmove", move, { passive: false });
+  document.addEventListener("touchend", end); document.addEventListener("touchcancel", end);
+  document.addEventListener("mousedown", start); document.addEventListener("mousemove", move); document.addEventListener("mouseup", end);
+  document.addEventListener("click", function (e) { if (Date.now() - justDragged < 600) { e.stopPropagation(); e.preventDefault(); } }, true);
+  document.addEventListener("contextmenu", function (e) { if (D || (e.target.closest && e.target.closest(".x-appt"))) e.preventDefault(); });
+})();
 
 /* ---------- render y eventos ---------- */
 function render() {
