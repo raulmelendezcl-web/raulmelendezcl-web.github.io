@@ -1,0 +1,1360 @@
+<!doctype html>
+<html lang="es-CL">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Essencia" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="theme-color" content="#fbf3ea" />
+    <meta name="color-scheme" content="light only" />
+    <link rel="apple-touch-icon" sizes="512x512" href="essencia_icon_512.jpg" />
+    <link rel="icon" type="image/jpeg" href="essencia_icon_512.jpg" />
+    <title>Essencia Agenda</title>
+    <link rel="stylesheet" href="hark.css" />
+    <style>
+      /* Warm, light palette for the whole app, in every theme */
+      :root, :root[data-theme="light"], :root[data-theme="dark"] {
+        color-scheme: light;
+        --x-bg: #fbf3ea;
+        --x-card: #fffaf4;
+        --x-ink: #4a3428;
+        --x-ink2: #7a5a48;
+        --x-line: #ead8c6;
+        --x-accent: #9c4a35;
+        --x-accent-soft: #f6e1d6;
+        --x-on-accent: #fffaf4;
+        --x-les: #6b5a2e;
+        --x-les-soft: #f1e8d2;
+        --x-est: #a3445a;
+        --x-est-soft: #f8e3e4;
+        --x-amber: #8a5300;
+        --x-amber-soft: #fbecd4;
+        --x-ok: #2f6b3a;
+        --x-ok-soft: #e6f0dc;
+        --x-rent: #f3e7da;
+        --x-wa: #25d366;
+        --x-wa-ink: #06301a;
+        --x-mauve: #9c4f86;
+        --hover-wash: #9c4a3514;
+        --text-primary: #4a3428;
+        --text-secondary: #7a5a48;
+        --fill-primary: #9c4a35;
+        --text-primary-on: #fffaf4;
+        --fill-primary-on: #fbf3ea;
+        --fill-tertiary: #f3e7da;
+        --stroke-primary: #dcc3ad;
+        --stroke-secondary: #ead8c6;
+        --fill-system-red: #b23a2a;
+      }
+      html, body { background: var(--x-bg); color: var(--x-ink); }
+      ::selection { background: #f1cdbd; color: #4a3428; }
+      button, input, select, textarea { font: inherit; color: inherit; }
+      input, select, textarea { font-size: 16px; }
+      .x-app { max-width: 480px; margin: 0 auto; min-height: 100dvh; position: relative; background: var(--x-bg); }
+      @media (min-width: 520px) { .x-app { box-shadow: 0 0 0 1px var(--x-line); } }
+
+      .x-top { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 10px; padding: calc(10px + env(safe-area-inset-top)) 16px 10px; background: color-mix(in srgb, var(--x-bg) 88%, transparent); -webkit-backdrop-filter: var(--hark-blur); backdrop-filter: var(--hark-blur); border-bottom: 1px solid var(--x-line); }
+      .x-top img { width: 44px; height: 44px; border-radius: 10px; object-fit: cover; }
+      .x-top__t { flex: 1; display: grid; min-width: 0; }
+      .x-mv { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+      .x-mv li { display: grid; gap: 4px; padding: 10px 12px; border: 1px solid var(--x-line); border-radius: var(--r-s); background: var(--x-card); }
+      .x-mv__top { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+      .x-mv__t { font: var(--type-label); white-space: nowrap; }
+      .x-mv__t s { color: var(--x-ink2); }
+      .x-mv__w { font: var(--type-caption); color: var(--x-amber); }
+      .x-btn.is-avisado { background: var(--x-ok-soft); border-color: transparent; color: var(--x-ok); }
+      .x-dayhead { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+      .x-top__t b { font: var(--type-heading); letter-spacing: 0.06em; color: var(--x-ink); }
+      .x-top__t small { font: var(--type-caption); color: var(--x-ink2); }
+      .x-icon { min-width: var(--tap); min-height: var(--tap); border: 0; background: transparent; border-radius: var(--r-pill); cursor: pointer; font: var(--type-label); color: var(--x-ink2); }
+      .x-icon:hover { background: var(--hover-wash); }
+
+      .x-view { padding: 16px 16px calc(130px + env(safe-area-inset-bottom)); display: grid; gap: 16px; }
+      .x-view h2 { font: var(--type-heading); }
+      .x-fine { font: var(--type-caption); color: var(--x-ink2); }
+      .x-label { font: var(--type-tag); color: var(--x-ink2); text-transform: uppercase; letter-spacing: 0.06em; }
+
+      .x-banner { display: flex; align-items: center; gap: 8px; padding: 6px 6px 6px 14px; border-radius: var(--r-s); background: var(--x-accent-soft); font: var(--type-small); }
+      .x-banner span { flex: 1; }
+      .x-card { background: var(--x-card); border: 1px solid var(--x-line); border-radius: var(--r-m); padding: 14px; display: grid; gap: 10px; }
+      .x-sum p { font: var(--type-body); }
+
+      .x-btn { min-height: var(--tap); padding: 0 16px; border-radius: var(--r-pill); border: 1px solid var(--x-line); background: var(--x-card); font: var(--type-label); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none; }
+      .x-btn:hover { box-shadow: inset 0 0 0 100px var(--hover-wash); }
+      .x-btn--accent { background: var(--x-accent); border-color: var(--x-accent); color: var(--x-on-accent); }
+      .x-btn--wa { background: var(--x-wa); border-color: var(--x-wa); color: var(--x-wa-ink); }
+      .x-btn--big { min-height: 54px; width: 100%; font: var(--type-body-strong); }
+      .x-btn--danger { color: var(--fill-system-red); }
+      .x-row { display: flex; gap: 8px; flex-wrap: wrap; }
+      .x-row > .x-btn { flex: 1; }
+
+      .x-days { display: flex; gap: 8px; overflow-x: auto; margin-inline: -16px; padding: 2px 16px; scrollbar-width: none; }
+      .x-days button { flex: none; min-height: var(--tap); padding: 0 14px; border-radius: var(--r-pill); border: 1px solid var(--x-line); background: var(--x-card); font: var(--type-label); cursor: pointer; }
+      .x-days button[aria-pressed="true"] { background: var(--x-accent); border-color: var(--x-accent); color: var(--x-on-accent); }
+
+      .x-tl { display: grid; }
+      .x-slot { display: grid; grid-template-columns: 52px 1fr; gap: 10px; padding: 6px 0; border-top: 1px solid var(--x-line); min-height: 58px; }
+      .x-slot__h { font: var(--type-label); color: var(--x-ink2); padding-top: 8px; font-variant-numeric: tabular-nums; }
+      .x-slot__c { display: grid; gap: 6px; }
+      .x-appt { text-align: left; width: 100%; border: 1px solid var(--x-line); border-left: 4px solid var(--x-accent); background: var(--x-card); border-radius: var(--r-s); padding: 10px 12px; cursor: pointer; display: grid; gap: 6px; }
+      .x-appt[data-t="lesion"] { border-left-color: var(--x-les); }
+      .x-appt[data-t="estetica"] { border-left-color: var(--x-est); }
+      .x-appt--hl { box-shadow: 0 0 0 2px var(--x-accent); }
+      .x-appt__top { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+      .x-appt__top b { font: var(--type-body-strong); }
+      .x-meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font: var(--type-caption); color: var(--x-ink2); }
+      .x-free { display: flex; align-items: center; justify-content: space-between; color: var(--x-ink2); font: var(--type-small); padding-left: 2px; }
+      .x-add { width: var(--tap); height: var(--tap); border-radius: 50%; border: 1px dashed var(--x-line); background: transparent; font-size: 20px; color: var(--x-accent); cursor: pointer; }
+
+      .x-b { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: var(--r-pill); font: var(--type-tag); background: var(--x-accent-soft); color: var(--x-accent); }
+      .x-b--les { background: var(--x-les-soft); color: var(--x-les); }
+      .x-b--est { background: var(--x-est-soft); color: var(--x-est); }
+      .x-s { display: inline-flex; padding: 2px 8px; border-radius: var(--r-pill); font: var(--type-tag); }
+      .x-s--ok { background: var(--x-ok-soft); color: var(--x-ok); }
+      .x-s--pend { background: var(--x-amber-soft); color: var(--x-amber); }
+      .x-s--sent { background: var(--x-accent-soft); color: var(--x-accent); }
+
+      .x-tabs { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; z-index: 30; display: grid; grid-template-columns: 1fr 1fr 104px 1fr 1fr; align-items: end; padding: 6px 4px calc(6px + env(safe-area-inset-bottom)); background: color-mix(in srgb, var(--x-card) 92%, transparent); -webkit-backdrop-filter: var(--hark-blur); backdrop-filter: var(--hark-blur); border-top: 1px solid var(--x-line); }
+      .x-tab { min-height: 52px; border: 0; background: transparent; display: grid; place-items: center; gap: 2px; font: var(--type-caption); color: var(--x-ink2); cursor: pointer; border-radius: var(--r-s); }
+      .x-tab svg { width: 22px; height: 22px; }
+      .x-tab[aria-current="page"] { color: var(--x-accent); font-weight: var(--weight-medium); }
+      .x-tab--mic { gap: 2px; width: 104px; justify-self: center; color: var(--x-accent); font: var(--type-tag); font-weight: var(--weight-medium); }
+      .x-tab--mic span { width: 80px; height: 80px; margin-top: -48px; border-radius: 50%; background: var(--x-accent); background-clip: padding-box; color: var(--x-on-accent); display: grid; place-items: center; box-shadow: 0 8px 24px color-mix(in srgb, var(--x-accent) 45%, transparent); border: 4px solid var(--x-bg); }
+      .x-tab--mic svg { width: 34px; height: 34px; }
+      .x-tab--mic:hover span { box-shadow: inset 0 0 0 100px var(--hover-wash), 0 8px 24px color-mix(in srgb, var(--x-accent) 45%, transparent); }
+      .x-voz { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: var(--r-m); background: var(--x-accent-soft); }
+      .x-voz .x-fine { flex: 1; color: var(--x-ink); }
+      .x-mic--sm { width: 56px; height: 56px; flex: none; box-shadow: 0 6px 16px color-mix(in srgb, var(--x-accent) 30%, transparent); }
+      .x-mic--sm svg { width: 26px; height: 26px; }
+      .x-tab--mic[aria-current="page"] span { box-shadow: 0 0 0 3px var(--x-accent-soft), 0 6px 20px color-mix(in srgb, var(--x-accent) 40%, transparent); }
+      .x-dict .x-banner { width: 100%; text-align: left; }
+      .x-dict .x-btn--big { width: 100%; }
+      .x-card__top { display: flex; justify-content: space-between; align-items: center; gap: 8px; min-height: 24px; }
+      .x-none { font: var(--type-body); color: var(--x-ink2); }
+
+      .x-sheet { position: fixed; inset: 0; z-index: 50; display: flex; align-items: flex-end; justify-content: center; }
+      .x-sheet[hidden] { display: none; }
+      .x-sheet__bg { position: absolute; inset: 0; background: rgb(0 0 0 / 0.35); border: 0; }
+      .x-sheet__panel { position: relative; width: 100%; max-width: 480px; max-height: 88dvh; overflow-y: auto; background: var(--x-bg); border-radius: var(--r-l) var(--r-l) 0 0; padding: 8px 16px calc(24px + env(safe-area-inset-bottom)); display: grid; gap: 14px; animation: x-up var(--dur-quick) var(--ease-out); }
+      @keyframes x-up { from { transform: translateY(40px); opacity: 0; } }
+      @media (prefers-reduced-motion: reduce) { .x-sheet__panel { animation: none; } }
+      .x-sheet__head { display: flex; align-items: center; justify-content: space-between; gap: 8px; position: sticky; top: -8px; background: var(--x-bg); padding-top: 8px; z-index: 1; }
+      .x-sheet__head h3 { font: var(--type-heading); }
+
+      .x-dl { display: grid; grid-template-columns: auto 1fr; gap: 8px 14px; margin: 0; font: var(--type-small); }
+      .x-dl dt { color: var(--x-ink2); }
+      .x-dl dd { margin: 0; }
+      .x-bar { height: 8px; border-radius: var(--r-pill); background: var(--x-accent-soft); overflow: hidden; }
+      .x-bar i { display: block; height: 100%; background: var(--x-accent); border-radius: inherit; }
+      .x-note { padding: 10px 12px; border-radius: var(--r-s); background: var(--x-rent); font: var(--type-small); display: grid; gap: 4px; white-space: pre-line; }
+      .x-msg { white-space: pre-wrap; font: var(--type-small); background: var(--x-rent); border-radius: var(--r-s); padding: 10px 12px; }
+
+      .x-field { display: grid; gap: 6px; font: var(--type-tag); color: var(--x-ink2); }
+      .x-field input, .x-field select, .x-field textarea, .x-in { width: 100%; min-height: var(--tap); border: 1px solid var(--x-line); border-radius: var(--r-s); background: var(--x-card); padding: 10px 12px; color: var(--x-ink); }
+      .x-field textarea { resize: vertical; line-height: 1.4; }
+      .x-two { display: grid; grid-template-columns: 1.4fr 1fr; gap: 8px; }
+      .x-warn { padding: 8px 12px; border-radius: var(--r-s); background: var(--x-amber-soft); color: var(--x-amber); font: var(--type-small); }
+
+      .x-list { display: grid; gap: 8px; }
+      .x-li { width: 100%; text-align: left; display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; align-items: center; padding: 12px 14px; border: 1px solid var(--x-line); border-radius: var(--r-m); background: var(--x-card); cursor: pointer; text-decoration: none; }
+      .x-li b { font: var(--type-body-strong); }
+      .x-li__plan { font: var(--type-label); color: var(--x-accent); }
+
+      .x-dict { display: grid; justify-items: center; gap: 12px; text-align: center; padding-top: 8px; }
+      .x-mic { width: 128px; height: 128px; border-radius: 50%; border: 0; background: var(--x-accent); color: var(--x-on-accent); display: grid; place-items: center; cursor: pointer; box-shadow: 0 10px 30px color-mix(in srgb, var(--x-accent) 35%, transparent); }
+      .x-mic svg { width: 48px; height: 48px; }
+      .x-mic.is-on { animation: x-pulse 1.4s ease-in-out infinite; }
+      @keyframes x-pulse { 50% { box-shadow: 0 0 0 18px color-mix(in srgb, var(--x-accent) 18%, transparent); } }
+      .x-dict .x-field { width: 100%; text-align: left; }
+      .x-dict .x-row { width: 100%; }
+
+      .x-toast { position: fixed; left: 50%; bottom: calc(178px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 60; background: var(--x-accent-soft); color: var(--x-ink); border: 1px solid #e3bfae; padding: 12px 18px; border-radius: var(--r-pill); font: var(--type-label); box-shadow: 0 8px 24px rgb(122 80 56 / 0.18); max-width: 90vw; }
+      .x-toast[hidden] { display: none; }
+      .x-splash { position: fixed; inset: 0; z-index: 100; background: var(--x-bg); display: grid; place-content: center; justify-items: center; gap: 14px; transition: opacity 400ms var(--ease-out); }
+      .x-splash img { width: 200px; height: 200px; border-radius: var(--r-l); }
+      .x-splash p { font: var(--type-label); letter-spacing: 0.04em; color: var(--x-ink2); text-align: center; padding: 0 24px; }
+      .x-rule { width: 48px; height: 0; border: 0; border-top: 1px solid var(--x-mauve); margin: 0; }
+      .x-splash.is-out { opacity: 0; pointer-events: none; }
+      .x-about { display: grid; justify-items: center; gap: 8px; text-align: center; padding: 8px 0; }
+      .x-walink { display: inline-block; margin-top: 4px; font: var(--type-caption); color: var(--x-ink2); word-break: break-all; -webkit-touch-callout: default; }
+      .x-about img { width: 140px; height: 140px; border-radius: var(--r-m); }
+      .x-about__who { font: var(--type-label); color: var(--x-ink); margin-top: -4px; }
+      .x-hola { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
+      .x-hola__txt { display: grid; gap: 2px; min-width: 0; }
+      .x-avatar { position: relative; flex: none; width: 48px; height: 48px; border-radius: 50%; padding: 2px; background: linear-gradient(135deg, var(--x-mauve), var(--x-accent)); }
+      .x-avatar__in { position: relative; width: 100%; height: 100%; border-radius: 50%; border: 2px solid var(--x-bg); background: var(--x-accent-soft); color: var(--x-accent); display: grid; place-items: center; overflow: hidden; font: var(--type-label); font-weight: var(--weight-bold); letter-spacing: 0.04em; }
+      .x-avatar__in img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; border-radius: 50%; color: transparent; font-size: 0; }
+      .x-dhint { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: var(--r-m); background: var(--x-accent-soft); color: var(--x-ink); font: var(--type-body); }
+      .x-dhint__ic { flex: none; width: 40px; height: 40px; border-radius: 50%; background: var(--x-accent); color: var(--x-on-accent); display: grid; place-items: center; }
+      .x-dhint__ic svg { width: 22px; height: 22px; }
+      .x-dhint.is-flash { animation: x-flash 1.2s var(--ease-out) 1; }
+      @keyframes x-flash { 30% { box-shadow: 0 0 0 4px var(--x-accent); } }
+      @media (prefers-reduced-motion: reduce) { .x-dhint.is-flash { animation: none; } }
+      .x-vtxt { width: 100%; min-height: 168px; border: 1px solid var(--x-line); border-radius: var(--r-s); background: var(--x-card); padding: 12px; color: var(--x-ink); font-size: 17px; line-height: 1.45; resize: vertical; }
+      .x-vtxt:focus { outline: 2px solid var(--x-accent); outline-offset: 1px; }
+      .x-btn.is-on { animation: x-pulse 1.4s ease-in-out infinite; }
+      .x-prev { display: grid; gap: 10px; }
+      .x-prev ul { margin: 0; padding-left: 18px; font: var(--type-small); }
+
+      /* Warm, light menus: tab bar and every sheet stay cream in both themes */
+      .x-tabs, .x-sheet__panel {
+        color-scheme: light;
+        --x-bg: #fbf3ea;
+        --x-card: #fffaf4;
+        --x-ink: #4a3428;
+        --x-ink2: #7a5a48;
+        --x-line: #ead8c6;
+        --x-accent: #9c4a35;
+        --x-accent-soft: #f6e1d6;
+        --x-on-accent: #fffaf4;
+        --x-rent: #f3e7da;
+        --hover-wash: #9c4a3514;
+        color: var(--x-ink);
+      }
+      .x-tabs { background: color-mix(in srgb, #f8ece0 94%, transparent); border-top-color: #e6d0bb; box-shadow: 0 -6px 24px rgb(122 80 56 / 0.08); }
+      .x-tab--mic span { background: linear-gradient(145deg, #b8644c, #9c4a35); border-color: #f8ece0; box-shadow: 0 8px 24px rgb(169 83 61 / 0.35); }
+      .x-tab--mic:hover span { box-shadow: inset 0 0 0 100px #ffffff1f, 0 8px 24px rgb(169 83 61 / 0.35); }
+      .x-tab--mic[aria-current="page"] span { box-shadow: 0 0 0 3px #f1cdbd, 0 6px 20px rgb(169 83 61 / 0.35); }
+      .x-tab[aria-current="page"]:not(.x-tab--mic) { background: #f3dccf; }
+      .x-sheet__panel { background: var(--x-bg); box-shadow: 0 -10px 40px rgb(74 52 40 / 0.18); }
+      .x-sheet__bg { background: rgb(74 52 40 / 0.32); }
+
+      /* Fotos / Evolución */
+      .x-evo { display: grid; gap: 10px; }
+      .x-file { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; clip: rect(0 0 0 0); }
+      label.x-btn { position: relative; }
+      label.x-btn:focus-within { outline: 2px solid var(--x-accent); outline-offset: 2px; }
+      .x-btn:disabled { opacity: 0.6; cursor: default; }
+      .x-seg { display: flex; gap: 6px; flex-wrap: wrap; }
+      .x-seg button { min-height: var(--tap); padding: 0 16px; border-radius: var(--r-pill); border: 1px solid var(--x-line); background: var(--x-card); font: var(--type-label); color: var(--x-ink); cursor: pointer; }
+      .x-seg button[aria-pressed="true"] { background: var(--x-accent); border-color: var(--x-accent); color: var(--x-on-accent); }
+      .x-evo__prev { width: 100%; max-height: 260px; object-fit: contain; border-radius: var(--r-s); background: var(--x-rent); }
+      .x-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .x-ph { border: 0; padding: 0; background: none; text-align: left; cursor: pointer; display: grid; gap: 2px; align-content: start; color: var(--x-ink); min-width: 0; }
+      .x-ph__img { position: relative; display: block; aspect-ratio: 3 / 4; border-radius: var(--r-s); overflow: hidden; background: var(--x-rent); }
+      .x-ph__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      .x-ph__img .x-s { position: absolute; left: 6px; top: 6px; }
+      .x-ph b { font: var(--type-caption); font-weight: var(--weight-medium); }
+      .x-ph small { font: var(--type-caption); color: var(--x-ink2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .x-empty { padding: 18px 14px; border: 1px dashed var(--stroke-primary); border-radius: var(--r-m); text-align: center; font: var(--type-small); color: var(--x-ink2); }
+
+      .x-visor { position: fixed; inset: 0; z-index: 55; background: #2e211a; color: #fbf3ea; display: flex; justify-content: center; overflow-y: auto; }
+      .x-visor[hidden] { display: none; }
+      .x-visor__in { width: 100%; max-width: 480px; display: grid; gap: 12px; align-content: start; padding: calc(10px + env(safe-area-inset-top)) 16px calc(20px + env(safe-area-inset-bottom)); }
+      .x-visor__top { display: flex; align-items: center; gap: 8px; }
+      .x-visor__top b, .x-visor__top h3 { flex: 1; font: var(--type-heading); }
+      .x-visor .x-icon { color: inherit; }
+      .x-visor__img { display: grid; place-items: center; }
+      .x-visor__img img { max-width: 100%; max-height: calc(100dvh - 300px); object-fit: contain; border-radius: var(--r-s); }
+      .x-visor__nota { font: var(--type-body); }
+      .x-visor .x-btn:not(.x-btn--wa):not(.x-btn--danger) { color: var(--x-ink); }
+      .x-visor .x-note { color: var(--x-ink); }
+      .x-visor--cmp { background: var(--x-bg); color: var(--x-ink); }
+      .x-cmp-sel { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+      .x-cmp { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+      .x-cmp figure { margin: 0; display: grid; gap: 6px; justify-items: center; text-align: center; }
+      .x-cmp img { width: 100%; aspect-ratio: 4 / 5; object-fit: contain; background: var(--x-rent); border-radius: var(--r-s); }
+      .x-cmp figcaption { font: var(--type-small); color: var(--x-ink2); display: grid; gap: 4px; justify-items: center; }
+    </style>
+  </head>
+  <body>
+    <div class="x-app">
+      <header class="x-top">
+        <img src="logo_essencia_hd.jpg" alt="Logo Essencia" />
+        <div class="x-top__t"><b>Essencia</b><small id="hdate"></small></div>
+        <button class="x-icon" data-act="mas" aria-label="Más: acerca de Essencia">Más ⋯</button>
+      </header>
+      <main id="view" class="x-view" aria-live="polite"></main>
+      <nav class="x-tabs" aria-label="Secciones">
+        <button class="x-tab" data-act="tab" data-v="agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Agenda</button>
+        <button class="x-tab" data-act="tab" data-v="pacientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4.5 4.5-6.5 8-6.5s7 2 8 6.5"/></svg>Pacientes</button>
+        <button class="x-tab x-tab--mic" data-act="dictar" data-v="dictar" aria-label="Dictar atención"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></span>Dictar</button>
+        <button class="x-tab" data-act="tab" data-v="plantillas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M6 3h9l4 4v14H6z"/><path d="M9 11h7M9 15h7"/></svg>Plantillas</button>
+        <button class="x-tab" data-act="mas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>Más</button>
+      </nav>
+      <div id="sheet" class="x-sheet" hidden>
+        <button class="x-sheet__bg" data-act="close" aria-label="Cerrar"></button>
+        <div class="x-sheet__panel" role="dialog" aria-modal="true" id="sheetBody"></div>
+      </div>
+      <div id="visor" class="x-visor" hidden><div class="x-visor__in" role="dialog" aria-modal="true" aria-label="Foto de evolución" id="visorBody"></div></div>
+      <div id="toast" class="x-toast" role="status" hidden></div>
+      <div id="splash" class="x-splash" aria-hidden="true"><img src="logo_essencia_hd.jpg" alt="" /><hr class="x-rule" /><p>Kinesiología Integral, Estética y Salud</p></div>
+    </div>
+    <script src="hark.js"></script>
+    <script>
+/* ---------- utilidades ---------- */
+var DIAS = ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"];
+var MIC_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>';
+var FOTO_ISABEL = "data:image/jpeg;base64,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";
+function pad(n) { return n < 10 ? "0" + n : "" + n; }
+/* agenda: largo del bloque en minutos (más adelante, 15 según tratamiento) */
+var SLOT_MIN = 30, DIA_INI = 9 * 60, DIA_FIN = 19 * 60;
+function aMin(h) { var p = String(h).split(":"); return (+p[0] || 0) * 60 + (+p[1] || 0); }
+function deMin(m) { return pad(Math.floor(m / 60)) + ":" + pad(m % 60); }
+function bloques() { var a = []; for (var m = DIA_INI; m + SLOT_MIN <= DIA_FIN; m += SLOT_MIN) a.push(deMin(m)); return a; }
+function redondear(m) { var s = DIA_INI + Math.round((m - DIA_INI) / SLOT_MIN) * SLOT_MIN; return Math.max(DIA_INI, Math.min(DIA_FIN - SLOT_MIN, s)); }
+function iso(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+function addDays(d, n) { var x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() + n); return x; }
+function parseISO(s) { var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+function fechaCorta(s) { var d = parseISO(s); return DIAS[d.getDay()] + " " + pad(d.getDate()) + "-" + pad(d.getMonth() + 1); }
+function fechaLarga(d) { return DIAS[d.getDay()] + " " + pad(d.getDate()) + "-" + pad(d.getMonth() + 1) + "-" + d.getFullYear(); }
+function clp(n) { return "$" + String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+function el(id) { return document.getElementById(id); }
+function save() { try { localStorage.setItem("essencia2", JSON.stringify(S)); } catch (e) {} }
+// Builds every WhatsApp link. The full message is a plain JS string; it is encoded exactly once
+// with encodeURIComponent (UTF-8, so emoji like 👋 🌿 📅 😊 stay intact and "\n" becomes %0A).
+// Uses WhatsApp's send endpoint directly: the wa.me redirect re-encodes the text and breaks 4-byte emoji into replacement characters.
+function waTexto(texto) {
+  var s = String(texto == null ? "" : texto).replace(/\r\n?/g, "\n");
+  if (s.toWellFormed) s = s.toWellFormed(); // a lone surrogate would make encodeURIComponent throw
+  return s;
+}
+function wa(tel, texto) { return "https://api.whatsapp.com/send?phone=" + String(tel).replace(/\D/g, "") + "&text=" + encodeURIComponent(waTexto(texto)); }
+function toast(msg) { var t = el("toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(function () { t.hidden = true; }, 3200); }
+
+var HOY = new Date(), HOY_ISO = iso(HOY), MAN_ISO = iso(addDays(HOY, 1));
+var CIERRE = "Un abrazo,\nIsabel Pizarro · Essencia";
+var FIRMA = CIERRE + "\nJoaquín del Pino 823, San Carlos";
+/* agrega el cierre de Isabel una sola vez (también a plantillas guardadas con la firma anterior) */
+function conFirma(t) {
+  t = String(t == null ? "" : t);
+  if (t.indexOf("Isabel Pizarro") >= 0) return t;
+  var viejo = "Essencia – Joaquín del Pino 823, San Carlos";
+  if (t.indexOf(viejo) >= 0) return t.replace(viejo, FIRMA);
+  return t.replace(/\s+$/, "") + "\n" + CIERRE;
+}
+var TIPOS = { postop: { t: "Post-op", c: "" }, lesion: { t: "Lesión", c: " x-b--les" }, estetica: { t: "Estética", c: " x-b--est" } };
+var EST = { conf: { t: "Confirmada ✓", c: "x-s--ok" }, pend: { t: "Por confirmar", c: "x-s--pend" }, env: { t: "Enviado", c: "x-s--sent" } };
+
+/* ---------- estado ---------- */
+var S = {
+  vista: "agenda",
+  dia: HOY_ISO,
+  bannerOk: false,
+  pacientes: [
+    { id: "p1", nom: "María Soto", tel: "+56941324372", tipo: "postop", det: "Post abdominoplastia", cirugia: iso(addDays(HOY, -18)), plan: 10, hechas: 3, notas: [{ f: iso(addDays(HOY, -3)), txt: "Sesión 3 de 10. Edema moderado lado izquierdo, buena tolerancia al drenaje." }] },
+    { id: "p2", nom: "Carolina Muñoz", tel: "+56900000002", tipo: "postop", det: "Post lipoescultura", cirugia: iso(addDays(HOY, -34)), plan: 8, hechas: 5, notas: [{ f: iso(addDays(HOY, -4)), txt: "Sesión 5 de 8. Fibrosis flanco derecho en disminución." }] },
+    { id: "p3", nom: "Javiera Pérez", tel: "+56900000003", tipo: "postop", det: "Post mamoplastia", cirugia: iso(addDays(HOY, -9)), plan: 6, hechas: 2, notas: [{ f: iso(addDays(HOY, -2)), txt: "Sesión 2 de 6. Molestia leve al elevar brazos, se indican movilizaciones suaves." }] },
+    { id: "p4", nom: "Pedro Álvarez", tel: "+56900000004", tipo: "lesion", det: "Esguince de tobillo grado II", plan: 8, hechas: 4, notas: [{ f: iso(addDays(HOY, -5)), txt: "Sesión 4 de 8. Mejora el apoyo, sigue con propiocepción en casa." }] },
+    { id: "p5", nom: "Luis Contreras", tel: "+56900000005", tipo: "lesion", det: "Lumbago mecánico", plan: 6, hechas: 1, notas: [{ f: iso(addDays(HOY, -6)), txt: "Sesión 1 de 6. Contractura paravertebral derecha." }] },
+    { id: "p6", nom: "Francisca Vera", tel: "+56900000006", tipo: "estetica", det: "Limpieza facial profunda", plan: 4, hechas: 2, notas: [{ f: iso(addDays(HOY, -14)), txt: "Sesión 2 de 4. Piel mixta, buena respuesta." }] },
+    { id: "p7", nom: "Antonia Reyes", tel: "+56900000007", tipo: "postop", det: "Post lipoescultura de brazos", cirugia: iso(addDays(HOY, -12)), plan: 8, hechas: 1, notas: [{ f: iso(addDays(HOY, -2)), txt: "Sesión 1 de 8. Edema leve en ambos brazos, buena tolerancia al drenaje." }] },
+    { id: "p8", nom: "Valentina Díaz", tel: "+56900000008", tipo: "estetica", det: "Drenaje linfático corporal", plan: 6, hechas: 0, notas: [] }
+  ],
+  citas: [
+    { id: "c1", pid: "p1", fecha: HOY_ISO, hora: "10:00", n: 3, estado: "conf" },
+    { id: "c2", pid: "p4", fecha: HOY_ISO, hora: "11:00", n: 4, estado: "conf" },
+    { id: "c3", pid: "p3", fecha: HOY_ISO, hora: "12:00", n: 2, estado: "env" },
+    { id: "c4", pid: "p5", fecha: HOY_ISO, hora: "16:00", n: 1, estado: "pend" },
+    { id: "c5", pid: "p2", fecha: HOY_ISO, hora: "18:00", n: 5, estado: "conf" },
+    { id: "c6", pid: "p2", fecha: MAN_ISO, hora: "09:00", n: 6, estado: "conf" },
+    { id: "c7", pid: "p1", fecha: MAN_ISO, hora: "10:00", n: 4, estado: "pend" },
+    { id: "c8", pid: "p6", fecha: MAN_ISO, hora: "12:00", n: 3, estado: "conf" },
+    { id: "c9", pid: "p3", fecha: MAN_ISO, hora: "15:00", n: 3, estado: "conf" },
+    { id: "c10", pid: "p4", fecha: MAN_ISO, hora: "17:00", n: 5, estado: "pend" },
+    { id: "c11", pid: "p5", fecha: MAN_ISO, hora: "18:00", n: 2, estado: "conf" },
+    { id: "c12", pid: "p7", fecha: HOY_ISO, hora: "14:00", n: 2, estado: "conf" },
+    { id: "c13", pid: "p8", fecha: MAN_ISO, hora: "16:00", n: 1, estado: "pend" }
+  ],
+  plantillas: [
+    { id: "t1", nom: "Post abdominoplastia", txt: "Hola 😊 Te dejo tus cuidados post abdominoplastia:\n• Usar la faja todo el día, incluso para dormir\n• Caminar 20 minutos, en tramos cortos\n• No levantar peso sobre 3 kilos por ahora\n• Tomar 2 litros de agua al día\nCualquier duda me escribes.\n" + FIRMA },
+    { id: "t2", nom: "Post lipoescultura", txt: "Hola 😊 Cuidados post lipoescultura:\n• Faja compresiva día y noche\n• Dormir de espalda las primeras semanas\n• Caminatas suaves, sin ejercicio de impacto\n• Hidratarse bien y evitar la sal\nNos vemos en tu próxima sesión.\n" + FIRMA },
+    { id: "t3", nom: "Post mamoplastia", txt: "Hola 😊 Cuidados post mamoplastia:\n• Usar el sostén post quirúrgico todo el día\n• No levantar los brazos sobre los hombros\n• Movilizaciones suaves de cuello 2 veces al día\n• Dormir semi sentada\nCualquier molestia me avisas.\n" + FIRMA },
+    { id: "t4", nom: "Drenaje linfático", txt: "Hola 😊 Después de tu drenaje:\n• Tomar 2 litros de agua en el día\n• Evitar la sal y los alimentos procesados\n• Caminar liviano 20 minutos\n• Nada de sauna ni agua muy caliente hoy\nTe espero en la próxima sesión.\n" + FIRMA },
+    { id: "t5", nom: "Esguince de tobillo", txt: "Hola 😊 Tus ejercicios en casa:\n• Hielo 15 minutos, 3 veces al día\n• Movilidad del tobillo: abecedario con el pie, 2 series\n• Equilibrio en un pie, 3 x 30 segundos\n• Elevar la pierna al descansar\nSi aumenta el dolor, me escribes.\n" + FIRMA },
+    { id: "t6", nom: "Lumbago", txt: "Hola 😊 Para tu lumbago:\n• Calor local 20 minutos en la mañana\n• Ejercicios suaves: báscula pelviana y gato-camello, 10 repeticiones\n• Caminar 20 minutos diarios\n• Evitar estar sentada más de una hora seguida\nNos vemos en la próxima sesión.\n" + FIRMA },
+    { id: "t7", nom: "Recordatorio de hora", txt: "Hola 😊 Te recuerdo tu hora de mañana. Te espero puntual, trae tu faja o ropa cómoda.\n" + FIRMA },
+    { id: "t8", nom: "Confirmación de hora", txt: "Hola 😊 ¿Me confirmas tu hora? Si no puedes, avísame y la movemos sin problema.\n" + FIRMA }
+  ]
+};
+S.hoy = HOY_ISO;
+try { var raw = localStorage.getItem("essencia2"); if (raw) { var o = JSON.parse(raw); if (o && o.citas && o.hoy === HOY_ISO) S = o; } } catch (e) {}
+(S.pacientes || []).forEach(function (p) { if (p.id === "p1" && p.nom === "María Soto" && (p.tel === "+56900000001" || p.tel === "+56951388164")) p.tel = "+56941324372"; });
+S.vista = "agenda"; S.dia = HOY_ISO;
+(S.plantillas || []).forEach(function (t) { t.txt = conFirma(t.txt); });
+
+var DIAS_L = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
+function fechaMsg(f) { var d = parseISO(f); return DIAS_L[d.getDay()] + " " + pad(d.getDate()) + "-" + pad(d.getMonth() + 1); }
+function pac(id) { for (var i = 0; i < S.pacientes.length; i++) if (S.pacientes[i].id === id) return S.pacientes[i]; return null; }
+function citasDe(f) { return S.citas.filter(function (c) { return c.fecha === f; }).sort(function (a, b) { return a.hora < b.hora ? -1 : 1; }); }
+function hslot(h) { return deMin(redondear(aMin(h))); }
+function choque(f, h, pid) { return citasDe(f).filter(function (c) { return hslot(c.hora) === hslot(h) && c.pid !== pid; })[0]; }
+function proxima(pid) { return S.citas.filter(function (c) { return c.pid === pid && c.fecha >= HOY_ISO; }).sort(function (a, b) { return (a.fecha + a.hora) < (b.fecha + b.hora) ? -1 : 1; })[0]; }
+function badge(t) { return '<span class="x-b' + TIPOS[t].c + '">' + TIPOS[t].t + "</span>"; }
+function estadoChip(e) { return '<span class="x-s ' + EST[e].c + '">' + EST[e].t + "</span>"; }
+function nombreDia(f) { return f === HOY_ISO ? "hoy" : f === MAN_ISO ? "mañana" : "el " + fechaCorta(f); }
+function msgRecordatorio(c) {
+  var p = pac(c.pid);
+  return "Hola " + p.nom.split(" ")[0] + " 😊 Te recuerdo tu hora " + nombreDia(c.fecha) + " " + fechaCorta(c.fecha) + " a las " + c.hora + " para tu sesión " + c.n + " de " + p.plan + ". ¿Me confirmas? Si no puedes, avísame y la movemos.\n" + FIRMA;
+}
+function conNombre(txt, p) { return txt.replace(/^Hola/, "Hola " + p.nom.split(" ")[0]); }
+function opcionesDia(sel) {
+  var h = "";
+  for (var i = 0; i < 14; i++) { var f = iso(addDays(HOY, i)); h += '<option value="' + f + '"' + (f === sel ? " selected" : "") + ">" + (i === 0 ? "Hoy · " : i === 1 ? "Mañana · " : "") + fechaCorta(f) + "</option>"; }
+  return h;
+}
+function opcionesHora(sel) {
+  var h = "";
+  var s = sel ? hslot(sel) : "";
+  bloques().forEach(function (v) { h += '<option' + (v === s ? " selected" : "") + ">" + v + "</option>"; });
+  return h;
+}
+function plan(p) { return '<div class="x-bar" role="img" aria-label="' + p.hechas + " de " + p.plan + ' sesiones"><i style="width:' + Math.round((100 * p.hechas) / p.plan) + '%"></i></div>'; }
+
+/* ---------- vistas ---------- */
+var V = {};
+V.agenda = function () {
+  var man = citasDe(MAN_ISO), pend = man.filter(function (c) { return c.estado === "pend"; }).length;
+  var hd = new Date(), hola = DIAS_L[hd.getDay()] + " " + hd.getDate() + " de " + ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"][hd.getMonth()];
+  /* Foto de perfil incrustada (FOTO_ISABEL, más abajo). Si falla, quedan las iniciales. */
+  var h = '<div class="x-hola"><span class="x-avatar" role="img" aria-label="Isabel"><span class="x-avatar__in" aria-hidden="true">IP' +
+    (FOTO_ISABEL ? '<img src="' + FOTO_ISABEL + '" alt="" onerror="this.remove()" />' : "") + "</span></span>" +
+    '<div class="x-hola__txt"><h2>Hola, Isabel</h2><p class="x-fine">Hoy es ' + hola + "</p></div></div>";
+  if (!S.bannerOk) h += '<div class="x-banner"><span>📲 Agrégala a tu pantalla de inicio: en Safari toca Compartir → Agregar a inicio.</span><button class="x-icon" data-act="banner" aria-label="Cerrar aviso">✕</button></div>';
+  h += '<section class="x-card x-sum"><p><b>Mañana: ' + man.length + " pacientes</b> · " + pend + " por confirmar</p>" +
+    '<button class="x-btn x-btn--accent x-btn--big" data-act="recordatorios">Enviar recordatorios de mañana</button></section>';
+  h += '<div class="x-days" role="group" aria-label="Día">';
+  for (var i = 0; i < 7; i++) { var f = iso(addDays(HOY, i)); h += '<button data-act="dia" data-f="' + f + '" aria-pressed="' + (f === S.dia) + '">' + (i === 0 ? "Hoy" : i === 1 ? "Mañana" : fechaCorta(f)) + "</button>"; }
+  h += "</div>";
+  var cs = citasDe(S.dia);
+  h += '<div class="x-dayhead"><p class="x-fine">' + fechaCorta(S.dia) + " · " + cs.length + " pacientes</p>" + (cs.length ? '<button class="x-btn" data-act="atrasar">⏱ Atrasar</button>' : "") + "</div>";
+  h += '<div class="x-tl">';
+  bloques().forEach(function (hh) {
+    var inner = "";
+    cs.filter(function (c) { return hslot(c.hora) === hh; }).forEach(function (c) {
+      var p = pac(c.pid);
+      inner += '<button class="x-appt' + (c.id === S.hl ? " x-appt--hl" : "") + '" data-t="' + p.tipo + '" data-act="cita" data-id="' + c.id + '"><span class="x-appt__top"><b>' + esc(p.nom) + "</b>" + estadoChip(c.estado) + '</span><span class="x-meta">' + c.hora + " · " + badge(p.tipo) + " Sesión " + c.n + " de " + p.plan + "</span></button>";
+    });
+    if (!inner) inner = '<div class="x-free"><span>Libre</span><button class="x-add" data-act="nueva" data-h="' + hh + '" aria-label="Agendar a las ' + hh + '">+</button></div>';
+    h += '<div class="x-slot"><span class="x-slot__h">' + hh + '</span><div class="x-slot__c">' + inner + "</div></div>";
+  });
+  return h + '<div class="x-slot"><span class="x-slot__h">' + deMin(DIA_FIN) + '</span><div class="x-free"><span>Cierre</span></div></div></div>';
+};
+
+V.pacientes = function () {
+  return '<div class="x-card__top"><h2>Pacientes</h2><button class="x-btn x-btn--accent" data-act="nuevopac">+ Nuevo paciente</button></div><input class="x-in" id="buscar" type="search" placeholder="Buscar por nombre o motivo" aria-label="Buscar paciente" value="' + esc(S.q || "") + '"><div class="x-list" id="plist">' + listaPac() + "</div>";
+};
+function listaPac() {
+  var q = (S.q || "").toLowerCase();
+  return S.pacientes.filter(function (p) { return (p.nom + " " + p.det).toLowerCase().indexOf(q) >= 0; }).map(function (p) {
+    var c = proxima(p.id);
+    return '<button class="x-li" data-act="pac" data-id="' + p.id + '"><b>' + esc(p.nom) + '</b><span class="x-li__plan">' + p.hechas + "/" + p.plan + '</span><span class="x-meta">' + badge(p.tipo) + (c ? " Próxima: " + fechaCorta(c.fecha) + " " + c.hora : " Sin próxima hora") + "</span></button>";
+  }).join("") || '<p class="x-fine">Sin resultados.</p>';
+}
+
+V.plantillas = function () {
+  var h = '<h2>Plantillas de cuidados</h2><p class="x-fine">Edítalas una vez y envíalas con un toque. El saludo se completa con el nombre de la paciente.</p>';
+  S.plantillas.forEach(function (t) {
+    if (S.editT === t.id) {
+      h += '<section class="x-card"><label class="x-field">Nombre<input id="tnom" value="' + esc(t.nom) + '"></label><label class="x-field">Texto<textarea id="ttxt" rows="8">' + esc(t.txt) + '</textarea></label><div class="x-row"><button class="x-btn" data-act="tcancel">Cancelar</button><button class="x-btn x-btn--accent" data-act="tsave" data-id="' + t.id + '">Guardar</button></div></section>';
+    } else {
+      h += '<section class="x-card"><b>' + esc(t.nom) + '</b><p class="x-msg">' + esc(t.txt) + '</p><div class="x-row"><button class="x-btn" data-act="tedit" data-id="' + t.id + '">Editar</button><button class="x-btn x-btn--wa" data-act="tsend" data-id="' + t.id + '">Enviar a…</button></div></section>';
+    }
+  });
+  return h + '<button class="x-btn x-btn--big" data-act="tnew">+ Nueva plantilla</button>';
+};
+
+function hojaMas() {
+  hoja("Acerca de", '<section class="x-about"><img src="' + document.querySelector(".x-top img").getAttribute("src") + '" alt="Logo Essencia"><b>Essencia</b><p class="x-about__who">Isabel Pizarro, Kinesióloga</p><hr class="x-rule"><p class="x-fine">Kinesiología Integral, Estética y Salud<br>Joaquín del Pino 823, San Carlos</p><p class="x-fine">Para enviar por WhatsApp, abre esta página en Safari y agrégala a tu pantalla de inicio.</p><button class="x-btn" data-act="reset">Restablecer datos de demostración</button><p class="x-fine">Prototipo de demostración · datos ficticios</p></section>');
+}
+
+/* ---------- dictado ---------- */
+var D = { txt: "", res: null, rec: null, err: "", pid: null };
+var EJEMPLO = "María Soto, post abdominoplastia, sesión 3 de 10, drenaje linfático, edema lado izquierdo. Próxima el jueves a las 10. Que use la faja todo el día, camine 20 minutos y tome 2 litros de agua.";
+var EJEMPLO_RES = "Agenda a Pedro Álvarez el lunes a las 11 para tobillo";
+var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+V.dictar = function () {
+  if (D.res) return vResultado();
+  var pp = D.pid ? pac(D.pid) : null;
+  return '<section class="x-dict"><h2>Dictar</h2>' +
+    (pp ? '<div class="x-banner"><span>Atención de <b>' + esc(pp.nom) + "</b></span><button class=\"x-icon\" data-act=\"quitarpac\" aria-label=\"Quitar paciente\">✕</button></div>" : "") +
+    '<button class="x-mic" data-act="mic" aria-label="Empezar dictado">' + MIC_SVG + "</button>" +
+    "<p>Toca el micrófono y di qué tratamiento hiciste, qué debe hacer el paciente y cuándo es su próxima hora.</p>" +
+    (D.err ? '<p class="x-warn">' + esc(D.err) + "</p>" : "") +
+    '<label class="x-field">Escribe o pega lo que dirías<textarea id="dtxt" rows="6">' + esc(D.txt) + "</textarea></label>" +
+    '<div class="x-row"><button class="x-btn" data-act="ejemplo">Usar ejemplo</button><button class="x-btn" data-act="ejemplo-res">Ejemplo: solo reservar</button></div>' +
+    '<button class="x-btn x-btn--accent x-btn--big" data-act="procesar">Procesar</button></section>';
+};
+/* Dictado confiable en iPhone: la vía principal es el micrófono del teclado (funciona en cualquier página).
+   El reconocimiento del navegador es solo un extra; si falla, se vuelve en silencio al teclado. */
+var HINT_TXT = "Toca el 🎙 micrófono del teclado y habla. Cuando termines, toca Listo.";
+var srMal = false; try { srMal = localStorage.getItem("essencia-sr-mal") === "1"; } catch (e) {}
+function srOk() { return !!SR && !srMal; }
+function hintHTML(id) { return '<div class="x-dhint" id="' + id + '"><span class="x-dhint__ic" aria-hidden="true">' + MIC_SVG + "</span><span>" + HINT_TXT + "</span></div>"; }
+function enfocar(id) { var t = el(id); if (!t) return; try { t.focus({ preventScroll: true }); } catch (e) { t.focus(); } var n = t.value.length; try { t.setSelectionRange(n, n); } catch (e) {} }
+var VR = { r: null, timer: null, got: false };
+function pararVoz() { clearTimeout(VR.timer); var r = VR.r; VR.r = null; if (r) { r.onend = r.onerror = r.onresult = null; try { r.abort(); } catch (e) {} } }
+/* Escucha automática sobre un textarea; onTxt recibe el texto, onFin restaura el botón */
+function escucharAuto(taId, btnId, hintId, onTxt) {
+  var b = el(btnId);
+  if (VR.r) { pararVoz(); if (b) { b.classList.remove("is-on"); b.textContent = "Escuchar automático"; } return; }
+  function alTeclado() {
+    pararVoz(); srMal = true; try { localStorage.setItem("essencia-sr-mal", "1"); } catch (e) {}
+    var bb = el(btnId); if (bb) bb.hidden = true;
+    var h = el(hintId); if (h) { h.classList.remove("is-flash"); void h.offsetWidth; h.classList.add("is-flash"); }
+    enfocar(taId);
+  }
+  var ta = el(taId), base = ta && ta.value.trim() ? ta.value.trim() + " " : "", r;
+  try { r = new SR(); } catch (e) { alTeclado(); return; }
+  r.lang = "es-CL"; r.interimResults = true; r.continuous = true;
+  VR.got = false;
+  r.onresult = function (e) {
+    var t = ""; for (var i = 0; i < e.results.length; i++) t += e.results[i][0].transcript;
+    if (t.trim()) { VR.got = true; clearTimeout(VR.timer); }
+    var x = el(taId); if (!x) return; x.value = base + t; onTxt(x.value);
+  };
+  r.onerror = function () { if (!VR.got) alTeclado(); else { pararVoz(); fin(); } };
+  r.onend = function () { VR.r = null; clearTimeout(VR.timer); if (!VR.got) alTeclado(); else fin(); };
+  function fin() { var bb = el(btnId); if (bb) { bb.classList.remove("is-on"); bb.textContent = "Escuchar automático"; } }
+  try { r.start(); } catch (e) { alTeclado(); return; }
+  VR.r = r;
+  VR.timer = setTimeout(function () { if (!VR.got) alTeclado(); }, 4000);
+  if (b) { b.classList.add("is-on"); b.textContent = "Escuchando… toca para parar"; }
+}
+/* hoja de dictado de la atención */
+function prevHTML(txt) {
+  if (!txt.trim()) return '<p class="x-fine">Mientras hablas, aquí se va armando el tratamiento, los pasos, la próxima hora y el WhatsApp.</p>';
+  var r; try { r = procesar(txt); } catch (e) { return ""; }
+  return '<section class="x-card"><p class="x-label">Paciente</p><p><b>' + (r.pid ? esc(r.nom) : "Paciente nueva" + (r.nom === "Paciente nueva" ? "" : ": " + esc(r.nom))) + "</b></p></section>" +
+    (r.solo ? "" : '<section class="x-card"><p class="x-label">Tratamiento</p><p>' + (r.tratTxt ? esc(r.tratTxt) : '<span class="x-none">Aún nada</span>') + "</p></section>" +
+      '<section class="x-card"><p class="x-label">Pasos a seguir</p>' + (r.ind.length ? "<ul>" + r.ind.map(function (i) { return "<li>" + esc(i) + "</li>"; }).join("") + "</ul>" : '<p class="x-none">Aún nada</p>') + "</section>") +
+    '<section class="x-card"><p class="x-label">Próxima hora</p><p>' + (r.conHora ? "📅 " + cap(fechaMsg(r.fecha)) + " · " + r.hora + " · sesión " + r.prox + " de " + r.total : '<span class="x-none">Sin próxima hora</span>') + "</p>" + (r.conHora ? notaFinde(r.fecha) : "") + "</section>" +
+    '<section class="x-card"><p class="x-label">WhatsApp</p><p class="x-msg">' + esc(r.msg) + "</p></section>";
+}
+function hojaDictar() {
+  var pp = D.pid ? pac(D.pid) : null;
+  hoja("Dictar" + (pp ? " · " + esc(pp.nom.split(" ")[0]) : ""),
+    hintHTML("vhint") +
+    '<textarea id="vtxt" class="x-vtxt" rows="7" aria-label="Lo que dictas" placeholder="Ej: María Soto, drenaje linfático. Próxima el jueves a las 10. Que use la faja todo el día.">' + esc(D.txt) + "</textarea>" +
+    '<p class="x-fine">Termina diciendo «listo» y se procesa solo. Ejemplos: “Agenda a Carolina el sábado a las 14:00” · “Paciente nueva Carolina Pérez, agenda el lunes a las 10” · “Drenaje sesión 3 de 10, que use faja, próxima el jueves a las 11”</p>' +
+    (srOk() ? '<button type="button" class="x-btn" id="vauto" data-act="vauto">Escuchar automático</button>' : "") +
+    '<p class="x-warn" id="verr" hidden></p>' +
+    '<button class="x-btn x-btn--accent x-btn--big" data-act="vlisto">Listo, armar</button>' +
+    '<div class="x-prev" id="vprev" aria-live="polite">' + prevHTML(D.txt) + "</div>");
+  enfocar("vtxt");
+}
+/* palabra final "listo": se quita y, tras ~1 s sin más texto, se procesa solo */
+var LISTO_RE = /(^|[\s.,;:!¡?¿…"'«»()\-])l[ií]st[oó][\s.,;:!?¡¿…"'«»()]*$/i;
+var LISTO_T = null;
+function quitarListo(v) { return LISTO_RE.test(v) ? v.replace(LISTO_RE, "$1").replace(/[\s,;:¡¿«"'(\-]+$/, "").trim() : v; }
+function vInput(v) {
+  D.txt = v; var p = el("vprev"); if (p) p.innerHTML = prevHTML(quitarListo(v)); var d = el("dtxt"); if (d) d.value = v; var e = el("verr"); if (e && v.trim()) e.hidden = true;
+  clearTimeout(LISTO_T);
+  if (LISTO_RE.test(v)) LISTO_T = setTimeout(function () {
+    var ta = el("vtxt"); if (!ta || !LISTO_RE.test(ta.value)) return;
+    var t = quitarListo(ta.value); ta.value = t; D.txt = t; ta.blur(); ACT.vlisto();
+  }, 1000);
+}
+function mic() { D.err = ""; hojaDictar(); }
+
+/* parser local por reglas */
+var VERBOS = { use: "Usar", camine: "Caminar", tome: "Tomar", beba: "Beber", evite: "Evitar", haga: "Hacer", aplique: "Aplicar", descanse: "Descansar", levante: "Levantar", duerma: "Dormir", coma: "Comer", mantenga: "Mantener", realice: "Realizar", ponga: "Poner", lleve: "Llevar", traiga: "Traer", repita: "Repetir", eleve: "Elevar", siga: "Seguir", hidrate: "Hidratarse", hidratese: "Hidratarse", se: "" };
+function sinTilde(s) { return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); }
+function infinitivo(s) {
+  s = s.trim().replace(/[.;]$/, "");
+  var neg = /^no\s+/i.test(s); if (neg) s = s.replace(/^no\s+/i, "");
+  var w = s.split(/\s+/), v = VERBOS[sinTilde(w[0])];
+  if (v !== undefined) { w.shift(); if (v) w.unshift(v); }
+  var out = w.join(" ");
+  if (neg) out = "No " + out.charAt(0).toLowerCase() + out.slice(1);
+  return out.charAt(0).toUpperCase() + out.slice(1);
+}
+function cap(s) { s = String(s).trim(); return s.charAt(0).toUpperCase() + s.slice(1); }
+function telefono(s) {
+  var d = String(s || "").replace(/\D/g, "");
+  if (!d) return "";
+  if (d.indexOf("56") === 0 && d.length === 11) return "+" + d;
+  if (d.length === 9) return "+56" + d;
+  if (d.length === 8) return "+569" + d;
+  return "+" + d;
+}
+var RX_DIA = /\b(hoy|manana|lunes|martes|miercoles|jueves|viernes|sabado|domingo)\b/;
+var RX_TRAT = /(drenaje|masaje|limpieza|kinesio|ultrasonido|electro|\btens\b|vendaje|ejercicio|terapia|movilizaci|puncion|radiofrecuencia|presoterapia|laser|crioterapia|peeling|hidratacion facial)/;
+var RX_DX = /^(post\b|abdominoplastia|lipo|mamoplastia|esguince|tendinitis|lumbago|lesion\b)/;
+function nombreNuevo(txt) {
+  var m = txt.match(/paciente\s+nuev[oa]\s*:?\s*([A-Za-zÁÉÍÓÚÑáéíóúñ]+)(?:\s+([A-Za-zÁÉÍÓÚÑáéíóúñ]+))?/i);
+  if (!m) return "";
+  var stop = /^(telefono|fono|celular|cel|whatsapp|numero|con|de|del|el|la|post|para|agenda|y)$/;
+  var w = [m[1]]; if (m[2] && !stop.test(sinTilde(m[2]))) w.push(m[2]);
+  return w.map(function (x) { return cap(x.toLowerCase()); }).join(" ");
+}
+/* nombre dictado: "a X", "para X", "paciente (nueva) X", o la primera palabra si no es un comando */
+var STOPN = /^(agenda|agendar|agendame|agendala|agendalo|agende|reserva|reservar|reservame|reserve|cita|dia|hora|horas|paciente|nueva|nuevo|lunes|martes|miercoles|jueves|viernes|sabado|domingo|hoy|manana|tarde|noche|proxima|proximo|semana|sesion|el|la|las|los|lo|de|del|a|al|para|por|con|en|y|que|su|mi|tu|me|favor|telefono|fono|celular|cel|whatsapp|numero|post|hola|ok|listo)$/;
+function nombreDictado(txt) {
+  var W = "[A-Za-zÁÉÍÓÚÑáéíóúñü]+", rx = new RegExp("(?:^|[\\s,])(paciente(?:\\s+nuev[oa])?\\s*:?|para|a)\\s+(" + W + ")(?:\\s+(" + W + "))?", "gi"), m;
+  function ok(w, libre) { var s = sinTilde(w); return !STOPN.test(s) && !RX_TRAT.test(s) && !RX_DX.test(s) && (libre || /^[A-ZÁÉÍÓÚÑ]/.test(w)); }
+  function nm(a, b, pa) { return [a].concat(b && ok(b, pa) ? [b] : []).map(function (x) { return cap(x.toLowerCase()); }).join(" "); }
+  while ((m = rx.exec(txt))) {
+    var pa = /^paciente/i.test(m[1]);
+    if (ok(m[2], pa)) return { nom: nm(m[2], m[3], pa), nuevo: /nuev/i.test(m[1]) };
+    rx.lastIndex = m.index + 1;
+  }
+  m = txt.match(new RegExp("^\\s*(" + W + ")(?:\\s+(" + W + "))?"));
+  return m && ok(m[1], false) ? { nom: nm(m[1], m[2], false), nuevo: false, inicio: true } : null;
+}
+/* hora dictada: 14:00, 14.00, 14 00, 14 horas, a las 14, las 2 de la tarde, 2 y media, a las 9 de la mañana */
+var NUMS = { una: 1, uno: 1, dos: 2, tres: 3, cuatro: 4, cinco: 5, seis: 6, siete: 7, ocho: 8, nueve: 9, diez: 10, once: 11, doce: 12 };
+var FRAC = { "y media": 30, "y cuarto": 15, "y quince": 15, "y cuarenta y cinco": 45, "menos cuarto": -15, "menos quince": -15 };
+var RXF = "(?:\\s*(y media|y cuarto|y quince|y cuarenta y cinco|menos cuarto|menos quince))?";
+var RX_HORAS = [/\b(\d{1,2})[:.](\d{2})\b()/, new RegExp("\\blas? (\\d{1,2})(?: (\\d{2})\\b)?" + RXF), /\b(\d{1,2}) (\d{2})\b()/, /\b(\d{1,2})()\s?(?:horas?|hrs?)\b()/, new RegExp("\\b(\\d{1,2})()" + RXF.replace(/\)\?$/, ")"))];
+var RX_HORA = /(\blas? (\d{1,2}|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce)\b|\b\d{1,2}[:.]\d{2}\b|\b\d{1,2} \d{2}\b|\b\d{1,2} ?(horas?|hrs?)\b|\b\d{1,2} (y media|y cuarto|y quince|menos cuarto|menos quince))/;
+var RX_TEL = /(?:telefono|fono|celular|cel|whatsapp|numero)\s*(?:es\s*)?:?\s*\+?\d[\d\s.\-]{6,}\d/g;
+function horaDe(pt) {
+  pt = pt.replace(/\blas? (una|uno|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce)\b/g, function (s, w) { return "las " + NUMS[w]; });
+  for (var i = 0, m; i < RX_HORAS.length; i++) {
+    if (!(m = pt.match(RX_HORAS[i]))) continue;
+    var hh = +m[1], mm = m[2] ? +m[2] : m[3] ? FRAC[m[3].trim()] : 0;
+    if (hh > 23 || mm > 59) continue;
+    if (/de la (tarde|noche)/.test(pt) && hh < 12) hh += 12;
+    else if (!/(de|en|por) la manana/.test(pt) && hh >= 1 && hh <= 7) hh += 12;
+    return [hh, mm];
+  }
+  return null;
+}
+function notaFinde(f) { var g = parseISO(f).getDay(); return g === 0 || g === 6 ? '<p class="x-fine">' + cap(DIAS_L[g]) + ": fuera de tu horario habitual</p>" : ""; }
+function resumenCita(r) { return r.conHora ? "<p><b>📅 " + cap(fechaMsg(r.fecha)) + " · " + r.hora + " · " + esc(r.nom) + "</b></p>" : "<p>Sin hora para " + esc(r.nom) + "</p>"; }
+function refSum() { var s = el("rsum"); if (s && D.res) s.innerHTML = resumenCita(D.res); }
+function procesar(txt, forzar) {
+  var n = sinTilde(txt), m, sug = null;
+  /* paciente: forzado > nombre completo > paciente nueva > preseleccionado > nombre dictado > nombre de pila */
+  var ex = nombreDictado(txt);
+  var p = forzar ? pac(forzar) : S.pacientes.filter(function (x) { return n.indexOf(sinTilde(x.nom)) >= 0; })[0] || null;
+  var nuevo = !p && ex && ex.nuevo ? ex.nom : "";
+  if (!p && !nuevo && D.pid) p = pac(D.pid);
+  if (!p && !nuevo && ex && !ex.inicio) {
+    p = S.pacientes.filter(function (x) { return sinTilde(x.nom) === sinTilde(ex.nom); })[0] || null;
+    if (!p) { nuevo = ex.nom; if (ex.nom.indexOf(" ") < 0) sug = S.pacientes.filter(function (x) { return sinTilde(x.nom.split(" ")[0]) === sinTilde(ex.nom); })[0] || null; }
+  }
+  if (!p && !nuevo) p = S.pacientes.filter(function (x) { return new RegExp("\\b" + sinTilde(x.nom.split(" ")[0]) + "\\b").test(n); })[0] || null;
+  if (!p && !nuevo && ex) nuevo = ex.nom;
+  var nom = p ? p.nom : nuevo || "Paciente nueva";
+  var tel = (m = txt.match(/(?:tel[eé]fono|fono|celular|cel|whatsapp|n[uú]mero)\s*(?:es\s*)?:?\s*(\+?\d[\d\s.\-]{6,}\d)/i)) ? telefono(m[1]) : "";
+  var tipo = p ? p.tipo : /post|abdomino|lipo|mamopl|cirug/.test(n) ? "postop" : /lesion|esguince|tendinitis|rodilla|hombro|lumbago|tobillo|contractura/.test(n) ? "lesion" : /facial|limpieza|estetic|drenaje/.test(n) ? "estetica" : "lesion";
+  var det = p ? p.det : /abdominoplastia/.test(n) ? "Post abdominoplastia" : /lipo/.test(n) ? "Post lipoescultura" : /mamoplastia/.test(n) ? "Post mamoplastia" : /esguince/.test(n) ? "Esguince" : /tendinitis/.test(n) ? "Tendinitis" : /lumbago/.test(n) ? "Lumbago" : /tobillo/.test(n) ? "Lesión de tobillo" : /rodilla/.test(n) ? "Lesión de rodilla" : /hombro/.test(n) ? "Lesión de hombro" : /facial|limpieza/.test(n) ? "Limpieza facial" : /drenaje/.test(n) ? "Drenaje linfático" : "Por definir";
+  var ses = n.match(/sesion\s*(\d+)\s*de\s*(\d+)/);
+  /* frases: indicaciones, programación, tratamiento y observaciones */
+  var ind = [], trats = [], obs = [], prog = [], motivo = "";
+  txt.split(/\n+|[.!?]+(?:\s+|$)/).forEach(function (s) {
+    s = s.trim(); if (!s) return;
+    var ns = sinTilde(s);
+    if (/^que\s/.test(ns)) {
+      s.replace(/^que\s+/i, "").replace(/[.]$/, "").split(/,\s*/).forEach(function (parte) {
+        var ps = parte.split(/\s+y\s+/), cur = ps[0];
+        for (var k = 1; k < ps.length; k++) { var w = sinTilde(ps[k]).replace(/^no\s+/, "").split(/\s+/)[0]; if (VERBOS[w] !== undefined) { ind.push(infinitivo(cur)); cur = ps[k]; } else cur += " y " + ps[k]; }
+        if (cur.trim()) ind.push(infinitivo(cur));
+      });
+      return;
+    }
+    s.split(/\s*,\s*/).forEach(function (part) {
+      part = part.trim(); if (!part) return;
+      var np = sinTilde(part), k = np.indexOf(sinTilde(nom)), nt = np.replace(RX_TEL, " ");
+      if (RX_HORA.test(nt) || /^(agend|reserv)/.test(nt) || (/(proxima|agend|reserv|nos vemos|hora)/.test(nt) && RX_DIA.test(nt))) {
+        prog.push(nt);
+        var mo = part.match(/\bpara\s+(?:el\s+|la\s+|su\s+|tu\s+)?(.+)$/i);
+        if (mo && !/^(las|el)\b/i.test(mo[1]) && sinTilde(mo[1]).indexOf(sinTilde(nom)) !== 0) motivo = mo[1].replace(/[.,;]+$/, "");
+        return;
+      }
+      if (/^que\s/.test(np)) { ind.push(infinitivo(part.replace(/^que\s+/i, ""))); return; }
+      if (/^paciente\s+nuev/.test(np) || /(telefono|fono|celular|whatsapp|numero)/.test(np)) return;
+      if (k >= 0) { part = (part.slice(0, k) + part.slice(k + nom.length)).trim(); np = sinTilde(part); }
+      part = part.replace(/sesi[oó]n\s*\d+\s*de\s*\d+/i, "").trim(); np = sinTilde(part);
+      if (!part || RX_DX.test(np)) return;
+      if (RX_TRAT.test(np)) trats.push(part); else obs.push(part);
+    });
+  });
+  /* comandos de reserva sin tratamiento (agenda…, reserva…, agéndame…) = solo reserva */
+  var solo = !ses && !trats.length && !ind.length && (/\b(agend|reserv)/.test(n) || !obs.length);
+  /* día y hora, solo desde las frases de programación */
+  var pt = prog.join(" "), pd = pt.replace(/(de|en|por) la manana/g, " "), dia = null, hh = null, mm = 0, wd = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
+  for (var i = 0; i < 7; i++) if (new RegExp("\\b" + wd[i] + "\\b").test(pd)) { dia = addDays(HOY, ((i - HOY.getDay() + 7) % 7) || 7); break; }
+  if (!dia) dia = /pasado manana/.test(pd) ? addDays(HOY, 2) : /\bmanana\b/.test(pd) ? addDays(HOY, 1) : /\bhoy\b/.test(pd) ? HOY : null;
+  var hr = horaDe(pt); if (hr) { hh = hr[0]; mm = hr[1]; }
+  var conHora = !!(dia || hh !== null);
+  if (hh === null || hh > 18) { hh = 10; mm = 0; }
+  var tm = redondear(hh * 60 + mm); hh = Math.floor(tm / 60); mm = tm % 60;
+  if (!dia) dia = addDays(HOY, 1);
+  /* sesiones */
+  var total = ses ? +ses[2] : p ? p.plan : 10, hecha = 0, prox;
+  if (solo) {
+    var maxN = p ? S.citas.filter(function (c) { return c.pid === p.id && c.fecha >= HOY_ISO; }).reduce(function (a, c) { return Math.max(a, c.n); }, p.hechas) : 0;
+    prox = maxN + 1;
+  } else { hecha = ses ? +ses[1] : p ? p.hechas + 1 : 1; prox = hecha + 1; }
+  var tratTxt = "";
+  if (!solo) {
+    var base = trats.length ? cap(trats.join(" y ")) : tipo === "lesion" ? "Kinesiología" : tipo === "estetica" ? "Tratamiento" : "Drenaje linfático";
+    tratTxt = base + ", sesión " + hecha + " de " + total + "." + (obs.length ? " " + cap(obs.join(", ")) + "." : "");
+  }
+  var r = { pid: p ? p.id : null, sug: sug ? sug.id : null, nom: nom, tel: p ? p.tel : tel, tipo: tipo, det: det, solo: solo, hecha: hecha, total: total, prox: prox, conHora: conHora, fecha: iso(dia), hora: pad(hh) + ":" + pad(mm), ind: ind, motivo: motivo, tratTxt: tratTxt };
+  r.msg = mensaje(r);
+  return r;
+}
+function mensaje(r) {
+  var s = "Hola " + r.nom.split(" ")[0] + " 😊 ", cuando = "el " + fechaMsg(r.fecha) + " a las " + r.hora;
+  if (r.solo && !r.ind.length) {
+    return s + (r.conHora ? "Te confirmo tu hora " + cuando + " para tu sesión " + r.prox + " de " + r.total + (r.motivo ? " (" + r.motivo + ")" : "") + ". ¿Me confirmas? Si no puedes, avísame y la movemos." : "Cualquier duda me escribes.") + "\n" + FIRMA;
+  }
+  s += r.ind.length ? "Te dejo tus pasos a seguir:\n" + r.ind.map(function (i) { return "• " + i; }).join("\n") + "\n" : "Gracias por venir hoy.\n";
+  if (r.conHora) s += "Tu próxima hora es " + cuando + ", sesión " + r.prox + " de " + r.total + ". Te espero.\n";
+  return s + "Cualquier duda me escribes.\n" + FIRMA;
+}
+function regenMsg() { D.res.msg = mensaje(D.res); var t = el("rmsg"); if (t) t.value = D.res.msg; }
+function leerInd(v) { return v.split(/\n+/).map(function (l) { return l.replace(/^[\s•\-*·]+/, "").trim(); }).filter(Boolean); }
+function avisoChoque() {
+  var r = D.res, c = choque(r.fecha, r.hora, r.pid);
+  return notaFinde(r.fecha) + (c ? '<p class="x-warn">Ojo: a esa hora ya está ' + esc(pac(c.pid).nom) + " (" + c.hora + "). Elige otra hora o déjala igual si atiendes a las dos.</p>" : '<p class="x-fine">✓ Horario libre</p>');
+}
+function cardProx() {
+  var r = D.res;
+  if (!r.conHora) return '<div class="x-card__top"><p class="x-label">Próxima reserva</p></div><p class="x-none">Sin próxima hora</p><button class="x-btn" data-act="addhora">Agregar hora</button>';
+  return '<div class="x-card__top"><p class="x-label">Próxima reserva</p><button class="x-icon" data-act="quitarhora">Quitar</button></div>' +
+    '<div class="x-two"><label class="x-field">Día<select id="rfecha">' + opcionesDia(r.fecha) + '</select></label><label class="x-field">Hora<select id="rhora">' + opcionesHora(r.hora) + "</select></label></div>" +
+    '<div id="rchoque">' + avisoChoque() + '</div><p class="x-fine">Sesión ' + r.prox + " de " + r.total + (r.motivo ? " · " + esc(r.motivo) : "") + "</p>";
+}
+function vResultado() {
+  var r = D.res, h = "<h2>Revisa y aprueba</h2>" + '<section class="x-card x-sum" id="rsum">' + resumenCita(r) + "</section>" +
+    '<p class="x-meta"><b style="color:var(--x-ink);font:var(--type-body-strong)">' + esc(r.nom) + "</b>" + badge(r.tipo) + (r.pid ? "" : '<span class="x-s x-s--pend">Paciente nueva</span>') + " " + esc(r.det) + (r.solo ? ' <span class="x-s x-s--sent">Solo reserva</span>' : "") + "</p>";
+  var sinNom = r.nom === "Paciente nueva";
+  if (!r.pid) h += '<section class="x-card"><p class="x-label" id="rnuevo">Paciente nueva' + (sinNom ? "" : ": " + esc(r.nom)) + "</p>" +
+    (r.sug ? '<button class="x-btn" data-act="espac" data-id="' + r.sug + '">¿Es ' + esc(pac(r.sug).nom) + "? Usar su ficha</button>" : "") +
+    '<label class="x-field">Nombre<input id="rnom" placeholder="Nombre y apellido" value="' + (sinNom ? "" : esc(r.nom)) + '"></label>' +
+    '<label class="x-field">Teléfono (WhatsApp, opcional)<input id="rtel" type="tel" inputmode="tel" placeholder="+569…" value="' + esc(r.tel) + '"></label><p class="x-fine">Se crea su ficha al aprobar.</p></section>';
+  if (!r.solo) {
+    h += '<section class="x-card"><p class="x-label">Tratamiento realizado</p><label class="x-field"><span class="x-fine">Hoy, ' + fechaCorta(HOY_ISO) + '</span><textarea id="rtrat" rows="3">' + esc(r.tratTxt) + "</textarea></label></section>";
+    h += '<section class="x-card"><p class="x-label">Pasos a seguir</p><label class="x-field"><span class="x-fine">Una indicación por línea</span><textarea id="rind" rows="' + Math.max(3, r.ind.length + 1) + '" placeholder="• Usar la faja todo el día">' + esc(r.ind.map(function (i) { return "• " + i; }).join("\n")) + "</textarea></label></section>";
+  }
+  h += '<section class="x-card" id="rprox">' + cardProx() + "</section>";
+  h += '<section class="x-card"><p class="x-label">Mensaje de WhatsApp</p><label class="x-field"><span class="x-fine">Para ' + esc(r.nom.split(" ")[0]) + (r.pid ? " · " + pac(r.pid).tel : "") + " · se arma solo con los pasos y la próxima hora</span><textarea id=\"rmsg\" rows=\"9\">" + esc(r.msg) + "</textarea></label></section>";
+  return h + '<button class="x-btn x-btn--wa x-btn--big" data-act="aprobar">Aprobar: agendar, guardar y enviar</button>' +
+    '<div class="x-row"><button class="x-btn" data-act="redictar">Volver a dictar</button><button class="x-btn" data-act="guardar">Solo guardar</button></div>';
+}
+function aprobar(enviar) {
+  var r = D.res;
+  r.msg = el("rmsg").value;
+  if (el("rtrat")) r.tratTxt = el("rtrat").value;
+  if (el("rind")) r.ind = leerInd(el("rind").value);
+  var p = r.pid ? pac(r.pid) : null;
+  if (!p) { p = { id: "p" + Date.now(), nom: r.nom, tel: telefono(el("rtel") ? el("rtel").value : r.tel), tipo: r.tipo, det: r.det, cirugia: r.tipo === "postop" ? HOY_ISO : null, plan: r.total, hechas: 0, notas: [] }; S.pacientes.push(p); }
+  if (!r.solo) {
+    p.hechas = Math.max(p.hechas, r.hecha); p.plan = r.total;
+    var nota = r.tratTxt.trim() + (r.ind.length ? "\nPasos a seguir:\n" + r.ind.map(function (i) { return "• " + i; }).join("\n") : "");
+    if (nota.trim()) p.notas.unshift({ f: HOY_ISO, txt: nota.trim() });
+    if (r.conHora) S.citas = S.citas.filter(function (c) { return !(c.pid === p.id && c.fecha > HOY_ISO && c.n === r.prox); });
+  }
+  var cid = r.conHora ? "c" + Date.now() : null;
+  if (cid) S.citas.push({ id: cid, pid: p.id, fecha: r.fecha, hora: r.hora, n: r.prox, estado: enviar ? "env" : "pend" });
+  toast(cid ? "Agendado: " + p.nom + ", " + fechaMsg(r.fecha) + " a las " + r.hora : enviar ? "Guardado y listo para enviar" : r.solo ? "Reserva guardada en la agenda" : "Guardado en la agenda y la ficha");
+  D.res = null; D.txt = ""; D.pid = null; S.vista = "agenda"; S.dia = r.conHora ? r.fecha : HOY_ISO; S.hl = cid; render();
+  if (cid) {
+    setTimeout(function () { var a = document.querySelector(".x-appt--hl"); if (a) a.scrollIntoView({ block: "center", behavior: "smooth" }); }, 60);
+    setTimeout(function () { S.hl = null; var a = document.querySelector(".x-appt--hl"); if (a) a.classList.remove("x-appt--hl"); }, 6000);
+  }
+  if (enviar) hojaEnvio(p, r.msg);
+}
+var ENVIO = "";
+function hojaEnvio(p, msg) {
+  var url = wa(p.tel, msg);
+  ENVIO = msg;
+  hoja("Guardado ✓", '<p class="x-fine">Falta enviar el mensaje a ' + esc(p.nom.split(" ")[0]) + " · " + esc(p.tel) + "</p>" +
+    '<a class="x-btn x-btn--wa x-btn--big" href="' + url + '" target="_blank" rel="noopener">Abrir WhatsApp y enviar</a>' +
+    '<p class="x-msg">' + esc(msg) + "</p>" +
+    '<button class="x-btn" data-act="copiar">Copiar mensaje</button>' +
+    '<p class="x-fine">Si WhatsApp no se abre, mantén presionado este enlace:<br><a class="x-walink" href="' + url + '" target="_blank" rel="noopener">' + esc(url) + "</a></p>" +
+    '<button class="x-btn" data-act="close">Listo</button>');
+}
+function copiar(txt) {
+  function viejo() {
+    var ta = document.createElement("textarea");
+    ta.value = txt; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.focus(); ta.select(); ta.setSelectionRange(0, txt.length);
+    var ok = false; try { ok = document.execCommand("copy"); } catch (e) {}
+    document.body.removeChild(ta);
+    toast(ok ? "Mensaje copiado" : "No se pudo copiar; mantén presionado el mensaje");
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(function () { toast("Mensaje copiado"); }, viejo);
+  else viejo();
+}
+
+/* ---------- hojas ---------- */
+function hoja(titulo, cuerpo) {
+  el("sheetBody").innerHTML = '<div class="x-sheet__head"><h3>' + titulo + '</h3><button class="x-icon" data-act="close" aria-label="Cerrar">✕</button></div>' + cuerpo;
+  el("sheet").hidden = false; el("sheetBody").scrollTop = 0;
+}
+function cerrar() { pararVoz(); el("sheet").hidden = true; el("visor").hidden = true; }
+function hojaRecordatorios() {
+  var cs = citasDe(MAN_ISO);
+  hoja("Recordatorios · " + fechaCorta(MAN_ISO), '<p class="x-fine">Un toque por paciente: se abre WhatsApp con el mensaje listo.</p>' + cs.map(function (c) {
+    var p = pac(c.pid);
+    return '<section class="x-card"><div class="x-appt__top"><b>' + c.hora + " · " + esc(p.nom) + "</b>" + estadoChip(c.estado) + '</div><p class="x-msg">' + esc(msgRecordatorio(c)) + '</p><a class="x-btn x-btn--wa" data-act="marcar" data-id="' + c.id + '" href="' + wa(p.tel, msgRecordatorio(c)) + '" target="_blank" rel="noopener">Enviar</a></section>';
+  }).join(""));
+}
+function hojaCita(id) {
+  var c = S.citas.filter(function (x) { return x.id === id; })[0], p = pac(c.pid), nt = p.notas[0];
+  hoja(esc(p.nom), '<p class="x-meta">' + badge(p.tipo) + estadoChip(c.estado) + " " + fechaCorta(c.fecha) + " · " + c.hora + "</p>" +
+    '<dl class="x-dl"><dt>Teléfono</dt><dd><a class="link" href="tel:' + p.tel + '">' + p.tel + "</a></dd><dt>Motivo</dt><dd>" + esc(p.det) + "</dd><dt>Esta hora</dt><dd>Sesión " + c.n + " de " + p.plan + "</dd><dt>Plan</dt><dd>" + p.hechas + " de " + p.plan + " realizadas" + plan(p) + "</dd></dl>" +
+    (nt ? '<div class="x-note"><span class="x-label">Última nota · ' + fechaCorta(nt.f) + "</span>" + esc(nt.txt) + "</div>" : "") +
+    '<button class="x-btn x-btn--accent x-btn--big" data-act="dictar-cita" data-id="' + c.id + '">🎙 Dictar sobre esta atención</button>' +
+    '<div id="mover" hidden class="x-card"><p class="x-label">Mover a una hora libre</p><div class="x-two"><label class="x-field">Día<select id="mfecha" data-id="' + c.id + '">' + opcionesDia(c.fecha) + '</select></label><label class="x-field">Hora libre<select id="mhora">' + opcionesLibres(c.fecha, c.id) + '</select></label></div><button class="x-btn x-btn--accent" id="mok" data-act="mover-ok" data-id="' + c.id + '"' + (libres(c.fecha, c.id).length ? "" : " disabled") + '>Confirmar nueva hora</button></div>' +
+    (c.estado === "pend" ? '<button class="x-btn" data-act="confirmar" data-id="' + c.id + '">Marcar como confirmada</button>' : "") +
+    '<div class="x-row"><button class="x-btn" data-act="mover">Mover hora</button><button class="x-btn x-btn--danger" data-act="cancelar" data-id="' + c.id + '">Cancelar</button></div>' +
+    '<a class="x-btn x-btn--wa x-btn--big" href="' + wa(p.tel, msgRecordatorio(c)) + '" target="_blank" rel="noopener" data-act="marcar" data-id="' + c.id + '">Enviar WhatsApp</a>');
+}
+/* ---------- atrasar / mover hora ---------- */
+function ahoraMin() { var d = new Date(); return d.getHours() * 60 + d.getMinutes(); }
+function cruza(a, b) { return Math.abs(aMin(a) - aMin(b)) < SLOT_MIN; }
+function libres(f, exceptId) {
+  var cs = citasDe(f).filter(function (c) { return c.id !== exceptId; }), now = ahoraMin();
+  return bloques().filter(function (h) { return (f !== HOY_ISO || aMin(h) >= now) && !cs.some(function (c) { return cruza(c.hora, h); }); });
+}
+function opcionesLibres(f, exceptId) {
+  var l = libres(f, exceptId);
+  return l.length ? l.map(function (h) { return "<option>" + h + "</option>"; }).join("") : "<option disabled selected>Sin horas libres</option>";
+}
+function msgAviso(p, ant, nueva, fAnt, fNueva) {
+  var n = p.nom.split(" ")[0];
+  var a = fAnt && fNueva && fAnt !== fNueva;
+  return "Hola " + n + " 🌿 Se me alargó una sesión, ¿te acomoda venir " + (a ? "el " + fechaMsg(fNueva) + " " : "") + "a las " + nueva + " en vez " + (a ? "del " + fechaMsg(fAnt) + " a las " : "de las ") + ant + "? " + CIERRE;
+}
+var A = { min: 15, scope: "desde", cid: null };
+function proximaDelDia() {
+  var cs = citasDe(S.dia), now = ahoraMin();
+  return (cs.filter(function (c) { return S.dia !== HOY_ISO || aMin(c.hora) >= now; })[0] || cs[0] || {}).id || null;
+}
+function atrLista() {
+  var cs = citasDe(S.dia), i = 0;
+  if (A.scope === "desde") { for (var k = 0; k < cs.length; k++) if (cs[k].id === A.cid) i = k; }
+  var mv = cs.slice(i), quedan = cs.slice(0, i);
+  return mv.map(function (c) {
+    var nueva = deMin(aMin(c.hora) + A.min), k = quedan.filter(function (q) { return cruza(q.hora, nueva); })[0];
+    return { c: c, ant: c.hora, nueva: nueva, tarde: aMin(nueva) + SLOT_MIN > DIA_FIN, choca: k ? pac(k.pid).nom : "" };
+  });
+}
+function seg(act, v, sel, txt) { return '<button type="button" data-act="' + act + '" data-v="' + v + '" aria-pressed="' + (String(v) === String(sel)) + '">' + txt + "</button>"; }
+function hojaAtrasar() {
+  var cs = citasDe(S.dia);
+  if (!A.cid || !cs.some(function (c) { return c.id === A.cid; })) A.cid = proximaDelDia();
+  var l = atrLista(), nT = l.filter(function (r) { return r.tarde; }).length, nC = l.filter(function (r) { return r.choca; }).length;
+  hoja("⏱ Atrasar · " + fechaCorta(S.dia),
+    '<div class="x-field">Cuánto<div class="x-seg" role="group" aria-label="Minutos">' + [15, 30, 45, 60].map(function (m) { return seg("atr-min", m, A.min, "+" + m + " min"); }).join("") + "</div></div>" +
+    '<div class="x-field">Qué horas<div class="x-seg" role="group" aria-label="Alcance">' + seg("atr-scope", "desde", A.scope, "Desde esta hora") + seg("atr-scope", "todo", A.scope, "Todo el día") + "</div></div>" +
+    (A.scope === "desde" ? '<label class="x-field">Primera hora a atrasar<select id="atrcita">' + cs.map(function (c) { return '<option value="' + c.id + '"' + (c.id === A.cid ? " selected" : "") + ">" + c.hora + " · " + esc(pac(c.pid).nom) + "</option>"; }).join("") + "</select></label>" : "") +
+    '<p class="x-label">Vista previa</p><ul class="x-mv">' + l.map(function (r) {
+      return '<li><span class="x-mv__top"><b>' + esc(pac(r.c.pid).nom) + '</b><span class="x-mv__t"><s>' + r.ant + "</s> → <b>" + r.nueva + "</b></span></span>" +
+        (r.tarde ? '<span class="x-mv__w">Termina después de las ' + deMin(DIA_FIN) + "</span>" : "") +
+        (r.choca ? '<span class="x-mv__w">Choca con ' + esc(r.choca) + "</span>" : "") + "</li>";
+    }).join("") + "</ul>" +
+    (nT ? '<p class="x-warn">' + nT + (nT === 1 ? " hora termina" : " horas terminan") + " después de las " + deMin(DIA_FIN) + ".</p>" : "") +
+    (nC ? '<p class="x-warn">' + nC + (nC === 1 ? " hora queda encima" : " horas quedan encima") + " de otra paciente.</p>" : "") +
+    '<button class="x-btn x-btn--accent x-btn--big" data-act="atr-ok">Confirmar atraso (' + l.length + ")</button>");
+}
+var AV = [];
+function hojaAvisar(lista, titulo) {
+  AV = lista;
+  hoja(titulo || "Avisar a pacientes", '<p class="x-fine">Un toque por paciente: se abre WhatsApp con el aviso listo.</p><ul class="x-mv">' + lista.map(function (r, i) {
+    var p = pac(r.pid);
+    return '<li><span class="x-mv__top"><b>' + esc(p.nom) + '</b><span class="x-mv__t">' + (r.fAnt !== r.fNueva ? fechaCorta(r.fAnt) + " " : "") + "<s>" + r.ant + "</s> → <b>" + (r.fAnt !== r.fNueva ? fechaCorta(r.fNueva) + " " : "") + r.nueva + "</b></span></span>" +
+      '<a class="x-btn x-btn--wa' + (r.ok ? " is-avisado" : "") + '" data-act="avisado" data-i="' + i + '" href="' + wa(p.tel, msgAviso(p, r.ant, r.nueva, r.fAnt, r.fNueva)) + '" target="_blank" rel="noopener">' + (r.ok ? "Avisado ✓" : "Avisar por WhatsApp") + "</a></li>";
+  }).join("") + '</ul><button class="x-btn" data-act="close">Listo</button>');
+}
+function hojaNueva(h, pid) {
+  hoja(pid ? "Primera hora · " + esc(pac(pid).nom) : "Agendar " + fechaCorta(S.dia) + " · " + h, (pid ? '<label class="x-field">Día<select id="nfecha">' + opcionesDia(MAN_ISO) + "</select></label>" : "") + '<label class="x-field">Paciente<select id="npac">' + S.pacientes.map(function (p) { return '<option value="' + p.id + '"' + (p.id === pid ? " selected" : "") + ">" + esc(p.nom) + " · sesión " + Math.min(p.hechas + 1, p.plan) + " de " + p.plan + "</option>"; }).join("") +
+    '</select></label><label class="x-field">Hora<select id="nhora">' + opcionesHora(h) + '</select></label><button class="x-btn x-btn--accent x-btn--big" data-act="nueva-ok">Agendar</button><p class="x-fine">Queda “Por confirmar” hasta que te responda.</p>');
+}
+function hojaPac(id) {
+  var p = pac(id), c = proxima(id), dias = p.cirugia ? Math.round((parseISO(HOY_ISO) - parseISO(p.cirugia)) / 864e5) : null;
+  hoja(esc(p.nom), '<p class="x-meta">' + badge(p.tipo) + " " + esc(p.det) + "</p>" +
+    '<dl class="x-dl"><dt>Teléfono</dt><dd><a class="link" href="tel:' + p.tel + '">' + p.tel + "</a></dd><dt>" + (p.tipo === "postop" ? "Cirugía" : p.tipo === "lesion" ? "Lesión" : "Tratamiento") + "</dt><dd>" + esc(p.det) + "</dd>" +
+    (dias !== null ? "<dt>Fecha cirugía</dt><dd>" + fechaCorta(p.cirugia) + " · <b>Día " + dias + " de recuperación</b></dd>" : "") +
+    "<dt>Próxima hora</dt><dd>" + (c ? fechaCorta(c.fecha) + " " + c.hora + " " + estadoChip(c.estado) : "Sin agendar") + "</dd><dt>Plan</dt><dd>" + p.hechas + " de " + p.plan + " sesiones" + plan(p) + "</dd></dl>" +
+    '<section class="x-evo" id="evo" data-pid="' + p.id + '" aria-label="Evolución"><p class="x-label">Evolución</p><p class="x-fine">Cargando fotos…</p></section>' +
+    '<p class="x-label">Historial de notas</p>' + (p.notas.map(function (nt) { return '<div class="x-note"><span class="x-label">' + fechaCorta(nt.f) + "</span>" + esc(nt.txt) + "</div>"; }).join("") || '<p class="x-fine">Aún sin notas.</p>') +
+    '<p class="x-label">Plantillas de cuidados</p><div class="x-row">' + S.plantillas.map(function (t) { return '<a class="x-btn x-btn--wa" href="' + wa(p.tel, conNombre(t.txt, p)) + '" target="_blank" rel="noopener">' + esc(t.nom) + "</a>"; }).join("") + "</div>");
+  cargarEvo(id);
+}
+/* ---------- nuevo paciente ---------- */
+var FR = null;
+var NUMS = { un: 1, uno: 1, una: 1, dos: 2, tres: 3, cuatro: 4, cinco: 5, seis: 6, siete: 7, ocho: 8, nueve: 9, diez: 10, once: 11, doce: 12, trece: 13, catorce: 14, quince: 15, dieciseis: 16, veinte: 20, treinta: 30 };
+var MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+function numDe(s) { return /^\d+$/.test(s) ? +s : NUMS[s] || 0; }
+function nombreDe(txt) {
+  var nom = nombreNuevo(txt);
+  if (nom) return nom;
+  var stop = /^(telefono|fono|celular|cel|whatsapp|numero|con|de|del|el|la|post|para|agenda|y|tipo|lesion|operad[oa]|cirugia|plan|estetica|es|se|su|tiene|paciente|nuev[oa])$/;
+  var m = txt.match(/(?:se llama|nombre(?:\s+es)?|llamad[oa])\s*:?\s+([^\d,.;]+)/i) || txt.match(/^\s*([^\d,.;]+)/);
+  if (!m) return "";
+  var w = [];
+  m[1].trim().split(/\s+/).some(function (x) { if (!/^[A-Za-zÁÉÍÓÚÑáéíóúñü]+$/.test(x) || stop.test(sinTilde(x))) return w.length > 0; w.push(cap(x.toLowerCase())); return w.length >= 3; });
+  return w.join(" ");
+}
+function telDe(txt) {
+  var m = txt.match(/(?:tel[eé]fono|fono|celular|cel|whatsapp|n[uú]mero)\s*(?:es\s*)?:?\s*(\+?\d[\d\s.\-]{6,}\d)/i) || txt.match(/(\+?\d[\d\s.\-]{6,}\d)/);
+  if (!m) return "";
+  var d = m[1].replace(/\D/g, "");
+  d = d.indexOf("569") === 0 ? d.slice(0, 11) : d.charAt(0) === "9" ? d.slice(0, 9) : d.length === 8 ? d : "";
+  return d ? telefono(d) : "";
+}
+function cirugiaDe(n) {
+  var f = null;
+  n.split(/[,.;]/).some(function (s) {
+    if (!/(operad|cirugia|intervenid|se opero|opero)/.test(s)) return false;
+    var m, wd = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
+    if ((m = s.match(/hace\s+(\d+|[a-z]+)\s+(dia|semana|mes)/))) { var k = numDe(m[1]); if (k) f = addDays(HOY, -k * (m[2] === "semana" ? 7 : m[2] === "mes" ? 30 : 1)); }
+    else if (/antes de ayer|anteayer/.test(s)) f = addDays(HOY, -2);
+    else if (/\bayer\b/.test(s)) f = addDays(HOY, -1);
+    else if (/\bhoy\b/.test(s)) f = HOY;
+    else if ((m = s.match(/(\d{1,2})\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)(?:\s+(?:de|del)\s+(\d{4}))?/))) { f = new Date(m[3] ? +m[3] : HOY.getFullYear(), MESES.indexOf(m[2]), +m[1]); if (!m[3] && f > HOY) f.setFullYear(f.getFullYear() - 1); }
+    else if ((m = s.match(/(\d{1,2})[\/\-](\d{1,2})(?:[\/\-](\d{2,4}))?/))) { var y = m[3] ? (m[3].length === 2 ? 2000 + +m[3] : +m[3]) : HOY.getFullYear(); f = new Date(y, +m[2] - 1, +m[1]); if (!m[3] && f > HOY) f.setFullYear(y - 1); }
+    else for (var i = 0; i < 7; i++) if (new RegExp("\\b" + wd[i] + "\\b").test(s)) { f = addDays(HOY, -(((HOY.getDay() - i + 7) % 7) || 7)); break; }
+    return !!f;
+  });
+  return f ? iso(f) : "";
+}
+function parseFicha(txt) {
+  var n = sinTilde(txt), m;
+  var tipo = /(post|abdomino|lipo|mamopl|rinopl|operad|cirugia|intervenid)/.test(n) ? "postop" : /(lesion|esguince|tendinitis|rodilla|hombro|lumbago|tobillo|contractura|fractura|desgarro)/.test(n) ? "lesion" : /(estetic|facial|limpieza|drenaje|celulitis|reductor)/.test(n) ? "estetica" : "";
+  var det = /abdominoplastia/.test(n) ? "Post abdominoplastia" : /lipo/.test(n) ? "Post lipoescultura" + (/brazo/.test(n) ? " de brazos" : "") : /mamoplastia/.test(n) ? "Post mamoplastia" : /rinoplastia/.test(n) ? "Post rinoplastia" : /esguince/.test(n) ? "Esguince" + (/tobillo/.test(n) ? " de tobillo" : /rodilla/.test(n) ? " de rodilla" : "") : /tendinitis/.test(n) ? "Tendinitis" : /lumbago/.test(n) ? "Lumbago" : /contractura/.test(n) ? "Contractura" : /tobillo/.test(n) ? "Lesión de tobillo" : /rodilla/.test(n) ? "Lesión de rodilla" : /hombro/.test(n) ? "Lesión de hombro" : /facial|limpieza/.test(n) ? "Limpieza facial" : /drenaje/.test(n) ? "Drenaje linfático" : "";
+  var plan = (m = n.match(/(\d+|[a-z]+)\s+sesiones/)) && numDe(m[1]) ? numDe(m[1]) : (m = n.match(/plan\s+(?:de\s+)?(\d+|[a-z]+)/)) ? numDe(m[1]) : 0;
+  return { nom: nombreDe(txt), tel: telDe(txt), tipo: tipo, det: det, cir: cirugiaDe(n), plan: plan };
+}
+function llenarFicha(txt) {
+  var r = parseFicha(txt), set = function (id, v) { if (v && el(id)) el(id).value = v; };
+  set("fnom", r.nom); set("ftel", r.tel); set("ftipo", r.tipo); set("fdet", r.det); set("fcir", r.cir); set("fplan", r.plan);
+}
+function ferr(msg) { var e = el("ferr"); if (!e) return; e.textContent = msg; e.hidden = !msg; }
+function fmic() { ferr(""); var h = el("fhint"); if (h) { h.classList.remove("is-flash"); void h.offsetWidth; h.classList.add("is-flash"); } enfocar("fvoz"); }
+function hojaFicha() {
+  hoja("Nuevo paciente",
+    hintHTML("fhint") +
+    '<textarea id="fvoz" class="x-vtxt" rows="4" aria-label="Lo que dictas" placeholder="Ej: Camila Rojas, teléfono 9 1234 5678, post lipoescultura, operada hace 10 días, plan de 8 sesiones."></textarea>' +
+    (srOk() ? '<button type="button" class="x-btn" id="fauto" data-act="fauto">Escuchar automático</button>' : "") +
+    '<button class="x-btn x-btn--accent x-btn--big" data-act="fllenar">Listo, rellenar</button><p class="x-fine">Los campos se rellenan solos mientras dictas. Revísalos y guarda.</p>' +
+    '<label class="x-field">Nombre<input id="fnom" autocomplete="off" placeholder="Camila Rojas"></label>' +
+    '<label class="x-field">Teléfono (WhatsApp)<input id="ftel" type="tel" inputmode="tel" placeholder="+56912345678"></label>' +
+    '<div class="x-two"><label class="x-field">Tipo<select id="ftipo"><option value="postop">Post-op</option><option value="lesion">Lesión</option><option value="estetica">Estética</option></select></label><label class="x-field">Plan de sesiones<input id="fplan" type="number" inputmode="numeric" min="1" max="60" value="8"></label></div>' +
+    '<label class="x-field">Cirugía o lesión<input id="fdet" placeholder="Post lipoescultura, esguince de tobillo…"></label>' +
+    '<label class="x-field">Fecha de cirugía (opcional)<input id="fcir" type="date" max="' + HOY_ISO + '"></label>' +
+    '<p class="x-warn" id="ferr" hidden></p><button class="x-btn x-btn--accent x-btn--big" data-act="nuevopac-ok">Guardar paciente</button>');
+  enfocar("fvoz");
+}
+function msgBienvenida(p) {
+  var c = proxima(p.id);
+  return "Hola " + p.nom.split(" ")[0] + " 😊 ¡Te doy la más cariñosa bienvenida a Essencia! Será un gusto acompañarte en tu plan de " + p.plan + " sesiones." +
+    (c ? " Tu primera hora es el " + fechaMsg(c.fecha) + " a las " + c.hora + "." : "") +
+    "\nTe espero en Joaquín del Pino 823, San Carlos. Ven con ropa cómoda" + (p.tipo === "postop" ? " y tu faja" : "") + ". Cualquier duda, escríbeme por aquí cuando quieras.\n" + CIERRE;
+}
+function hojaCreado(pid) {
+  var p = pac(pid), c = proxima(pid);
+  hoja("Ficha creada ✓", '<p class="x-meta"><b style="color:var(--x-ink);font:var(--type-body-strong)">' + esc(p.nom) + "</b>" + badge(p.tipo) + " " + esc(p.det) + "</p>" +
+    '<dl class="x-dl"><dt>Teléfono</dt><dd>' + p.tel + "</dd><dt>Plan</dt><dd>" + p.plan + " sesiones</dd>" + (p.cirugia ? "<dt>Fecha cirugía</dt><dd>" + fechaCorta(p.cirugia) + "</dd>" : "") + "</dl>" +
+    (c ? '<p class="x-fine">✓ Primera hora: ' + fechaCorta(c.fecha) + " a las " + c.hora + "</p>" : '<button class="x-btn x-btn--accent x-btn--big" data-act="primera" data-id="' + p.id + '">Agendar primera hora</button>') +
+    '<a class="x-btn x-btn--wa x-btn--big" href="' + wa(p.tel, msgBienvenida(p)) + '" target="_blank" rel="noopener">Enviar bienvenida por WhatsApp</a>' +
+    '<p class="x-msg">' + esc(msgBienvenida(p)) + '</p><button class="x-btn" data-act="close">Listo</button>');
+}
+function horaLibre(f) { var b = bloques(); for (var i = 0; i < b.length; i++) { var h = b[i]; if (!citasDe(f).some(function (c) { return hslot(c.hora) === h; })) return h; } return "10:00"; }
+
+function hojaEnviarA(tid) {
+  var t = S.plantillas.filter(function (x) { return x.id === tid; })[0];
+  hoja("Enviar “" + esc(t.nom) + "” a…", '<div class="x-list">' + S.pacientes.map(function (p) {
+    return '<a class="x-li" href="' + wa(p.tel, conNombre(t.txt, p)) + '" target="_blank" rel="noopener" data-act="close"><b>' + esc(p.nom) + '</b><span class="x-btn x-btn--wa">Enviar</span><span class="x-meta">' + badge(p.tipo) + " " + esc(p.det) + "</span></a>";
+  }).join("") + "</div>");
+}
+
+/* ---------- render y eventos ---------- */
+function render() {
+  el("hdate").textContent = "Hoy, " + fechaCorta(HOY_ISO);
+  document.querySelectorAll(".x-tab").forEach(function (b) { if (b.dataset.v === S.vista) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); });
+  el("view").innerHTML = V[S.vista]();
+  save();
+}
+var ACT = {
+  tab: function (b) { S.vista = b.dataset.v; cerrar(); render(); window.scrollTo(0, 0); },
+  mas: hojaMas,
+  banner: function () { S.bannerOk = true; render(); },
+  dia: function (b) { S.dia = b.dataset.f; render(); },
+  recordatorios: hojaRecordatorios,
+  cita: function (b) { hojaCita(b.dataset.id); },
+  nueva: function (b) { hojaNueva(b.dataset.h); },
+  "nueva-ok": function () {
+    var p = pac(el("npac").value), f = el("nfecha") ? el("nfecha").value : S.dia;
+    S.citas.push({ id: "c" + Date.now(), pid: p.id, fecha: f, hora: el("nhora").value, n: Math.min(p.hechas + 1, p.plan), estado: "pend" });
+    if (el("nfecha") && S.np === p.id) { S.dia = f; render(); hojaCreado(p.id); } else { cerrar(); render(); }
+    toast("Hora agendada para " + p.nom.split(" ")[0]);
+  },
+  nuevopac: hojaFicha,
+  fmic: fmic,
+  fauto: function () { escucharAuto("fvoz", "fauto", "fhint", llenarFicha); },
+  fllenar: function () { var t = el("fvoz").value.trim(); if (!t) { ferr("Dicta o escribe los datos primero."); enfocar("fvoz"); return; } pararVoz(); ferr(""); llenarFicha(t); el("fvoz").blur(); var f = el("fnom"); if (f) f.scrollIntoView({ block: "center", behavior: "smooth" }); },
+  "nuevopac-ok": function () {
+    var nom = el("fnom").value.trim().replace(/\s+/g, " "), tel = telefono(el("ftel").value), n = parseInt(el("fplan").value, 10);
+    if (!nom) { ferr("Falta el nombre."); return; }
+    if (!/^\+569\d{8}$/.test(tel)) { ferr("Revisa el teléfono: debe quedar como +569 y 8 dígitos, por ejemplo 9 1234 5678."); return; }
+    if (!(n >= 1)) { ferr("Indica cuántas sesiones tiene el plan."); return; }
+    pararVoz();
+    var p = { id: "p" + Date.now(), nom: nom, tel: tel, tipo: el("ftipo").value, det: el("fdet").value.trim() || "Por definir", cirugia: el("fcir").value || null, plan: n, hechas: 0, notas: [] };
+    S.pacientes.push(p); S.np = p.id; render(); hojaCreado(p.id); toast("Ficha de " + nom.split(" ")[0] + " creada");
+  },
+  primera: function (b) { var f = MAN_ISO; hojaNueva(horaLibre(f), b.dataset.id); },
+  marcar: function (b) { var c = S.citas.filter(function (x) { return x.id === b.dataset.id; })[0]; if (c && c.estado === "pend") { c.estado = "env"; render(); } },
+  confirmar: function (b) { S.citas.forEach(function (c) { if (c.id === b.dataset.id) c.estado = "conf"; }); cerrar(); render(); toast("Hora confirmada"); },
+  mover: function () { el("mover").hidden = false; el("mover").scrollIntoView({ block: "nearest" }); },
+  "mover-ok": function (b) {
+    var c = S.citas.filter(function (x) { return x.id === b.dataset.id; })[0], f = el("mfecha").value, h = el("mhora").value;
+    if (!c || libres(f, c.id).indexOf(h) < 0) { toast("Elige una hora libre"); return; }
+    var r = { pid: c.pid, ant: c.hora, nueva: h, fAnt: c.fecha, fNueva: f };
+    c.fecha = f; c.hora = h; c.estado = "pend"; S.dia = f; render(); hojaAvisar([r], "Hora movida · avisar");
+    toast("Hora movida a " + fechaCorta(f) + " " + h);
+  },
+  atrasar: function () { A.cid = proximaDelDia(); hojaAtrasar(); },
+  "atr-min": function (b) { A.min = +b.dataset.v; hojaAtrasar(); },
+  "atr-scope": function (b) { A.scope = b.dataset.v; hojaAtrasar(); },
+  "atr-ok": function () {
+    var l = atrLista();
+    if (!l.length) return;
+    var lista = l.map(function (r) { r.c.hora = r.nueva; r.c.estado = "pend"; return { pid: r.c.pid, ant: r.ant, nueva: r.nueva, fAnt: r.c.fecha, fNueva: r.c.fecha }; });
+    render(); hojaAvisar(lista); toast(lista.length + (lista.length === 1 ? " hora atrasada " : " horas atrasadas ") + A.min + " min");
+  },
+  avisado: function (b) { var r = AV[+b.dataset.i]; if (r) r.ok = true; b.classList.add("is-avisado"); b.textContent = "Avisado ✓"; },
+  cancelar: function (b) { if (!confirm("¿Cancelar esta hora?")) return; S.citas = S.citas.filter(function (x) { return x.id !== b.dataset.id; }); cerrar(); render(); toast("Hora cancelada"); },
+  pac: function (b) { hojaPac(b.dataset.id); },
+  close: function () { setTimeout(cerrar, 0); },
+  mic: mic,
+  dictar: function () { if (S.vista !== "dictar") { D.res = null; D.pid = null; D.err = ""; } S.vista = "dictar"; cerrar(); render(); window.scrollTo(0, 0); hojaDictar(); },
+  "dictar-cita": function (b) { var c = S.citas.filter(function (x) { return x.id === b.dataset.id; })[0]; D.pid = c ? c.pid : null; D.res = null; D.txt = ""; D.err = ""; S.vista = "dictar"; cerrar(); render(); window.scrollTo(0, 0); hojaDictar(); },
+  vauto: function () { escucharAuto("vtxt", "vauto", "vhint", vInput); },
+  vlisto: function () {
+    var t = el("vtxt").value.trim();
+    if (!t) { var e = el("verr"); e.textContent = "Aún no hay texto. " + HINT_TXT; e.hidden = false; enfocar("vtxt"); return; }
+    pararVoz(); el("vtxt").blur(); D.txt = t; D.err = ""; cerrar(); S.vista = "dictar"; D.res = procesar(t); render(); window.scrollTo(0, 0);
+  },
+  quitarpac: function () { D.pid = null; render(); },
+  ejemplo: function () { D.txt = EJEMPLO; D.err = ""; var ta = el("dtxt"); if (ta) ta.value = D.txt; },
+  "ejemplo-res": function () { D.txt = EJEMPLO_RES; D.err = ""; var ta = el("dtxt"); if (ta) ta.value = D.txt; },
+  addhora: function () { var r = D.res; r.conHora = true; if (r.fecha < HOY_ISO) r.fecha = MAN_ISO; el("rprox").innerHTML = cardProx(); regenMsg(); refSum(); },
+  quitarhora: function () { D.res.conHora = false; el("rprox").innerHTML = cardProx(); regenMsg(); refSum(); },
+  espac: function (b) { D.res = procesar(D.txt, b.dataset.id); render(); window.scrollTo(0, 0); },
+  procesar: function () { D.txt = el("dtxt").value.trim(); if (!D.txt) { D.err = "Escribe o dicta algo primero, o usa el ejemplo."; render(); return; } pararVoz(); D.res = procesar(D.txt); render(); window.scrollTo(0, 0); },
+  redictar: function () { D.res = null; render(); hojaDictar(); },
+  aprobar: function () { aprobar(true); },
+  guardar: function () { aprobar(false); },
+  copiar: function () { copiar(ENVIO); },
+  tedit: function (b) { S.editT = b.dataset.id; render(); },
+  tcancel: function () { S.editT = null; render(); },
+  tsave: function (b) { S.plantillas.forEach(function (t) { if (t.id === b.dataset.id) { t.nom = el("tnom").value.trim() || "Sin nombre"; t.txt = conFirma(el("ttxt").value); } }); S.editT = null; render(); toast("Plantilla guardada"); },
+  tnew: function () { var id = "t" + Date.now(); S.plantillas.push({ id: id, nom: "Nueva plantilla", txt: "Hola 😊 \n" + FIRMA }); S.editT = id; render(); setTimeout(function () { el("tnom").focus(); el("tnom").select(); }, 0); },
+  tsend: function (b) { hojaEnviarA(b.dataset.id); },
+  reset: function () { if (!confirm("¿Volver a los datos de demostración?")) return; try { localStorage.removeItem("essencia2"); } catch (e) {} location.reload(); }
+};
+/* ---------- fotos / evolución (IndexedDB, con respaldo en memoria) ---------- */
+var ETQ = { antes: { t: "Antes", c: "x-s--pend" }, durante: { t: "Durante", c: "x-s--sent" }, despues: { t: "Después", c: "x-s--ok" } };
+var ETQ_ORD = ["antes", "durante", "despues"];
+var FDB = { db: null, ready: null, mem: [] };
+var E = { pid: null, fotos: [], nueva: null, busy: false, mem: false, cmpA: null, cmpD: null, cmpBlob: null, cmpKey: "" };
+function fdbOpen() {
+  if (FDB.ready) return FDB.ready;
+  FDB.ready = new Promise(function (res) {
+    try {
+      if (!window.indexedDB) { res(null); return; }
+      var rq = indexedDB.open("essencia-fotos", 1);
+      rq.onupgradeneeded = function () { var st = rq.result.createObjectStore("fotos", { keyPath: "id" }); st.createIndex("pid", "pid"); };
+      rq.onsuccess = function () { FDB.db = rq.result; res(FDB.db); };
+      rq.onerror = rq.onblocked = function () { res(null); };
+    } catch (e) { res(null); }
+  });
+  return FDB.ready;
+}
+function memDe(pid) { return FDB.mem.filter(function (f) { return f.pid === pid; }); }
+function fotosDe(pid) {
+  return fdbOpen().then(function (db) {
+    if (!db) return memDe(pid);
+    return new Promise(function (res) {
+      try {
+        var rq = db.transaction("fotos").objectStore("fotos").index("pid").getAll(pid);
+        rq.onsuccess = function () { res((rq.result || []).concat(memDe(pid))); };
+        rq.onerror = function () { res(memDe(pid)); };
+      } catch (e) { res(memDe(pid)); }
+    });
+  });
+}
+function fotoGuardar(f) {
+  return fdbOpen().then(function (db) {
+    if (!db) { FDB.mem.push(f); return "mem"; }
+    return new Promise(function (res) {
+      try {
+        var tx = db.transaction("fotos", "readwrite");
+        tx.objectStore("fotos").put(f);
+        tx.oncomplete = function () { res("db"); };
+        tx.onerror = tx.onabort = function () { FDB.mem.push(f); res("mem"); };
+      } catch (e) { FDB.mem.push(f); res("mem"); }
+    });
+  });
+}
+function fotoBorrar(id) {
+  FDB.mem = FDB.mem.filter(function (f) { return f.id !== id; });
+  return fdbOpen().then(function (db) {
+    if (!db) return;
+    return new Promise(function (res) {
+      try { var tx = db.transaction("fotos", "readwrite"); tx.objectStore("fotos").delete(id); tx.oncomplete = tx.onerror = tx.onabort = function () { res(); }; } catch (e) { res(); }
+    });
+  });
+}
+function aBuf(blob) {
+  if (blob.arrayBuffer) return blob.arrayBuffer();
+  return new Promise(function (res, rej) { var r = new FileReader(); r.onload = function () { res(r.result); }; r.onerror = rej; r.readAsArrayBuffer(blob); });
+}
+/* reduce en el celular: lado mayor 1280 px, JPEG 0,8 */
+function comprimir(file) {
+  return new Promise(function (res, rej) {
+    var u = URL.createObjectURL(file), im = new Image();
+    im.onload = function () {
+      var w = im.naturalWidth, h = im.naturalHeight, k = Math.min(1, 1280 / Math.max(w, h));
+      var c = document.createElement("canvas"); c.width = Math.round(w * k); c.height = Math.round(h * k);
+      var x = c.getContext("2d"); x.fillStyle = "#ffffff"; x.fillRect(0, 0, c.width, c.height); x.drawImage(im, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(u);
+      c.toBlob(function (b) { if (b) res(b); else rej(new Error("blob")); }, "image/jpeg", 0.8);
+    };
+    im.onerror = function () { URL.revokeObjectURL(u); rej(new Error("img")); };
+    im.src = u;
+  });
+}
+function fechaFoto(s) { var p = String(s).split("-"); return p[2] + "-" + p[1] + "-" + p[0]; }
+function fotoPorId(id) { for (var i = 0; i < E.fotos.length; i++) if (E.fotos[i].id === id) return E.fotos[i]; return null; }
+function chipEtq(k) { return '<span class="x-s ' + ETQ[k].c + '">' + ETQ[k].t + "</span>"; }
+function cargarEvo(pid) {
+  if (E.pid !== pid) { if (E.nueva) URL.revokeObjectURL(E.nueva.url); E.nueva = null; E.cmpA = E.cmpD = null; }
+  E.pid = pid;
+  return fotosDe(pid).then(function (list) {
+    if (E.pid !== pid) return;
+    E.fotos.forEach(function (f) { URL.revokeObjectURL(f.url); });
+    E.mem = !FDB.db || FDB.mem.length > 0;
+    E.fotos = list.map(function (r) {
+      var b = new Blob([r.buf], { type: r.type || "image/jpeg" });
+      return { id: r.id, pid: r.pid, fecha: r.fecha, etq: r.etq, nota: r.nota || "", t: r.t || 0, blob: b, url: URL.createObjectURL(b) };
+    }).sort(function (a, b) { return a.fecha < b.fecha ? -1 : a.fecha > b.fecha ? 1 : a.t - b.t; });
+    renderEvo();
+  });
+}
+function renderEvo() {
+  var box = el("evo"); if (!box || box.dataset.pid !== E.pid) return;
+  var fs = E.fotos, hayA = fs.some(function (f) { return f.etq === "antes"; }), hayD = fs.some(function (f) { return f.etq === "despues"; });
+  var h = '<div class="x-card__top"><p class="x-label">Evolución</p>' + (hayA && hayD ? '<button class="x-btn" data-act="evocmp">Comparar</button>' : "") + "</div>";
+  if (E.nueva) {
+    h += '<div class="x-card"><img class="x-evo__prev" src="' + E.nueva.url + '" alt="Vista previa de la foto nueva">' +
+      '<label class="x-field">Fecha<input id="evofecha" type="date" max="' + HOY_ISO + '" value="' + E.nueva.fecha + '"></label>' +
+      '<div class="x-field">Etapa<div class="x-seg" role="group" aria-label="Etapa">' + ETQ_ORD.map(function (k) { return '<button type="button" data-act="evoetq" data-v="' + k + '" aria-pressed="' + (k === E.nueva.etq) + '">' + ETQ[k].t + "</button>"; }).join("") + "</div></div>" +
+      '<label class="x-field">Nota (opcional)<input id="evonota" maxlength="80" placeholder="Sesión 3, drenaje" autocomplete="off"></label>' +
+      '<div class="x-row"><button class="x-btn" data-act="evocancel">Cancelar</button><button class="x-btn x-btn--accent" data-act="evook">Guardar foto</button></div></div>';
+  } else {
+    h += '<div class="x-row"><label class="x-btn x-btn--accent">+ Agregar foto<input class="x-file" type="file" accept="image/*" data-evo="file"></label>' +
+      '<label class="x-btn">📷 Cámara<input class="x-file" type="file" accept="image/*" capture="environment" data-evo="file"></label></div>';
+  }
+  if (E.busy) h += '<p class="x-fine">Preparando la foto…</p>';
+  h += fs.length ? '<div class="x-grid">' + fs.map(function (f) {
+    return '<button class="x-ph" data-act="evover" data-id="' + f.id + '" aria-label="Ver foto ' + ETQ[f.etq].t + " del " + fechaFoto(f.fecha) + '"><span class="x-ph__img"><img src="' + f.url + '" alt="">' + chipEtq(f.etq) + "</span><b>" + fechaFoto(f.fecha) + "</b>" + (f.nota ? "<small>" + esc(f.nota) + "</small>" : "") + "</button>";
+  }).join("") + "</div>" : '<p class="x-empty">Aún no hay fotos de evolución</p>';
+  if (fs.length && !(hayA && hayD)) h += '<p class="x-fine">Para comparar, marca una foto como «Antes» y otra como «Después».</p>';
+  h += '<p class="x-fine">🔒 Las fotos quedan solo en este celular.' + (E.mem ? " Este navegador no permite guardarlas: se borran al cerrar la app." : "") + "</p>";
+  box.innerHTML = h;
+}
+function evoArchivo(inp) {
+  var file = inp.files && inp.files[0]; inp.value = "";
+  if (!file) return;
+  E.busy = true; renderEvo();
+  comprimir(file).then(function (b) {
+    E.busy = false;
+    E.nueva = { blob: b, url: URL.createObjectURL(b), fecha: HOY_ISO, etq: E.fotos.length ? "durante" : "antes" };
+    renderEvo();
+    var c = el("evo"); if (c) c.scrollIntoView({ block: "start", behavior: "smooth" });
+  }, function () { E.busy = false; renderEvo(); toast("No pude leer esa foto. Prueba con otra."); });
+}
+function evoGuardar() {
+  var n = E.nueva; if (!n) return;
+  var pid = E.pid, fecha = (el("evofecha") && el("evofecha").value) || HOY_ISO, nota = el("evonota") ? el("evonota").value.trim().slice(0, 80) : "";
+  if (fecha > HOY_ISO) fecha = HOY_ISO;
+  aBuf(n.blob).then(function (buf) {
+    return fotoGuardar({ id: "f" + Date.now(), pid: pid, fecha: fecha, etq: n.etq, nota: nota, t: Date.now(), type: "image/jpeg", buf: buf });
+  }).then(function (donde) {
+    URL.revokeObjectURL(n.url); E.nueva = null;
+    toast(donde === "db" ? "Foto guardada" : "Foto guardada solo mientras la app esté abierta");
+    return cargarEvo(pid);
+  }, function () { toast("No se pudo guardar la foto"); });
+}
+/* visor a pantalla completa */
+function abrirVisor(cmp, html, etiqueta) {
+  var v = el("visor");
+  v.className = "x-visor" + (cmp ? " x-visor--cmp" : "");
+  el("visorBody").setAttribute("aria-label", etiqueta);
+  el("visorBody").innerHTML = html; v.hidden = false; v.scrollTop = 0;
+  var x = v.querySelector("[data-act=vcerrar]"); if (x) x.focus();
+}
+function cerrarVisor() { el("visor").hidden = true; E.cmpKey = ""; }
+function visorFoto(id) {
+  var f = fotoPorId(id); if (!f) return;
+  abrirVisor(false, '<div class="x-visor__top">' + chipEtq(f.etq) + "<b>" + fechaFoto(f.fecha) + '</b><button class="x-icon" data-act="vcerrar" aria-label="Cerrar">✕</button></div>' +
+    '<div class="x-visor__img"><img src="' + f.url + '" alt="Foto ' + ETQ[f.etq].t + " del " + fechaFoto(f.fecha) + '"></div>' +
+    (f.nota ? '<p class="x-visor__nota">' + esc(f.nota) + "</p>" : "") +
+    '<div id="vaviso"></div><button class="x-btn x-btn--wa x-btn--big" data-act="evosend" data-id="' + f.id + '">Enviar por WhatsApp</button>' +
+    '<div class="x-row"><button class="x-btn" data-act="evosave" data-id="' + f.id + '">Guardar imagen</button><button class="x-btn x-btn--danger" data-act="evodel" data-id="' + f.id + '">Eliminar</button></div>', "Foto de evolución");
+}
+function cargarImg(url) { return new Promise(function (res, rej) { var im = new Image(); im.onload = function () { res(im); }; im.onerror = rej; im.src = url; }); }
+function redondo(x, l, t, w, h, r) { x.beginPath(); x.moveTo(l + r, t); x.lineTo(l + w - r, t); x.quadraticCurveTo(l + w, t, l + w, t + r); x.lineTo(l + w, t + h - r); x.quadraticCurveTo(l + w, t + h, l + w - r, t + h); x.lineTo(l + r, t + h); x.quadraticCurveTo(l, t + h, l, t + h - r); x.lineTo(l, t + r); x.quadraticCurveTo(l, t, l + r, t); x.closePath(); }
+/* una sola imagen: Antes y Después lado a lado, fechas abajo y pie de Essencia */
+function lienzoComparar(a, d) {
+  return Promise.all([cargarImg(a.url), cargarImg(d.url)]).then(function (ims) {
+    var cs = getComputedStyle(document.documentElement), tk = function (n, f) { return cs.getPropertyValue(n).trim() || f; };
+    var bg = tk("--x-bg", "#fbf3ea"), panel = tk("--x-rent", "#f3e7da"), ink = tk("--x-ink", "#4a3428"), ink2 = tk("--x-ink2", "#7a5a48"), acc = tk("--x-accent", "#9c4a35"), line = tk("--x-line", "#ead8c6");
+    var PW = 600, PH = 750, M = 40, G = 24, W = M * 2 + PW * 2 + G, H = M + PH + 116 + 84;
+    var FONT = 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
+    var c = document.createElement("canvas"); c.width = W; c.height = H;
+    var x = c.getContext("2d");
+    x.fillStyle = bg; x.fillRect(0, 0, W, H);
+    [[ims[0], a], [ims[1], d]].forEach(function (par, i) {
+      var im = par[0], f = par[1], px = M + i * (PW + G), py = M;
+      x.save(); redondo(x, px, py, PW, PH, 24); x.clip();
+      x.fillStyle = panel; x.fillRect(px, py, PW, PH);
+      var k = Math.min(PW / im.naturalWidth, PH / im.naturalHeight), w = im.naturalWidth * k, h = im.naturalHeight * k;
+      x.drawImage(im, px + (PW - w) / 2, py + (PH - h) / 2, w, h);
+      x.restore();
+      x.textAlign = "center";
+      x.fillStyle = ink; x.font = "600 34px " + FONT; x.fillText(ETQ[f.etq].t, px + PW / 2, py + PH + 54);
+      x.fillStyle = ink2; x.font = "400 28px " + FONT; x.fillText(fechaFoto(f.fecha), px + PW / 2, py + PH + 94);
+    });
+    x.strokeStyle = tk("--x-mauve", "#9c4f86"); x.lineWidth = 2; x.beginPath(); x.moveTo(M, H - 80); x.lineTo(W - M, H - 80); x.stroke();
+    var pie = "Essencia · Isabel Pizarro, Kinesióloga", logo = document.querySelector(".x-top img"), LS = 52, LG = 14;
+    x.fillStyle = acc; x.font = "600 28px " + FONT;
+    var tw = x.measureText(pie).width, conLogo = logo && logo.complete && logo.naturalWidth > 0;
+    var gx = W / 2 - (tw + (conLogo ? LS + LG : 0)) / 2;
+    if (conLogo) {
+      x.save(); redondo(x, gx, H - 66, LS, LS, 10); x.clip();
+      x.drawImage(logo, gx, H - 66, LS, LS);
+      x.restore();
+      gx += LS + LG;
+    }
+    x.textAlign = "left"; x.fillStyle = acc;
+    x.fillText(pie, gx, H - 30);
+    return new Promise(function (res, rej) { c.toBlob(function (b) { if (b) res(b); else rej(new Error("blob")); }, "image/jpeg", 0.9); });
+  });
+}
+function visorComparar() {
+  var as = E.fotos.filter(function (f) { return f.etq === "antes"; }), ds = E.fotos.filter(function (f) { return f.etq === "despues"; });
+  if (!as.length || !ds.length) { cerrarVisor(); return; }
+  var a = fotoPorId(E.cmpA), d = fotoPorId(E.cmpD);
+  if (!a || a.etq !== "antes") { a = as[0]; E.cmpA = a.id; }
+  if (!d || d.etq !== "despues") { d = ds[ds.length - 1]; E.cmpD = d.id; }
+  function opts(list, sel) { return list.map(function (f) { return '<option value="' + f.id + '"' + (f.id === sel ? " selected" : "") + ">" + fechaFoto(f.fecha) + (f.nota ? " · " + esc(f.nota) : "") + "</option>"; }).join(""); }
+  function fig(f) { return '<figure><img src="' + f.url + '" alt="Foto ' + ETQ[f.etq].t + " del " + fechaFoto(f.fecha) + '"><figcaption>' + chipEtq(f.etq) + fechaFoto(f.fecha) + "</figcaption></figure>"; }
+  abrirVisor(true, '<div class="x-visor__top"><h3>Comparar</h3><button class="x-icon" data-act="vcerrar" aria-label="Cerrar">✕</button></div>' +
+    '<div class="x-cmp-sel"><label class="x-field">Antes<select id="cmpa">' + opts(as, a.id) + '</select></label><label class="x-field">Después<select id="cmpd">' + opts(ds, d.id) + "</select></label></div>" +
+    '<div class="x-cmp">' + fig(a) + fig(d) + "</div>" +
+    '<div id="vaviso"></div><button class="x-btn x-btn--wa x-btn--big" id="cmpsend" data-act="evocmpsend" disabled>Preparando imagen…</button>' +
+    '<button class="x-btn" id="cmpsave" data-act="evocmpsave" disabled>Guardar imagen</button>' +
+    '<p class="x-fine">Se envía como una sola imagen, con las fechas bajo cada foto y el pie de Essencia.</p>', "Comparar antes y después");
+  var key = a.id + "|" + d.id; E.cmpKey = key; E.cmpBlob = null;
+  lienzoComparar(a, d).then(function (b) {
+    if (E.cmpKey !== key) return;
+    E.cmpBlob = b;
+    var s = el("cmpsend"), g = el("cmpsave");
+    if (s) { s.disabled = false; s.textContent = "Enviar por WhatsApp"; }
+    if (g) g.disabled = false;
+  }, function () { var s = el("cmpsend"); if (s) s.textContent = "No se pudo armar la imagen"; });
+}
+/* compartir: hoja de compartir del celular, o guardar + abrir WhatsApp */
+function nombreArchivo(p, extra) { return "essencia-" + sinTilde(p.nom.split(" ")[0]).replace(/[^a-z0-9]+/g, "-") + "-" + extra + ".jpg"; }
+function descargar(blob, nombre) {
+  var u = URL.createObjectURL(blob), a = document.createElement("a");
+  a.href = u; a.download = nombre; a.rel = "noopener";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function () { URL.revokeObjectURL(u); }, 10000);
+}
+function enviarImagen(blob, nombre, texto, p) {
+  var file = null;
+  try { file = new File([blob], nombre, { type: "image/jpeg" }); } catch (e) {}
+  var puede = false;
+  try { puede = !!(file && navigator.share && navigator.canShare && navigator.canShare({ files: [file] })); } catch (e) {}
+  if (puede) {
+    navigator.share({ files: [file], text: texto }).catch(function (err) { if (err && err.name === "AbortError") return; respaldo(false); });
+    return;
+  }
+  respaldo(true);
+  function respaldo(abrir) {
+    var url = wa(p.tel, texto);
+    descargar(blob, nombre);
+    if (abrir) window.open(url, "_blank", "noopener");
+    toast("Adjunta la foto guardada en el chat");
+    var v = el("vaviso");
+    if (v) v.innerHTML = '<div class="x-note"><b>Imagen guardada ✓</b>Adjunta la foto guardada en el chat de ' + esc(p.nom.split(" ")[0]) + '.<a class="x-btn x-btn--wa" href="' + url + '" target="_blank" rel="noopener">Abrir WhatsApp</a></div>';
+  }
+}
+ACT.evoetq = function (b) {
+  if (!E.nueva) return;
+  E.nueva.etq = b.dataset.v;
+  b.parentNode.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+};
+ACT.evocancel = function () { if (E.nueva) URL.revokeObjectURL(E.nueva.url); E.nueva = null; renderEvo(); };
+ACT.evook = evoGuardar;
+ACT.evover = function (b) { visorFoto(b.dataset.id); };
+ACT.vcerrar = cerrarVisor;
+ACT.evocmp = function () { visorComparar(); };
+ACT.evosend = function (b) {
+  var f = fotoPorId(b.dataset.id), p = pac(E.pid); if (!f || !p) return;
+  enviarImagen(f.blob, nombreArchivo(p, f.fecha), "Hola " + p.nom.split(" ")[0] + " 🌿 Mira tu foto de evolución (" + ETQ[f.etq].t + ", " + fechaFoto(f.fecha) + "). ¡Vas muy bien!\n" + CIERRE, p);
+};
+ACT.evosave = function (b) { var f = fotoPorId(b.dataset.id), p = pac(E.pid); if (!f || !p) return; descargar(f.blob, nombreArchivo(p, f.fecha)); toast("Imagen guardada"); };
+ACT.evodel = function (b) {
+  if (!confirm("¿Eliminar esta foto? No se puede deshacer.")) return;
+  var pid = E.pid;
+  fotoBorrar(b.dataset.id).then(function () { cerrarVisor(); toast("Foto eliminada"); cargarEvo(pid); });
+};
+ACT.evocmpsend = function () {
+  var a = fotoPorId(E.cmpA), d = fotoPorId(E.cmpD), p = pac(E.pid); if (!E.cmpBlob || !a || !d || !p) return;
+  enviarImagen(E.cmpBlob, nombreArchivo(p, "evolucion-" + d.fecha), "Hola " + p.nom.split(" ")[0] + " 🌿 Mira tu evolución: " + fechaFoto(a.fecha) + " → " + fechaFoto(d.fecha) + ". ¡Vas muy bien!\n" + CIERRE, p);
+};
+ACT.evocmpsave = function () { var d = fotoPorId(E.cmpD), p = pac(E.pid); if (!E.cmpBlob || !d || !p) return; descargar(E.cmpBlob, nombreArchivo(p, "evolucion-" + d.fecha)); toast("Imagen guardada"); };
+fdbOpen();
+
+document.addEventListener("click", function (e) {
+  var b = e.target.closest("[data-act]");
+  if (b && ACT[b.dataset.act]) ACT[b.dataset.act](b, e);
+});
+document.addEventListener("input", function (e) {
+  if (e.target.id === "buscar") { S.q = e.target.value; el("plist").innerHTML = listaPac(); }
+  if (e.target.id === "dtxt") D.txt = e.target.value;
+  if (e.target.id === "vtxt") { vInput(e.target.value); return; }
+  if (e.target.id === "fvoz") { if (e.target.value.trim()) { llenarFicha(e.target.value); ferr(""); } return; }
+  if (!D.res) return;
+  if (e.target.id === "rmsg") D.res.msg = e.target.value;
+  if (e.target.id === "rtrat") D.res.tratTxt = e.target.value;
+  if (e.target.id === "rtel") D.res.tel = e.target.value;
+  if (e.target.id === "rnom") { var nv = e.target.value.trim(); D.res.nom = nv ? cap(nv) : "Paciente nueva"; el("rnuevo").textContent = "Paciente nueva" + (nv ? ": " + D.res.nom : ""); regenMsg(); refSum(); }
+  if (e.target.id === "rind") { D.res.ind = leerInd(e.target.value); regenMsg(); }
+});
+document.addEventListener("change", function (e) {
+  if (e.target.dataset && e.target.dataset.evo === "file") { evoArchivo(e.target); return; }
+  if (e.target.id === "cmpa") { E.cmpA = e.target.value; visorComparar(); return; }
+  if (e.target.id === "cmpd") { E.cmpD = e.target.value; visorComparar(); return; }
+  if (e.target.id === "ftel" && e.target.value.trim()) e.target.value = telefono(e.target.value);
+  if (e.target.id === "atrcita") { A.cid = e.target.value; hojaAtrasar(); return; }
+  if (e.target.id === "mfecha") { var mid = e.target.dataset.id, mf = e.target.value; el("mhora").innerHTML = opcionesLibres(mf, mid); el("mok").disabled = !libres(mf, mid).length; return; }
+  if ((e.target.id === "rfecha" || e.target.id === "rhora") && D.res) {
+    D.res.fecha = el("rfecha").value; D.res.hora = el("rhora").value;
+    el("rchoque").innerHTML = avisoChoque();
+    regenMsg(); refSum();
+  }
+});
+document.addEventListener("keydown", function (e) { if (e.key === "Escape") { if (!el("visor").hidden) cerrarVisor(); else cerrar(); } });
+render();
+/* ?dictado=<texto> o #dictado=<texto>: abre Dictar con el texto y la vista previa (para un Atajo de Siri) */
+(function () {
+  var t = null;
+  try { t = new URLSearchParams(location.search).get("dictado"); } catch (e) {}
+  if (!t) { var m = /(?:^#|&)dictado=([^&]*)/.exec(location.hash); if (m) { try { t = decodeURIComponent(m[1].replace(/\+/g, " ")); } catch (e) { t = m[1]; } } }
+  if (!t || !t.trim()) return;
+  D.txt = t.trim(); D.res = null; D.pid = null; D.err = ""; S.vista = "dictar"; render(); hojaDictar();
+  try { history.replaceState(null, "", location.pathname); } catch (e) {}
+})();
+setTimeout(function () { el("splash").classList.add("is-out"); }, 900);
+
+    </script>
+  </body>
+</html>
