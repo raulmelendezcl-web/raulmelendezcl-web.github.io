@@ -68,6 +68,7 @@
       .x-dayhead { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
       .x-top__t b { font: var(--type-heading); letter-spacing: 0.06em; color: var(--x-ink); }
       .x-top__t small { font: var(--type-caption); color: var(--x-ink2); }
+      .x-top__t .x-lema { font-style: italic; letter-spacing: 0.02em; line-height: 1.25; white-space: normal; }
       .x-icon { min-width: var(--tap); min-height: var(--tap); border: 0; background: transparent; border-radius: var(--r-pill); cursor: pointer; font: var(--type-label); color: var(--x-ink2); }
       .x-icon:hover { background: var(--hover-wash); }
 
@@ -263,7 +264,7 @@
     <div class="x-app">
       <header class="x-top">
         <img src="logo_essencia_hd.jpg" alt="Logo Essencia" />
-        <div class="x-top__t"><b>Essencia</b><small id="hdate"></small></div>
+        <div class="x-top__t"><b>Essencia</b><small class="x-lema">Kinesiología Integral, Estética y Salud</small><small id="hdate" hidden></small></div>
         <button class="x-icon" data-act="mas" aria-label="Más: acerca de Essencia">Más ⋯</button>
       </header>
       <main id="view" class="x-view" aria-live="polite"></main>
