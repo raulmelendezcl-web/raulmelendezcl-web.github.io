@@ -119,9 +119,48 @@
       .x-b--les { background: var(--x-les-soft); color: var(--x-les); }
       .x-b--est { background: var(--x-est-soft); color: var(--x-est); }
       .x-s { display: inline-flex; padding: 2px 8px; border-radius: var(--r-pill); font: var(--type-tag); }
-      .x-s--ok { background: var(--x-ok-soft); color: var(--x-ok); }
-      .x-s--pend { background: var(--x-amber-soft); color: var(--x-amber); }
-      .x-s--sent { background: var(--x-accent-soft); color: var(--x-accent); }
+      .x-s--ok { background: #dcefd6; color: #276b31; }
+      .x-s--pend { background: #fff0b3; color: #7a5a00; }
+      .x-s--sent { background: #fff0b3; color: #7a5a00; }
+      .x-s--no { background: #fbdcd6; color: #b02e1c; }
+      .x-appt--canc { opacity: .62; border-left-color: #c8402b !important; }
+      .x-appt--canc .x-appt__top b { text-decoration: line-through; }
+      .x-hoy { background: var(--x-accent-soft); border: 1px solid var(--x-line); border-radius: var(--r-m, 16px); padding: 14px 16px; display: grid; gap: 8px; }
+      .x-hoy__k { font: var(--type-tag); letter-spacing: .08em; text-transform: uppercase; color: var(--x-accent); }
+      .x-hoy__n { font: var(--type-body-strong); color: var(--x-ink); }
+      .x-hoy__row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+      .x-hlist { display: grid; gap: 8px; }
+      .x-hli { display: grid; grid-template-columns: 50px 1fr auto; gap: 10px; align-items: center; text-align: left; width: 100%; border: 1px solid var(--x-line); background: var(--x-card); border-radius: var(--r-s); padding: 10px 12px; cursor: pointer; color: var(--x-ink); }
+      .x-hli__h { font: var(--type-body-strong); color: var(--x-accent); font-variant-numeric: tabular-nums; }
+      .x-hli__t { display: grid; gap: 2px; min-width: 0; }
+      .x-hli__t span { font: var(--type-small); color: var(--x-ink2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .x-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+      .x-stat { background: var(--x-card); border: 1px solid var(--x-line); border-radius: var(--r-s); padding: 12px; display: grid; gap: 2px; }
+      .x-stat b { font-size: 26px; line-height: 1.1; color: var(--x-ink); font-variant-numeric: tabular-nums; }
+      .x-stat span { font: var(--type-small); color: var(--x-ink2); }
+      .x-p { display: inline-flex; padding: 1px 7px; border-radius: var(--r-pill); font: var(--type-tag); border: 1px solid transparent; }
+      .x-p--pagado { background: #dcefd6; color: #276b31; }
+      .x-p--abono { background: #fff0b3; color: #7a5a00; }
+      .x-p--falta { background: transparent; color: #b02e1c; border-color: #e7b3a9; }
+      .x-pago { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+      .x-pago .x-btn[aria-pressed="true"] { box-shadow: 0 0 0 2px currentColor inset; font-weight: var(--weight-medium); }
+      .x-pl { border-left: 5px solid var(--x-line); }
+      .x-pl[data-cat="est"] { border-left-color: #a3445a; background: #fdf3f3; }
+      .x-pl[data-cat="kine"] { border-left-color: #2f6f73; background: #eef6f5; }
+      .x-pl[data-cat="gen"] { border-left-color: #a08770; }
+      .x-pl__top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+      .x-cat { display: inline-flex; padding: 2px 8px; border-radius: var(--r-pill); font: var(--type-tag); }
+      .x-cat--est { background: #f8e3e4; color: #a3445a; }
+      .x-cat--kine { background: #d9ecea; color: #2f6f73; }
+      .x-cat--gen { background: #efe6dc; color: #6e5845; }
+      .x-filt { display: flex; gap: 6px; overflow-x: auto; padding: 2px 0 6px; }
+      .x-filt button { flex: none; border: 1px solid var(--x-line); background: var(--x-card); color: var(--x-ink); border-radius: var(--r-pill); padding: 8px 14px; font: var(--type-small); cursor: pointer; }
+      .x-filt button[aria-pressed="true"][data-v="est"] { background: #a3445a; color: #fff; border-color: #a3445a; }
+      .x-filt button[aria-pressed="true"][data-v="kine"] { background: #2f6f73; color: #fff; border-color: #2f6f73; }
+      .x-filt button[aria-pressed="true"][data-v="gen"], .x-filt button[aria-pressed="true"][data-v="todas"] { background: #6e5845; color: #fff; border-color: #6e5845; }
+      .x-btn--ok { background: #dcefd6; color: #276b31; border-color: transparent; }
+      .x-btn--abono { background: #fff0b3; color: #7a5a00; border-color: transparent; }
+      .x-btn--no { background: #fbdcd6; color: #b02e1c; border-color: transparent; }
 
       .x-tabs { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; z-index: 30; display: grid; grid-template-columns: 1fr 1fr 104px 1fr 1fr; align-items: end; padding: 6px 4px calc(6px + env(safe-area-inset-bottom)); background: color-mix(in srgb, var(--x-card) 92%, transparent); -webkit-backdrop-filter: var(--hark-blur); backdrop-filter: var(--hark-blur); border-top: 1px solid var(--x-line); }
       .x-tab { min-height: 52px; border: 0; background: transparent; display: grid; place-items: center; gap: 2px; font: var(--type-caption); color: var(--x-ink2); cursor: pointer; border-radius: var(--r-s); }
@@ -335,7 +374,7 @@ function conFirma(t) {
   return t.replace(/\s+$/, "") + "\n" + CIERRE;
 }
 var TIPOS = { postop: { t: "Post-op", c: "" }, lesion: { t: "Lesión", c: " x-b--les" }, estetica: { t: "Estética", c: " x-b--est" } };
-var EST = { conf: { t: "Confirmada ✓", c: "x-s--ok" }, pend: { t: "Por confirmar", c: "x-s--pend" }, env: { t: "Enviado", c: "x-s--sent" } };
+var EST = { conf: { t: "Confirmada ✓", c: "x-s--ok" }, pend: { t: "Por confirmar", c: "x-s--pend" }, env: { t: "Enviado · por confirmar", c: "x-s--sent" }, canc: { t: "Cancelada", c: "x-s--no" }, asis: { t: "Asistió ✓", c: "x-s--ok" }, falto: { t: "No asistió", c: "x-s--no" } };
 
 /* ---------- estado ---------- */
 var S = {
@@ -387,16 +426,16 @@ S.vista = "agenda"; S.dia = HOY_ISO;
 var DIAS_L = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
 function fechaMsg(f) { var d = parseISO(f); return DIAS_L[d.getDay()] + " " + pad(d.getDate()) + "-" + pad(d.getMonth() + 1); }
 function pac(id) { for (var i = 0; i < S.pacientes.length; i++) if (S.pacientes[i].id === id) return S.pacientes[i]; return null; }
-function citasDe(f) { return S.citas.filter(function (c) { return c.fecha === f; }).sort(function (a, b) { return a.hora < b.hora ? -1 : 1; }); }
+function citasDe(f, todas) { return S.citas.filter(function (c) { return c.fecha === f && (todas || c.estado !== "canc"); }).sort(function (a, b) { return a.hora < b.hora ? -1 : 1; }); }
 function hslot(h) { return deMin(redondear(aMin(h))); }
 function choque(f, h, pid) { return citasDe(f).filter(function (c) { return hslot(c.hora) === hslot(h) && c.pid !== pid; })[0]; }
-function proxima(pid) { return S.citas.filter(function (c) { return c.pid === pid && c.fecha >= HOY_ISO; }).sort(function (a, b) { return (a.fecha + a.hora) < (b.fecha + b.hora) ? -1 : 1; })[0]; }
+function proxima(pid) { return S.citas.filter(function (c) { return c.pid === pid && c.fecha >= HOY_ISO && c.estado !== "canc"; }).sort(function (a, b) { return (a.fecha + a.hora) < (b.fecha + b.hora) ? -1 : 1; })[0]; }
 function badge(t) { return '<span class="x-b' + TIPOS[t].c + '">' + TIPOS[t].t + "</span>"; }
 function estadoChip(e) { return '<span class="x-s ' + EST[e].c + '">' + EST[e].t + "</span>"; }
 function nombreDia(f) { return f === HOY_ISO ? "hoy" : f === MAN_ISO ? "mañana" : "el " + fechaCorta(f); }
 function msgRecordatorio(c) {
   var p = pac(c.pid);
-  return "Hola " + p.nom.split(" ")[0] + " 😊 Te recuerdo tu hora " + nombreDia(c.fecha) + " " + fechaCorta(c.fecha) + " a las " + c.hora + " para tu sesión " + c.n + " de " + p.plan + ". ¿Me confirmas? Si no puedes, avísame y la movemos.\n" + FIRMA;
+  return "Hola " + p.nom.split(" ")[0] + " 😊 Te recuerdo tu hora " + nombreDia(c.fecha) + " " + fechaCorta(c.fecha) + " a las " + c.hora + " para tu sesión " + c.n + " de " + p.plan + ". ¿Me confirmas? Responde SÍ para confirmar, o NO si no puedes y la movemos.\n" + FIRMA;
 }
 function conNombre(txt, p) { return txt.replace(/^Hola/, "Hola " + p.nom.split(" ")[0]); }
 function opcionesDia(sel) {
@@ -418,7 +457,7 @@ V.agenda = function () {
   var man = citasDe(MAN_ISO), pend = man.filter(function (c) { return c.estado === "pend"; }).length;
   var hd = new Date(), hola = DIAS_L[hd.getDay()] + " " + hd.getDate() + " de " + ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"][hd.getMonth()];
   /* Foto de perfil incrustada (FOTO_ISABEL, más abajo). Si falla, quedan las iniciales. */
-  var h = '<div class="x-hola"><span class="x-avatar" role="img" aria-label="Isabel"><span class="x-avatar__in" aria-hidden="true">IP' +
+  var h = resumenHoy() + '<div class="x-hola"><span class="x-avatar" role="img" aria-label="Isabel"><span class="x-avatar__in" aria-hidden="true">IP' +
     (FOTO_ISABEL ? '<img src="' + FOTO_ISABEL + '" alt="" onerror="this.remove()" />' : "") + "</span></span>" +
     '<div class="x-hola__txt"><h2>Hola, Isabel</h2><p class="x-fine">Hoy es ' + hola + "</p></div></div>";
   if (!S.bannerOk) h += '<div class="x-banner"><span>📲 Agrégala a tu pantalla de inicio: en Safari toca Compartir → Agregar a inicio.</span><button class="x-icon" data-act="banner" aria-label="Cerrar aviso">✕</button></div>';
@@ -427,17 +466,17 @@ V.agenda = function () {
   h += '<div class="x-days" role="group" aria-label="Día">';
   for (var i = 0; i < 7; i++) { var f = iso(addDays(HOY, i)); h += '<button data-act="dia" data-f="' + f + '" aria-pressed="' + (f === S.dia) + '">' + (i === 0 ? "Hoy" : i === 1 ? "Mañana" : fechaCorta(f)) + "</button>"; }
   h += "</div>";
-  var cs = citasDe(S.dia);
+  var cs = citasDe(S.dia), csT = citasDe(S.dia, true);
   h += '<div class="x-dayhead"><p class="x-fine">' + fechaCorta(S.dia) + " · " + cs.length + " pacientes</p>" + (cs.length ? '<button class="x-btn" data-act="atrasar">⏱ Atrasar</button>' : "") + "</div>";
   if (cs.length) h += '<p class="x-fine" style="margin:4px 0 0">☝️ Mantén presionado un paciente y arrástralo a otra hora libre.</p>';
   h += '<div class="x-tl">';
   bloques().forEach(function (hh) {
-    var inner = "";
-    cs.filter(function (c) { return hslot(c.hora) === hh; }).forEach(function (c) {
-      var p = pac(c.pid);
-      inner += '<button class="x-appt' + (c.id === S.hl ? " x-appt--hl" : "") + '" data-t="' + p.tipo + '" data-act="cita" data-id="' + c.id + '"><span class="x-appt__top"><b>' + esc(p.nom) + "</b>" + estadoChip(c.estado) + '</span><span class="x-meta">' + c.hora + " · " + badge(p.tipo) + " Sesión " + c.n + " de " + p.plan + "</span></button>";
+    var inner = "", activa = false;
+    csT.filter(function (c) { return hslot(c.hora) === hh; }).forEach(function (c) {
+      var p = pac(c.pid); if (c.estado !== "canc") activa = true;
+      inner += '<button class="x-appt' + (c.id === S.hl ? " x-appt--hl" : "") + (c.estado === "canc" ? " x-appt--canc" : "") + '" data-t="' + p.tipo + '" data-act="cita" data-id="' + c.id + '"><span class="x-appt__top"><b>' + esc(p.nom) + "</b>" + estadoChip(c.estado) + '</span><span class="x-meta">' + c.hora + " · " + badge(p.tipo) + " Sesión " + c.n + " de " + p.plan + (c.estado !== "canc" ? " " + pagoChip(c) : "") + "</span></button>";
     });
-    if (!inner) inner = '<div class="x-free"><span>Libre</span><button class="x-add" data-act="nueva" data-h="' + hh + '" aria-label="Agendar a las ' + hh + '">+</button></div>';
+    if (!activa) inner += '<div class="x-free"><span>Libre</span><button class="x-add" data-act="nueva" data-h="' + hh + '" aria-label="Agendar a las ' + hh + '">+</button></div>';
     h += '<div class="x-slot" data-h="' + hh + '"><span class="x-slot__h">' + hh + '</span><div class="x-slot__c">' + inner + "</div></div>";
   });
   return h + '<div class="x-slot"><span class="x-slot__h">' + deMin(DIA_FIN) + '</span><div class="x-free"><span>Cierre</span></div></div></div>';
@@ -454,20 +493,31 @@ function listaPac() {
   }).join("") || '<p class="x-fine">Sin resultados.</p>';
 }
 
+var CATS = { est: "Estética", kine: "Kinesiología", gen: "General" };
+var CAT_DEF = { t1: "est", t2: "est", t3: "est", t4: "est", t5: "kine", t6: "kine", t7: "gen", t8: "gen" };
+function catDe(t) { return t.cat || CAT_DEF[t.id] || "gen"; }
 V.plantillas = function () {
+  var f = S.fcat || "todas";
   var h = '<h2>Plantillas de cuidados</h2><p class="x-fine">Edítalas una vez y envíalas con un toque. El saludo se completa con el nombre de la paciente.</p>';
-  S.plantillas.forEach(function (t) {
-    if (S.editT === t.id) {
-      h += '<section class="x-card"><label class="x-field">Nombre<input id="tnom" value="' + esc(t.nom) + '"></label><label class="x-field">Texto<textarea id="ttxt" rows="8">' + esc(t.txt) + '</textarea></label><div class="x-row"><button class="x-btn" data-act="tcancel">Cancelar</button><button class="x-btn x-btn--accent" data-act="tsave" data-id="' + t.id + '">Guardar</button></div></section>';
-    } else {
-      h += '<section class="x-card"><b>' + esc(t.nom) + '</b><p class="x-msg">' + esc(t.txt) + '</p><div class="x-row"><button class="x-btn" data-act="tedit" data-id="' + t.id + '">Editar</button><button class="x-btn x-btn--wa" data-act="tsend" data-id="' + t.id + '">Enviar a…</button></div></section>';
-    }
+  h += '<div class="x-filt" role="group" aria-label="Filtrar plantillas">' + [["todas", "Todas"], ["est", "Estética"], ["kine", "Kinesiología"], ["gen", "General"]].map(function (o) { return '<button data-act="fcat" data-v="' + o[0] + '" aria-pressed="' + (f === o[0]) + '">' + o[1] + "</button>"; }).join("") + "</div>";
+  ["est", "kine", "gen"].forEach(function (k) {
+    if (f !== "todas" && f !== k) return;
+    var ls = S.plantillas.filter(function (t) { return catDe(t) === k || S.editT === t.id && false; });
+    if (!ls.length) return;
+    if (f === "todas") h += '<p class="x-label" style="margin-top:10px">' + CATS[k] + "</p>";
+    ls.forEach(function (t) {
+      if (S.editT === t.id) {
+        h += '<section class="x-card x-pl" data-cat="' + k + '"><label class="x-field">Nombre<input id="tnom" value="' + esc(t.nom) + '"></label><label class="x-field">Tipo<select id="tcat">' + ["est", "kine", "gen"].map(function (c) { return '<option value="' + c + '"' + (c === k ? " selected" : "") + ">" + CATS[c] + "</option>"; }).join("") + '</select></label><label class="x-field">Texto<textarea id="ttxt" rows="8">' + esc(t.txt) + '</textarea></label><div class="x-row"><button class="x-btn" data-act="tcancel">Cancelar</button><button class="x-btn x-btn--accent" data-act="tsave" data-id="' + t.id + '">Guardar</button></div></section>';
+      } else {
+        h += '<section class="x-card x-pl" data-cat="' + k + '"><div class="x-pl__top"><b>' + esc(t.nom) + '</b><span class="x-cat x-cat--' + k + '">' + CATS[k] + '</span></div><p class="x-msg">' + esc(t.txt) + '</p><div class="x-row"><button class="x-btn" data-act="tedit" data-id="' + t.id + '">Editar</button><button class="x-btn x-btn--wa" data-act="tsend" data-id="' + t.id + '">Enviar a…</button></div></section>';
+      }
+    });
   });
   return h + '<button class="x-btn x-btn--big" data-act="tnew">+ Nueva plantilla</button>';
 };
 
 function hojaMas() {
-  hoja("Acerca de", '<section class="x-about"><img src="' + document.querySelector(".x-top img").getAttribute("src") + '" alt="Logo Essencia"><b>Essencia</b><p class="x-about__who">Isabel Pizarro, Kinesióloga</p><hr class="x-rule"><p class="x-fine">Kinesiología Integral, Estética y Salud<br>Joaquín del Pino 823, San Carlos</p><p class="x-fine">Para enviar por WhatsApp, abre esta página en Safari y agrégala a tu pantalla de inicio.</p><button class="x-btn" data-act="reset">Restablecer datos de demostración</button><p class="x-fine">Prototipo de demostración · datos ficticios</p></section>');
+  hoja("Más", '<button class="x-btn x-btn--accent x-btn--big" data-act="stats">📊 Estadísticas del mes</button><section class="x-about"><img src="' + document.querySelector(".x-top img").getAttribute("src") + '" alt="Logo Essencia"><b>Essencia</b><p class="x-about__who">Isabel Pizarro, Kinesióloga</p><hr class="x-rule"><p class="x-fine">Kinesiología Integral, Estética y Salud<br>Joaquín del Pino 823, San Carlos</p><p class="x-fine">Para enviar por WhatsApp, abre esta página en Safari y agrégala a tu pantalla de inicio.</p><button class="x-btn" data-act="reset">Restablecer datos de demostración</button><p class="x-fine">Prototipo de demostración · datos ficticios</p></section>');
 }
 
 /* ---------- dictado ---------- */
@@ -703,7 +753,7 @@ function procesar(txt, forzar) {
 function mensaje(r) {
   var s = "Hola " + r.nom.split(" ")[0] + " 😊 ", cuando = "el " + fechaMsg(r.fecha) + " a las " + r.hora;
   if (r.solo && !r.ind.length) {
-    return s + (r.conHora ? "Te confirmo tu hora " + cuando + " para tu sesión " + r.prox + " de " + r.total + (r.motivo ? " (" + r.motivo + ")" : "") + ". ¿Me confirmas? Si no puedes, avísame y la movemos." : "Cualquier duda me escribes.") + "\n" + FIRMA;
+    return s + (r.conHora ? "Te confirmo tu hora " + cuando + " para tu sesión " + r.prox + " de " + r.total + (r.motivo ? " (" + r.motivo + ")" : "") + ". ¿Me confirmas? Responde SÍ para confirmar, o NO si no puedes y la movemos." : "Cualquier duda me escribes.") + "\n" + FIRMA;
   }
   s += r.ind.length ? "Te dejo tus pasos a seguir:\n" + r.ind.map(function (i) { return "• " + i; }).join("\n") + "\n" : "Gracias por venir hoy.\n";
   if (r.conHora) s += "Tu próxima hora es " + cuando + ", sesión " + r.prox + " de " + r.total + ". Te espero.\n";
@@ -796,18 +846,18 @@ function hojaRecordatorios() {
   var cs = citasDe(MAN_ISO);
   hoja("Recordatorios · " + fechaCorta(MAN_ISO), '<p class="x-fine">Un toque por paciente: se abre WhatsApp con el mensaje listo.</p>' + cs.map(function (c) {
     var p = pac(c.pid);
-    return '<section class="x-card"><div class="x-appt__top"><b>' + c.hora + " · " + esc(p.nom) + "</b>" + estadoChip(c.estado) + '</div><p class="x-msg">' + esc(msgRecordatorio(c)) + '</p><a class="x-btn x-btn--wa" data-act="marcar" data-id="' + c.id + '" href="' + waApp(wa(p.tel, msgRecordatorio(c))) + '">Enviar</a></section>';
+    return '<section class="x-card"><div class="x-appt__top"><b>' + c.hora + " · " + esc(p.nom) + "</b>" + estadoChip(c.estado) + '</div><p class="x-msg">' + esc(msgRecordatorio(c)) + '</p><a class="x-btn x-btn--wa" data-act="marcar" data-id="' + c.id + '" href="' + waApp(wa(p.tel, msgRecordatorio(c))) + '">Enviar</a><div class="x-row"><button class="x-btn x-btn--ok" data-act="estado" data-e="conf" data-keep="rec" data-id="' + c.id + '">Dijo SÍ ✓</button><button class="x-btn x-btn--no" data-act="estado" data-e="canc" data-keep="rec" data-id="' + c.id + '">Dijo NO ✕</button></div></section>';
   }).join(""));
 }
 function hojaCita(id) {
   var c = S.citas.filter(function (x) { return x.id === id; })[0], p = pac(c.pid), nt = p.notas[0];
-  hoja(esc(p.nom), '<p class="x-meta">' + badge(p.tipo) + estadoChip(c.estado) + " " + fechaCorta(c.fecha) + " · " + c.hora + "</p>" +
+   hoja(esc(p.nom), '<p class="x-meta">' + badge(p.tipo) + estadoChip(c.estado) + (c.estado !== "canc" ? " " + pagoChip(c) : "") + " " + fechaCorta(c.fecha) + " · " + c.hora + "</p>" +
     '<dl class="x-dl"><dt>Teléfono</dt><dd><a class="link" href="tel:' + p.tel + '">' + p.tel + "</a></dd><dt>Motivo</dt><dd>" + esc(p.det) + "</dd><dt>Esta hora</dt><dd>Sesión " + c.n + " de " + p.plan + "</dd><dt>Plan</dt><dd>" + p.hechas + " de " + p.plan + " realizadas" + plan(p) + "</dd></dl>" +
     (nt ? '<div class="x-note"><span class="x-label">Última nota · ' + fechaCorta(nt.f) + "</span>" + esc(nt.txt) + "</div>" : "") +
     '<button class="x-btn x-btn--accent x-btn--big" data-act="dictar-cita" data-id="' + c.id + '">🎙 Dictar sobre esta atención</button>' +
     '<div id="mover" hidden class="x-card"><p class="x-label">Mover a una hora libre</p><div class="x-two"><label class="x-field">Día<select id="mfecha" data-id="' + c.id + '">' + opcionesDia(c.fecha) + '</select></label><label class="x-field">Hora libre<select id="mhora">' + opcionesLibres(c.fecha, c.id) + '</select></label></div><button class="x-btn x-btn--accent" id="mok" data-act="mover-ok" data-id="' + c.id + '"' + (libres(c.fecha, c.id).length ? "" : " disabled") + '>Confirmar nueva hora</button></div>' +
-    (c.estado === "pend" ? '<button class="x-btn" data-act="confirmar" data-id="' + c.id + '">Marcar como confirmada</button>' : "") +
-    '<div class="x-row"><button class="x-btn" data-act="mover">Mover hora</button><button class="x-btn x-btn--danger" data-act="cancelar" data-id="' + c.id + '">Cancelar</button></div>' +
+    botonesEstado(c) + (c.estado !== "canc" ? botonesPago(c) : "") +
+    '<div class="x-row"><button class="x-btn" data-act="mover">' + (c.estado === "canc" ? "Reagendar" : "Mover hora") + '</button>' + (c.estado === "canc" ? '<button class="x-btn x-btn--danger" data-act="borrar" data-id="' + c.id + '">Borrar</button>' : "") + "</div>" +
     '<a class="x-btn x-btn--wa x-btn--big" href="' + waApp(wa(p.tel, msgRecordatorio(c))) + '" data-act="marcar" data-id="' + c.id + '">Enviar WhatsApp</a>');
 }
 /* ---------- atrasar / mover hora ---------- */
@@ -877,6 +927,7 @@ function hojaPac(id) {
     '<dl class="x-dl"><dt>Teléfono</dt><dd><a class="link" href="tel:' + p.tel + '">' + p.tel + "</a></dd><dt>" + (p.tipo === "postop" ? "Cirugía" : p.tipo === "lesion" ? "Lesión" : "Tratamiento") + "</dt><dd>" + esc(p.det) + "</dd>" +
     (dias !== null ? "<dt>Fecha cirugía</dt><dd>" + fechaCorta(p.cirugia) + " · <b>Día " + dias + " de recuperación</b></dd>" : "") +
     "<dt>Próxima hora</dt><dd>" + (c ? fechaCorta(c.fecha) + " " + c.hora + " " + estadoChip(c.estado) : "Sin agendar") + "</dd><dt>Plan</dt><dd>" + p.hechas + " de " + p.plan + " sesiones" + plan(p) + "</dd></dl>" +
+    '<button class="x-btn" data-act="editpac" data-id="' + p.id + '">✏️ Editar datos</button>' +
     '<section class="x-evo" id="evo" data-pid="' + p.id + '" aria-label="Evolución"><p class="x-label">Evolución</p><p class="x-fine">Cargando fotos…</p></section>' +
     '<p class="x-label">Historial de notas</p>' + (p.notas.map(function (nt) { return '<div class="x-note"><span class="x-label">' + fechaCorta(nt.f) + "</span>" + esc(nt.txt) + "</div>"; }).join("") || '<p class="x-fine">Aún sin notas.</p>') +
     '<p class="x-label">Plantillas de cuidados</p><div class="x-row">' + S.plantillas.map(function (t) { return '<a class="x-btn x-btn--wa" href="' + waApp(wa(p.tel, conNombre(t.txt, p))) + '">' + esc(t.nom) + "</a>"; }).join("") + "</div>");
@@ -984,7 +1035,7 @@ function hojaEnviarA(tid) {
     timer = setTimeout(function () { timer = null; begin(a, p); }, 380);
   }
   function begin(a, p) {
-    var c = S.citas.filter(function (x) { return x.id === a.dataset.id; })[0]; if (!c) return;
+    var c = S.citas.filter(function (x) { return x.id === a.dataset.id; })[0]; if (!c || c.estado === "canc" || !a.closest(".x-slot")) return;
     var r = a.getBoundingClientRect(), g = a.cloneNode(true);
     g.classList.add("x-ghost"); g.style.width = r.width + "px"; g.style.left = r.left + "px"; g.style.top = r.top + "px";
     document.body.appendChild(g); a.classList.add("x-appt--src"); document.body.classList.add("is-dragging");
@@ -1021,6 +1072,72 @@ function hojaEnviarA(tid) {
   document.addEventListener("click", function (e) { if (Date.now() - justDragged < 600) { e.stopPropagation(); e.preventDefault(); } }, true);
   document.addEventListener("contextmenu", function (e) { if (D || (e.target.closest && e.target.closest(".x-appt"))) e.preventDefault(); });
 })();
+
+/* ---------- resumen de hoy, estados, estadísticas, editar paciente ---------- */
+function resumenHoy() {
+  var cs = citasDe(HOY_ISO), now = ahoraMin();
+  var prox = cs.filter(function (c) { return aMin(c.hora) + SLOT_MIN > now && c.estado !== "asis" && c.estado !== "falto"; })[0];
+  var h = '<section class="x-hoy" aria-label="Resumen de hoy">';
+  if (!cs.length) h += '<span class="x-hoy__k">Hoy</span><span class="x-hoy__n">No tienes pacientes hoy.</span>';
+  else if (!prox) h += '<span class="x-hoy__k">Hoy</span><span class="x-hoy__n">Terminaste las sesiones de hoy 🌿</span>';
+  else {
+    var p = pac(prox.pid), d = aMin(prox.hora) - now;
+    var cuando = d > 0 ? (d >= 60 ? "en " + Math.floor(d / 60) + " h" + (d % 60 ? " " + (d % 60) + " min" : "") : "en " + d + " min") : "ahora";
+    h += '<span class="x-hoy__k">Tu próxima sesión · ' + cuando + "</span>" +
+      '<div class="x-hoy__row"><span class="x-hoy__n">' + esc(p.nom) + " · " + esc(p.det) + " · " + prox.hora + "</span>" +
+      '<button class="x-btn" data-act="ver-cita" data-id="' + prox.id + '">Ver en la agenda</button></div>';
+  }
+  h += "</section>";
+  var todas = citasDe(HOY_ISO, true);
+  if (todas.length) {
+    h += '<p class="x-label" style="margin-top:12px">Agenda de hoy</p><div class="x-hlist">' + todas.map(function (c) {
+      var p = pac(c.pid);
+      return '<button class="x-hli" data-act="cita" data-id="' + c.id + '"><span class="x-hli__h">' + c.hora + '</span><span class="x-hli__t"><b>' + esc(p.nom) + "</b><span>" + esc(p.det) + "</span></span>" + estadoChip(c.estado) + "</button>";
+    }).join("") + "</div>";
+  }
+  return h;
+}
+var PAGO = { falta: { t: "Falta pago", c: "x-p--falta" }, abono: { t: "Abono", c: "x-p--abono" }, pagado: { t: "Pagado ✓", c: "x-p--pagado" } };
+function pagoChip(c) { var k = c.pago || "falta"; return '<span class="x-p ' + PAGO[k].c + '">' + PAGO[k].t + "</span>"; }
+function botonesPago(c) {
+  var k = c.pago || "falta", b = function (v, t, cl) { return '<button class="x-btn ' + cl + '" data-act="pago" data-v="' + v + '" data-id="' + c.id + '" aria-pressed="' + (k === v) + '">' + t + "</button>"; };
+  return '<p class="x-label">Pago</p><div class="x-pago">' + b("abono", "Abono", "x-btn--abono") + b("pagado", "Pagado", "x-btn--ok") + b("falta", "Falta pago", "x-btn--no") + "</div>";
+}
+function botonesEstado(c) {
+  var pasada = c.fecha < HOY_ISO || (c.fecha === HOY_ISO && aMin(c.hora) <= ahoraMin());
+  var b = function (e, t, cl) { return '<button class="x-btn ' + cl + '" data-act="estado" data-e="' + e + '" data-id="' + c.id + '">' + t + "</button>"; };
+  if (c.estado === "canc") return '<p class="x-fine">Hora cancelada: el bloque quedó libre en la agenda.</p>';
+  if (pasada) return '<div class="x-row">' + b("asis", "Asistió ✓", "x-btn--ok") + b("falto", "No asistió", "x-btn--no") + "</div>";
+  return '<div class="x-row">' + (c.estado !== "conf" ? b("conf", "Confirmó ✓", "x-btn--ok") : "") + b("canc", "Canceló ✕", "x-btn--no") + "</div>";
+}
+var EST_TOAST = { conf: "Hora confirmada", canc: "Hora cancelada · bloque libre", asis: "Marcada: asistió", falto: "Marcada: no asistió", pend: "Por confirmar" };
+function hojaStats() {
+  var hoy = parseISO(HOY_ISO), mes = HOY_ISO.slice(0, 7);
+  var cs = S.citas.filter(function (c) { return c.fecha.slice(0, 7) === mes; });
+  var n = function (e) { return cs.filter(function (c) { return c.estado === e; }).length; };
+  var asis = n("asis"), falto = n("falto"), canc = n("canc"), venir = cs.length - asis - falto - canc;
+  var act = cs.filter(function (c) { return c.estado !== "canc"; }), pg = function (k) { return act.filter(function (c) { return (c.pago || "falta") === k; }).length; };
+  var cerr = asis + falto, pct = cerr ? Math.round((100 * asis) / cerr) + " %" : "—";
+  var dias = {}, horas = {};
+  cs.filter(function (c) { return c.estado !== "canc"; }).forEach(function (c) { var d = DIAS_L[parseISO(c.fecha).getDay()]; dias[d] = (dias[d] || 0) + 1; horas[c.hora] = (horas[c.hora] || 0) + 1; });
+  var top = function (o) { var k = Object.keys(o).sort(function (a, b) { return o[b] - o[a]; })[0]; return k ? k + " (" + o[k] + ")" : "—"; };
+  var M = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"][hoy.getMonth()];
+  var st = function (v, t) { return '<div class="x-stat"><b>' + v + "</b><span>" + t + "</span></div>"; };
+  hoja("Estadísticas · " + M, '<div class="x-stats">' + st(cs.length, "horas agendadas") + st(pct, "asistencia") + st(asis, "asistieron") + st(falto, "no asistieron") + st(canc, "canceladas") + st(venir, "por atender") + st(pg("pagado"), "pagadas") + st(pg("abono") + " · " + pg("falta"), "con abono · falta pago") + "</div>" +
+    '<dl class="x-dl"><dt>Día con más pacientes</dt><dd>' + top(dias) + "</dd><dt>Hora más pedida</dt><dd>" + top(horas) + "</dd><dt>Pacientes en tu lista</dt><dd>" + S.pacientes.length + "</dd></dl>" +
+    '<p class="x-fine">La asistencia se calcula con las horas que marcas como Asistió o No asistió.</p>');
+}
+function hojaEditar(id) {
+  var p = pac(id), o = function (v, t) { return '<option value="' + v + '"' + (p.tipo === v ? " selected" : "") + ">" + t + "</option>"; };
+  hoja("Editar · " + esc(p.nom),
+    '<label class="x-field">Nombre<input id="enom" autocomplete="off" value="' + esc(p.nom) + '"></label>' +
+    '<label class="x-field">Teléfono (WhatsApp)<input id="etel" type="tel" inputmode="tel" value="' + esc(p.tel) + '"></label>' +
+    '<div class="x-two"><label class="x-field">Tipo<select id="etipo">' + o("postop", "Post-op") + o("lesion", "Lesión") + o("estetica", "Estética") + '</select></label><label class="x-field">Plan de sesiones<input id="eplan" type="number" inputmode="numeric" min="1" max="60" value="' + p.plan + '"></label></div>' +
+    '<label class="x-field">Cirugía o lesión<input id="edet" value="' + esc(p.det) + '"></label>' +
+    '<label class="x-field">Fecha de cirugía (opcional)<input id="ecir" type="date" max="' + HOY_ISO + '" value="' + (p.cirugia || "") + '"></label>' +
+    '<p class="x-warn" id="eerr" hidden></p><button class="x-btn x-btn--accent x-btn--big" data-act="editpac-ok" data-id="' + p.id + '">Guardar cambios</button>' +
+    '<button class="x-btn" data-act="pac" data-id="' + p.id + '">Volver sin guardar</button>');
+}
 
 /* ---------- render y eventos ---------- */
 function render() {
@@ -1079,6 +1196,27 @@ var ACT = {
   avisado: function (b) { var r = AV[+b.dataset.i]; if (r) r.ok = true; b.classList.add("is-avisado"); b.textContent = "Avisado ✓"; },
   cancelar: function (b) { if (!confirm("¿Cancelar esta hora?")) return; S.citas = S.citas.filter(function (x) { return x.id !== b.dataset.id; }); cerrar(); render(); toast("Hora cancelada"); },
   pac: function (b) { hojaPac(b.dataset.id); },
+  editpac: function (b) { hojaEditar(b.dataset.id); },
+  "editpac-ok": function (b) {
+    var p = pac(b.dataset.id), err = function (m) { var e = el("eerr"); e.textContent = m; e.hidden = !m; };
+    var nom = el("enom").value.trim().replace(/\s+/g, " "), tel = telefono(el("etel").value), n = parseInt(el("eplan").value, 10);
+    if (!nom) { err("Falta el nombre."); return; }
+    if (!/^\+569\d{8}$/.test(tel)) { err("Revisa el teléfono: debe quedar como +569 y 8 dígitos, por ejemplo 9 1234 5678."); return; }
+    if (!(n >= 1)) { err("Indica cuántas sesiones tiene el plan."); return; }
+    p.nom = nom; p.tel = tel; p.tipo = el("etipo").value; p.plan = n; p.det = el("edet").value.trim() || "Por definir"; p.cirugia = el("ecir").value || null;
+    render(); hojaPac(p.id); toast("Datos de " + nom.split(" ")[0] + " guardados");
+  },
+  estado: function (b) {
+    var c = S.citas.filter(function (x) { return x.id === b.dataset.id; })[0]; if (!c) return;
+    c.estado = b.dataset.e; render();
+    if (b.dataset.keep === "rec") hojaRecordatorios(); else cerrar();
+    toast(EST_TOAST[c.estado] || "Listo");
+  },
+  borrar: function (b) { if (!confirm("¿Borrar esta hora de la agenda?")) return; S.citas = S.citas.filter(function (x) { return x.id !== b.dataset.id; }); cerrar(); render(); toast("Hora borrada"); },
+  stats: hojaStats,
+  fcat: function (b) { S.fcat = b.dataset.v; S.editT = null; render(); },
+  pago: function (b) { var c = S.citas.filter(function (x) { return x.id === b.dataset.id; })[0]; if (!c) return; c.pago = b.dataset.v; render(); hojaCita(c.id); toast(PAGO[c.pago].t); },
+  "ver-cita": function (b) { S.vista = "agenda"; S.dia = HOY_ISO; S.hl = b.dataset.id; render(); setTimeout(function () { var a = document.querySelector(".x-appt--hl"); if (a) a.scrollIntoView({ block: "center", behavior: "smooth" }); }, 60); setTimeout(function () { S.hl = null; var a = document.querySelector(".x-appt--hl"); if (a) a.classList.remove("x-appt--hl"); }, 5000); },
   close: function () { setTimeout(cerrar, 0); },
   mic: mic,
   dictar: function () { if (S.vista !== "dictar") { D.res = null; D.pid = null; D.err = ""; } S.vista = "dictar"; cerrar(); render(); window.scrollTo(0, 0); hojaDictar(); },
@@ -1102,8 +1240,8 @@ var ACT = {
   copiar: function () { copiar(ENVIO); },
   tedit: function (b) { S.editT = b.dataset.id; render(); },
   tcancel: function () { S.editT = null; render(); },
-  tsave: function (b) { S.plantillas.forEach(function (t) { if (t.id === b.dataset.id) { t.nom = el("tnom").value.trim() || "Sin nombre"; t.txt = conFirma(el("ttxt").value); } }); S.editT = null; render(); toast("Plantilla guardada"); },
-  tnew: function () { var id = "t" + Date.now(); S.plantillas.push({ id: id, nom: "Nueva plantilla", txt: "Hola 😊 \n" + FIRMA }); S.editT = id; render(); setTimeout(function () { el("tnom").focus(); el("tnom").select(); }, 0); },
+  tsave: function (b) { S.plantillas.forEach(function (t) { if (t.id === b.dataset.id) { t.nom = el("tnom").value.trim() || "Sin nombre"; t.cat = el("tcat").value; t.txt = conFirma(el("ttxt").value); } }); S.editT = null; render(); toast("Plantilla guardada"); },
+  tnew: function () { var id = "t" + Date.now(); S.plantillas.push({ id: id, nom: "Nueva plantilla", cat: S.fcat && S.fcat !== "todas" ? S.fcat : "gen", txt: "Hola 😊 \n" + FIRMA }); S.editT = id; render(); setTimeout(function () { el("tnom").focus(); el("tnom").select(); }, 0); },
   tsend: function (b) { hojaEnviarA(b.dataset.id); },
   reset: function () { if (!confirm("¿Volver a los datos de demostración?")) return; try { localStorage.removeItem("essencia2"); } catch (e) {} location.reload(); }
 };

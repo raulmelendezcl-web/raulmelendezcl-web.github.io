@@ -1,5 +1,5 @@
 /* Essencia Agenda: abre sin conexión. Página: primero internet (3 s), si falla usa la copia guardada. */
-var CACHE = "essencia-v1";
+var CACHE = "essencia-v4";
 var FILES = ["./", "./index.html", "./hark.css", "./hark.js", "./logo_essencia_hd.jpg", "./essencia_icon_512.jpg"];
 self.addEventListener("install", function (e) {
   e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(FILES); }).then(function () { return self.skipWaiting(); }));
