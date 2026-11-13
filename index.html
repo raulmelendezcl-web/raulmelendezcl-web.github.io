@@ -125,10 +125,19 @@
       .x-s--no { background: #fbdcd6; color: #b02e1c; }
       .x-appt--canc { opacity: .62; border-left-color: #c8402b !important; }
       .x-appt--canc .x-appt__top b { text-decoration: line-through; }
-      .x-hoy { background: var(--x-accent-soft); border: 1px solid var(--x-line); border-radius: var(--r-m, 16px); padding: 14px 16px; display: grid; gap: 8px; }
-      .x-hoy__k { font: var(--type-tag); letter-spacing: .08em; text-transform: uppercase; color: var(--x-accent); }
-      .x-hoy__n { font: var(--type-body-strong); color: var(--x-ink); }
-      .x-hoy__row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+      .x-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0 10px; }
+      .x-kpi { display: grid; gap: 4px; text-align: left; background: var(--x-card); border: 1px solid var(--x-line); border-left: 4px solid var(--x-accent); border-radius: 14px; padding: 10px 12px; color: var(--x-ink); font: inherit; }
+      .x-kpi span { font-size: 12px; color: var(--x-muted, #7a6455); line-height: 1.2; }
+      .x-kpi b { font-size: 28px; line-height: 1; }
+      .x-kpi--b { border-left-color: var(--x-mauve); }
+      .x-kpi--c { border-left-color: #c9a227; cursor: pointer; }
+      .x-hoy { background: linear-gradient(135deg, #b0583f, #cf8a62); color: #fff; border: 0; border-radius: 20px; padding: 16px 18px; display: grid; gap: 4px; box-shadow: 0 6px 18px rgba(156,74,53,.22); }
+      .x-hoy__k { font: var(--type-tag); letter-spacing: .08em; text-transform: uppercase; color: #fde9dc; }
+      .x-hoy__hora { font-size: 34px; font-weight: 700; line-height: 1.1; margin-top: 4px; }
+      .x-hoy__n { font: var(--type-body-strong); font-size: 19px; color: #fff; }
+      .x-hoy__d { font-size: 14px; color: #fde9dc; }
+      .x-hoy .x-hoy__btn { margin-top: 10px; justify-self: start; background: #fff; color: var(--x-accent); border: 0; }
+      .x-asis { border: 1px solid #3f8a5a; background: #e3f2e8; color: #2f6e46; border-radius: 999px; padding: 6px 12px; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
       .x-hlist { display: grid; gap: 8px; }
       .x-hli { display: grid; grid-template-columns: 50px 1fr auto; gap: 10px; align-items: center; text-align: left; width: 100%; border: 1px solid var(--x-line); background: var(--x-card); border-radius: var(--r-s); padding: 10px 12px; cursor: pointer; color: var(--x-ink); }
       .x-hli__h { font: var(--type-body-strong); color: var(--x-accent); font-variant-numeric: tabular-nums; }
@@ -457,9 +466,9 @@ V.agenda = function () {
   var man = citasDe(MAN_ISO), pend = man.filter(function (c) { return c.estado === "pend"; }).length;
   var hd = new Date(), hola = DIAS_L[hd.getDay()] + " " + hd.getDate() + " de " + ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"][hd.getMonth()];
   /* Foto de perfil incrustada (FOTO_ISABEL, más abajo). Si falla, quedan las iniciales. */
-  var h = resumenHoy() + '<div class="x-hola"><span class="x-avatar" role="img" aria-label="Isabel"><span class="x-avatar__in" aria-hidden="true">IP' +
+  var h = '<div class="x-hola"><span class="x-avatar" role="img" aria-label="Isabel"><span class="x-avatar__in" aria-hidden="true">IP' +
     (FOTO_ISABEL ? '<img src="' + FOTO_ISABEL + '" alt="" onerror="this.remove()" />' : "") + "</span></span>" +
-    '<div class="x-hola__txt"><h2>Hola, Isabel</h2><p class="x-fine">Hoy es ' + hola + "</p></div></div>";
+    '<div class="x-hola__txt"><h2>Hola, Isabel</h2><p class="x-fine">Hoy es ' + hola + " · " + subHoy() + "</p></div></div>" + resumenHoy();
   if (!S.bannerOk) h += '<div class="x-banner"><span>📲 Agrégala a tu pantalla de inicio: en Safari toca Compartir → Agregar a inicio.</span><button class="x-icon" data-act="banner" aria-label="Cerrar aviso">✕</button></div>';
   h += '<section class="x-card x-sum"><p><b>Mañana: ' + man.length + " pacientes</b> · " + pend + " por confirmar</p>" +
     '<button class="x-btn x-btn--accent x-btn--big" data-act="recordatorios">Enviar recordatorios de mañana</button></section>';
@@ -1074,25 +1083,35 @@ function hojaEnviarA(tid) {
 })();
 
 /* ---------- resumen de hoy, estados, estadísticas, editar paciente ---------- */
+function subHoy() { var n = citasDe(HOY_ISO).length; return n ? "tienes " + n + (n === 1 ? " sesión" : " sesiones") + " hoy" : "día libre"; }
 function resumenHoy() {
   var cs = citasDe(HOY_ISO), now = ahoraMin();
+  var d0 = parseISO(HOY_ISO), dw = (d0.getDay() + 6) % 7, lun = iso(addDays(d0, -dw)), dom = iso(addDays(d0, 6 - dw));
+  var sem = S.citas.filter(function (c) { return c.fecha >= lun && c.fecha <= dom && c.estado !== "canc"; }).length;
+  var porConf = S.citas.filter(function (c) { return c.fecha === MAN_ISO && (c.estado === "pend" || c.estado === "env"); }).length;
+  var h = '<div class="x-kpis">' +
+    '<div class="x-kpi"><span>Hoy</span><b>' + cs.length + "</b></div>" +
+    '<div class="x-kpi x-kpi--b"><span>Esta semana</span><b>' + sem + "</b></div>" +
+    '<button class="x-kpi x-kpi--c" data-act="kpi-conf"><span>Confirmar mañana</span><b>' + porConf + "</b></button></div>";
   var prox = cs.filter(function (c) { return aMin(c.hora) + SLOT_MIN > now && c.estado !== "asis" && c.estado !== "falto"; })[0];
-  var h = '<section class="x-hoy" aria-label="Resumen de hoy">';
-  if (!cs.length) h += '<span class="x-hoy__k">Hoy</span><span class="x-hoy__n">No tienes pacientes hoy.</span>';
+  h += '<section class="x-hoy" aria-label="Resumen de hoy">';
+  if (!cs.length) h += '<span class="x-hoy__k">Hoy</span><span class="x-hoy__n">No tienes pacientes hoy 🌿</span>';
   else if (!prox) h += '<span class="x-hoy__k">Hoy</span><span class="x-hoy__n">Terminaste las sesiones de hoy 🌿</span>';
   else {
     var p = pac(prox.pid), d = aMin(prox.hora) - now;
     var cuando = d > 0 ? (d >= 60 ? "en " + Math.floor(d / 60) + " h" + (d % 60 ? " " + (d % 60) + " min" : "") : "en " + d + " min") : "ahora";
     h += '<span class="x-hoy__k">Tu próxima sesión · ' + cuando + "</span>" +
-      '<div class="x-hoy__row"><span class="x-hoy__n">' + esc(p.nom) + " · " + esc(p.det) + " · " + prox.hora + "</span>" +
-      '<button class="x-btn" data-act="ver-cita" data-id="' + prox.id + '">Ver en la agenda</button></div>';
+      '<span class="x-hoy__hora">' + prox.hora + "</span>" +
+      '<span class="x-hoy__n">' + esc(p.nom) + "</span><span class=\"x-hoy__d\">" + esc(p.det) + " · sesión " + prox.n + " de " + p.plan + "</span>" +
+      '<button class="x-btn x-hoy__btn" data-act="ver-cita" data-id="' + prox.id + '">Ver en la agenda</button>';
   }
   h += "</section>";
   var todas = citasDe(HOY_ISO, true);
   if (todas.length) {
-    h += '<p class="x-label" style="margin-top:12px">Agenda de hoy</p><div class="x-hlist">' + todas.map(function (c) {
-      var p = pac(c.pid);
-      return '<button class="x-hli" data-act="cita" data-id="' + c.id + '"><span class="x-hli__h">' + c.hora + '</span><span class="x-hli__t"><b>' + esc(p.nom) + "</b><span>" + esc(p.det) + "</span></span>" + estadoChip(c.estado) + "</button>";
+    h += '<p class="x-label" style="margin-top:14px">Agenda de hoy</p><div class="x-hlist">' + todas.map(function (c) {
+      var p = pac(c.pid), empezo = aMin(c.hora) <= now, abierta = c.estado !== "asis" && c.estado !== "falto" && c.estado !== "canc";
+      var der = empezo && abierta ? '<button class="x-asis" data-act="estado" data-e="asis" data-id="' + c.id + '">Asistió ✓</button>' : estadoChip(c.estado);
+      return '<div class="x-hli" role="button" tabindex="0" data-act="cita" data-id="' + c.id + '"><span class="x-hli__h">' + c.hora + '</span><span class="x-hli__t"><b>' + esc(p.nom) + "</b><span>" + esc(p.det) + "</span></span>" + der + "</div>";
     }).join("") + "</div>";
   }
   return h;
@@ -1216,6 +1235,7 @@ var ACT = {
   stats: hojaStats,
   fcat: function (b) { S.fcat = b.dataset.v; S.editT = null; render(); },
   pago: function (b) { var c = S.citas.filter(function (x) { return x.id === b.dataset.id; })[0]; if (!c) return; c.pago = b.dataset.v; render(); hojaCita(c.id); toast(PAGO[c.pago].t); },
+  "kpi-conf": function () { hojaRecordatorios(); },
   "ver-cita": function (b) { S.vista = "agenda"; S.dia = HOY_ISO; S.hl = b.dataset.id; render(); setTimeout(function () { var a = document.querySelector(".x-appt--hl"); if (a) a.scrollIntoView({ block: "center", behavior: "smooth" }); }, 60); setTimeout(function () { S.hl = null; var a = document.querySelector(".x-appt--hl"); if (a) a.classList.remove("x-appt--hl"); }, 5000); },
   close: function () { setTimeout(cerrar, 0); },
   mic: mic,
