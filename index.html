@@ -427,7 +427,13 @@ var S = {
   ]
 };
 S.hoy = HOY_ISO;
-try { var raw = localStorage.getItem("essencia2"); if (raw) { var o = JSON.parse(raw); if (o && o.citas && o.hoy === HOY_ISO) S = o; } } catch (e) {}
+try { var raw = localStorage.getItem("essencia2"); if (raw) { var o = JSON.parse(raw); if (o && o.citas && o.pacientes) {
+  /* Datos guardados se conservan siempre (antes solo cargaban el mismo día). */
+  if (o.hoy !== HOY_ISO) { try { localStorage.setItem("essencia2-prev", raw); } catch (e2) {} }
+  for (var k in S) if (!(k in o)) o[k] = S[k];
+  o.hoy = HOY_ISO; if (!o.dia || o.dia < HOY_ISO) o.dia = HOY_ISO; o.vista = o.vista || "agenda";
+  S = o; save();
+} } } catch (e) {}
 (S.pacientes || []).forEach(function (p) { if (p.id === "p1" && p.nom === "María Soto" && (p.tel === "+56900000001" || p.tel === "+56951388164")) p.tel = "+56941324372"; });
 S.vista = "agenda"; S.dia = HOY_ISO;
 (S.plantillas || []).forEach(function (t) { t.txt = conFirma(t.txt); });
@@ -526,7 +532,7 @@ V.plantillas = function () {
 };
 
 function hojaMas() {
-  hoja("Más", '<button class="x-btn x-btn--accent x-btn--big" data-act="stats">📊 Estadísticas del mes</button><section class="x-about"><img src="' + document.querySelector(".x-top img").getAttribute("src") + '" alt="Logo Essencia"><b>Essencia</b><p class="x-about__who">Isabel Pizarro, Kinesióloga</p><hr class="x-rule"><p class="x-fine">Kinesiología Integral, Estética y Salud<br>Joaquín del Pino 823, San Carlos</p><p class="x-fine">Para enviar por WhatsApp, abre esta página en Safari y agrégala a tu pantalla de inicio.</p><button class="x-btn" data-act="reset">Restablecer datos de demostración</button><p class="x-fine">Prototipo de demostración · datos ficticios</p></section>');
+  hoja("Más", '<button class="x-btn x-btn--accent x-btn--big" data-act="stats">📊 Estadísticas del mes</button><p class="x-label" style="margin-top:14px">Respaldo</p><p class="x-fine">Guarda una copia de pacientes, horas y plantillas. Hazlo cada semana y antes de cambiar de celular.</p><div class="x-row"><button class="x-btn x-btn--ok" data-act="bk-save">💾 Guardar respaldo</button><button class="x-btn" data-act="bk-load">📂 Restaurar</button></div><input type="file" id="bkfile" accept=".json,application/json" hidden><section class="x-about"><img src="' + document.querySelector(".x-top img").getAttribute("src") + '" alt="Logo Essencia"><b>Essencia</b><p class="x-about__who">Isabel Pizarro, Kinesióloga</p><hr class="x-rule"><p class="x-fine">Kinesiología Integral, Estética y Salud<br>Joaquín del Pino 823, San Carlos</p><p class="x-fine">Para enviar por WhatsApp, abre esta página en Safari y agrégala a tu pantalla de inicio.</p><button class="x-btn" data-act="reset">Restablecer datos de demostración</button><p class="x-fine">Prototipo de demostración · datos ficticios</p></section>');
 }
 
 /* ---------- dictado ---------- */
@@ -1236,6 +1242,38 @@ var ACT = {
   fcat: function (b) { S.fcat = b.dataset.v; S.editT = null; render(); },
   pago: function (b) { var c = S.citas.filter(function (x) { return x.id === b.dataset.id; })[0]; if (!c) return; c.pago = b.dataset.v; render(); hojaCita(c.id); toast(PAGO[c.pago].t); },
   "kpi-conf": function () { hojaRecordatorios(); },
+  "bk-save": function () {
+    var dt = new Date(), nombre = "Essencia-respaldo-" + iso(dt) + ".json";
+    var blob = new Blob([JSON.stringify({ app: "essencia", ver: 1, fecha: dt.toISOString(), datos: S })], { type: "application/json" });
+    try { localStorage.setItem("essencia-bk-fecha", iso(dt)); } catch (e) {}
+    var file = null; try { file = new File([blob], nombre, { type: "application/json" }); } catch (e) {}
+    if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+      navigator.share({ files: [file], title: "Respaldo Essencia" }).then(function () { toast("Respaldo guardado ✓"); }).catch(function () {});
+    } else {
+      var u = URL.createObjectURL(blob), a = document.createElement("a"); a.href = u; a.download = nombre; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(u); }, 4000); toast("Respaldo descargado ✓");
+    }
+  },
+  "bk-load": function () {
+    var inp = el("bkfile"); if (!inp) return;
+    inp.onchange = function () {
+      var f = inp.files && inp.files[0]; if (!f) return;
+      var r = new FileReader();
+      r.onload = function () {
+        try {
+          var o = JSON.parse(r.result), d = o && o.datos;
+          if (!d || !d.citas || !d.pacientes) { alert("Este archivo no es un respaldo de Essencia."); return; }
+          if (!confirm("¿Restaurar el respaldo del " + String(o.fecha || "").slice(0, 10) + "? Reemplaza lo que hay ahora en este celular (" + d.pacientes.length + " pacientes, " + d.citas.length + " horas).")) return;
+          try { localStorage.setItem("essencia2-prev", JSON.stringify(S)); } catch (e) {}
+          for (var k in S) if (!(k in d)) d[k] = S[k];
+          d.hoy = HOY_ISO; d.dia = HOY_ISO; d.vista = "agenda";
+          S = d; save(); cerrar(); render(); toast("Respaldo restaurado ✓");
+        } catch (e) { alert("No se pudo leer el archivo."); }
+      };
+      r.readAsText(f); inp.value = "";
+    };
+    inp.click();
+  },
   "ver-cita": function (b) { S.vista = "agenda"; S.dia = HOY_ISO; S.hl = b.dataset.id; render(); setTimeout(function () { var a = document.querySelector(".x-appt--hl"); if (a) a.scrollIntoView({ block: "center", behavior: "smooth" }); }, 60); setTimeout(function () { S.hl = null; var a = document.querySelector(".x-appt--hl"); if (a) a.classList.remove("x-appt--hl"); }, 5000); },
   close: function () { setTimeout(cerrar, 0); },
   mic: mic,
