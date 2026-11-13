@@ -314,6 +314,7 @@ function waTexto(texto) {
   return s;
 }
 function wa(tel, texto) { return "https://api.whatsapp.com/send?phone=" + String(tel).replace(/\D/g, "") + "&text=" + encodeURIComponent(waTexto(texto)); }
+function waApp(u) { return String(u).replace("https://api.whatsapp.com/send?", "whatsapp://send?"); }
 function toast(msg) { var t = el("toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(function () { t.hidden = true; }, 3200); }
 
 var HOY = new Date(), HOY_ISO = iso(HOY), MAN_ISO = iso(addDays(HOY, 1));
@@ -759,7 +760,7 @@ function hojaEnvio(p, msg) {
   var url = wa(p.tel, msg);
   ENVIO = msg;
   hoja("Guardado ✓", '<p class="x-fine">Falta enviar el mensaje a ' + esc(p.nom.split(" ")[0]) + " · " + esc(p.tel) + "</p>" +
-    '<a class="x-btn x-btn--wa x-btn--big" href="' + url + '" target="_blank" rel="noopener">Abrir WhatsApp y enviar</a>' +
+    '<a class="x-btn x-btn--wa x-btn--big" href="' + waApp(url) + '">Abrir WhatsApp y enviar</a>' +
     '<p class="x-msg">' + esc(msg) + "</p>" +
     '<button class="x-btn" data-act="copiar">Copiar mensaje</button>' +
     '<p class="x-fine">Si WhatsApp no se abre, mantén presionado este enlace:<br><a class="x-walink" href="' + url + '" target="_blank" rel="noopener">' + esc(url) + "</a></p>" +
@@ -788,7 +789,7 @@ function hojaRecordatorios() {
   var cs = citasDe(MAN_ISO);
   hoja("Recordatorios · " + fechaCorta(MAN_ISO), '<p class="x-fine">Un toque por paciente: se abre WhatsApp con el mensaje listo.</p>' + cs.map(function (c) {
     var p = pac(c.pid);
-    return '<section class="x-card"><div class="x-appt__top"><b>' + c.hora + " · " + esc(p.nom) + "</b>" + estadoChip(c.estado) + '</div><p class="x-msg">' + esc(msgRecordatorio(c)) + '</p><a class="x-btn x-btn--wa" data-act="marcar" data-id="' + c.id + '" href="' + wa(p.tel, msgRecordatorio(c)) + '" target="_blank" rel="noopener">Enviar</a></section>';
+    return '<section class="x-card"><div class="x-appt__top"><b>' + c.hora + " · " + esc(p.nom) + "</b>" + estadoChip(c.estado) + '</div><p class="x-msg">' + esc(msgRecordatorio(c)) + '</p><a class="x-btn x-btn--wa" data-act="marcar" data-id="' + c.id + '" href="' + waApp(wa(p.tel, msgRecordatorio(c))) + '">Enviar</a></section>';
   }).join(""));
 }
 function hojaCita(id) {
@@ -800,7 +801,7 @@ function hojaCita(id) {
     '<div id="mover" hidden class="x-card"><p class="x-label">Mover a una hora libre</p><div class="x-two"><label class="x-field">Día<select id="mfecha" data-id="' + c.id + '">' + opcionesDia(c.fecha) + '</select></label><label class="x-field">Hora libre<select id="mhora">' + opcionesLibres(c.fecha, c.id) + '</select></label></div><button class="x-btn x-btn--accent" id="mok" data-act="mover-ok" data-id="' + c.id + '"' + (libres(c.fecha, c.id).length ? "" : " disabled") + '>Confirmar nueva hora</button></div>' +
     (c.estado === "pend" ? '<button class="x-btn" data-act="confirmar" data-id="' + c.id + '">Marcar como confirmada</button>' : "") +
     '<div class="x-row"><button class="x-btn" data-act="mover">Mover hora</button><button class="x-btn x-btn--danger" data-act="cancelar" data-id="' + c.id + '">Cancelar</button></div>' +
-    '<a class="x-btn x-btn--wa x-btn--big" href="' + wa(p.tel, msgRecordatorio(c)) + '" target="_blank" rel="noopener" data-act="marcar" data-id="' + c.id + '">Enviar WhatsApp</a>');
+    '<a class="x-btn x-btn--wa x-btn--big" href="' + waApp(wa(p.tel, msgRecordatorio(c))) + '" data-act="marcar" data-id="' + c.id + '">Enviar WhatsApp</a>');
 }
 /* ---------- atrasar / mover hora ---------- */
 function ahoraMin() { var d = new Date(); return d.getHours() * 60 + d.getMinutes(); }
@@ -856,7 +857,7 @@ function hojaAvisar(lista, titulo) {
   hoja(titulo || "Avisar a pacientes", '<p class="x-fine">Un toque por paciente: se abre WhatsApp con el aviso listo.</p><ul class="x-mv">' + lista.map(function (r, i) {
     var p = pac(r.pid);
     return '<li><span class="x-mv__top"><b>' + esc(p.nom) + '</b><span class="x-mv__t">' + (r.fAnt !== r.fNueva ? fechaCorta(r.fAnt) + " " : "") + "<s>" + r.ant + "</s> → <b>" + (r.fAnt !== r.fNueva ? fechaCorta(r.fNueva) + " " : "") + r.nueva + "</b></span></span>" +
-      '<a class="x-btn x-btn--wa' + (r.ok ? " is-avisado" : "") + '" data-act="avisado" data-i="' + i + '" href="' + wa(p.tel, msgAviso(p, r.ant, r.nueva, r.fAnt, r.fNueva)) + '" target="_blank" rel="noopener">' + (r.ok ? "Avisado ✓" : "Avisar por WhatsApp") + "</a></li>";
+      '<a class="x-btn x-btn--wa' + (r.ok ? " is-avisado" : "") + '" data-act="avisado" data-i="' + i + '" href="' + waApp(wa(p.tel, msgAviso(p, r.ant, r.nueva, r.fAnt, r.fNueva))) + '">' + (r.ok ? "Avisado ✓" : "Avisar por WhatsApp") + "</a></li>";
   }).join("") + '</ul><button class="x-btn" data-act="close">Listo</button>');
 }
 function hojaNueva(h, pid) {
@@ -871,7 +872,7 @@ function hojaPac(id) {
     "<dt>Próxima hora</dt><dd>" + (c ? fechaCorta(c.fecha) + " " + c.hora + " " + estadoChip(c.estado) : "Sin agendar") + "</dd><dt>Plan</dt><dd>" + p.hechas + " de " + p.plan + " sesiones" + plan(p) + "</dd></dl>" +
     '<section class="x-evo" id="evo" data-pid="' + p.id + '" aria-label="Evolución"><p class="x-label">Evolución</p><p class="x-fine">Cargando fotos…</p></section>' +
     '<p class="x-label">Historial de notas</p>' + (p.notas.map(function (nt) { return '<div class="x-note"><span class="x-label">' + fechaCorta(nt.f) + "</span>" + esc(nt.txt) + "</div>"; }).join("") || '<p class="x-fine">Aún sin notas.</p>') +
-    '<p class="x-label">Plantillas de cuidados</p><div class="x-row">' + S.plantillas.map(function (t) { return '<a class="x-btn x-btn--wa" href="' + wa(p.tel, conNombre(t.txt, p)) + '" target="_blank" rel="noopener">' + esc(t.nom) + "</a>"; }).join("") + "</div>");
+    '<p class="x-label">Plantillas de cuidados</p><div class="x-row">' + S.plantillas.map(function (t) { return '<a class="x-btn x-btn--wa" href="' + waApp(wa(p.tel, conNombre(t.txt, p))) + '">' + esc(t.nom) + "</a>"; }).join("") + "</div>");
   cargarEvo(id);
 }
 /* ---------- nuevo paciente ---------- */
@@ -950,7 +951,7 @@ function hojaCreado(pid) {
   hoja("Ficha creada ✓", '<p class="x-meta"><b style="color:var(--x-ink);font:var(--type-body-strong)">' + esc(p.nom) + "</b>" + badge(p.tipo) + " " + esc(p.det) + "</p>" +
     '<dl class="x-dl"><dt>Teléfono</dt><dd>' + p.tel + "</dd><dt>Plan</dt><dd>" + p.plan + " sesiones</dd>" + (p.cirugia ? "<dt>Fecha cirugía</dt><dd>" + fechaCorta(p.cirugia) + "</dd>" : "") + "</dl>" +
     (c ? '<p class="x-fine">✓ Primera hora: ' + fechaCorta(c.fecha) + " a las " + c.hora + "</p>" : '<button class="x-btn x-btn--accent x-btn--big" data-act="primera" data-id="' + p.id + '">Agendar primera hora</button>') +
-    '<a class="x-btn x-btn--wa x-btn--big" href="' + wa(p.tel, msgBienvenida(p)) + '" target="_blank" rel="noopener">Enviar bienvenida por WhatsApp</a>' +
+    '<a class="x-btn x-btn--wa x-btn--big" href="' + waApp(wa(p.tel, msgBienvenida(p))) + '">Enviar bienvenida por WhatsApp</a>' +
     '<p class="x-msg">' + esc(msgBienvenida(p)) + '</p><button class="x-btn" data-act="close">Listo</button>');
 }
 function horaLibre(f) { var b = bloques(); for (var i = 0; i < b.length; i++) { var h = b[i]; if (!citasDe(f).some(function (c) { return hslot(c.hora) === h; })) return h; } return "10:00"; }
@@ -958,7 +959,7 @@ function horaLibre(f) { var b = bloques(); for (var i = 0; i < b.length; i++) { 
 function hojaEnviarA(tid) {
   var t = S.plantillas.filter(function (x) { return x.id === tid; })[0];
   hoja("Enviar “" + esc(t.nom) + "” a…", '<div class="x-list">' + S.pacientes.map(function (p) {
-    return '<a class="x-li" href="' + wa(p.tel, conNombre(t.txt, p)) + '" target="_blank" rel="noopener" data-act="close"><b>' + esc(p.nom) + '</b><span class="x-btn x-btn--wa">Enviar</span><span class="x-meta">' + badge(p.tipo) + " " + esc(p.det) + "</span></a>";
+    return '<a class="x-li" href="' + waApp(wa(p.tel, conNombre(t.txt, p))) + '" data-act="close"><b>' + esc(p.nom) + '</b><span class="x-btn x-btn--wa">Enviar</span><span class="x-meta">' + badge(p.tipo) + " " + esc(p.det) + "</span></a>";
   }).join("") + "</div>");
 }
 
@@ -1284,7 +1285,7 @@ function enviarImagen(blob, nombre, texto, p) {
     if (abrir) window.open(url, "_blank", "noopener");
     toast("Adjunta la foto guardada en el chat");
     var v = el("vaviso");
-    if (v) v.innerHTML = '<div class="x-note"><b>Imagen guardada ✓</b>Adjunta la foto guardada en el chat de ' + esc(p.nom.split(" ")[0]) + '.<a class="x-btn x-btn--wa" href="' + url + '" target="_blank" rel="noopener">Abrir WhatsApp</a></div>';
+    if (v) v.innerHTML = '<div class="x-note"><b>Imagen guardada ✓</b>Adjunta la foto guardada en el chat de ' + esc(p.nom.split(" ")[0]) + '.<a class="x-btn x-btn--wa" href="' + waApp(url) + '">Abrir WhatsApp</a></div>';
   }
 }
 ACT.evoetq = function (b) {
