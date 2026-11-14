@@ -391,13 +391,13 @@ var S = {
   dia: HOY_ISO,
   bannerOk: false,
   pacientes: [
-    { id: "p1", nom: "María Soto", tel: "+56941324372", tipo: "postop", det: "Post abdominoplastia", cirugia: iso(addDays(HOY, -18)), plan: 10, hechas: 3, notas: [{ f: iso(addDays(HOY, -3)), txt: "Sesión 3 de 10. Edema moderado lado izquierdo, buena tolerancia al drenaje." }] },
-    { id: "p2", nom: "Carolina Muñoz", tel: "+56900000002", tipo: "postop", det: "Post lipoescultura", cirugia: iso(addDays(HOY, -34)), plan: 8, hechas: 5, notas: [{ f: iso(addDays(HOY, -4)), txt: "Sesión 5 de 8. Fibrosis flanco derecho en disminución." }] },
-    { id: "p3", nom: "Javiera Pérez", tel: "+56900000003", tipo: "postop", det: "Post mamoplastia", cirugia: iso(addDays(HOY, -9)), plan: 6, hechas: 2, notas: [{ f: iso(addDays(HOY, -2)), txt: "Sesión 2 de 6. Molestia leve al elevar brazos, se indican movilizaciones suaves." }] },
-    { id: "p4", nom: "Pedro Álvarez", tel: "+56900000004", tipo: "lesion", det: "Esguince de tobillo grado II", plan: 8, hechas: 4, notas: [{ f: iso(addDays(HOY, -5)), txt: "Sesión 4 de 8. Mejora el apoyo, sigue con propiocepción en casa." }] },
-    { id: "p5", nom: "Luis Contreras", tel: "+56900000005", tipo: "lesion", det: "Lumbago mecánico", plan: 6, hechas: 1, notas: [{ f: iso(addDays(HOY, -6)), txt: "Sesión 1 de 6. Contractura paravertebral derecha." }] },
-    { id: "p6", nom: "Francisca Vera", tel: "+56900000006", tipo: "estetica", det: "Limpieza facial profunda", plan: 4, hechas: 2, notas: [{ f: iso(addDays(HOY, -14)), txt: "Sesión 2 de 4. Piel mixta, buena respuesta." }] },
-    { id: "p7", nom: "Antonia Reyes", tel: "+56900000007", tipo: "postop", det: "Post lipoescultura de brazos", cirugia: iso(addDays(HOY, -12)), plan: 8, hechas: 1, notas: [{ f: iso(addDays(HOY, -2)), txt: "Sesión 1 de 8. Edema leve en ambos brazos, buena tolerancia al drenaje." }] },
+    { id: "p1", nom: "María Soto", tel: "+56941324372", tipo: "postop", det: "Abdominoplastia post baja de peso", der: "Dr. Ejemplo (demo)", cirugia: iso(addDays(HOY, -18)), plan: 10, hechas: 3, notas: [{ f: iso(addDays(HOY, -3)), txt: "Sesión 3 de 10. Masaje post operatorio y drenaje. Edema moderado lado izquierdo, buena tolerancia." }] },
+    { id: "p2", nom: "Carolina Muñoz", tel: "+56900000002", tipo: "postop", det: "Lipoescultura abdomen y flancos", der: "Clínica Ejemplo (demo)", cirugia: iso(addDays(HOY, -34)), plan: 8, hechas: 5, notas: [{ f: iso(addDays(HOY, -4)), txt: "Sesión 5 de 8. Fibrosis flanco derecho en disminución." }] },
+    { id: "p3", nom: "Javiera Pérez", tel: "+56900000003", tipo: "postop", det: "Manga gástrica", der: "Dr. Ejemplo (demo)", cirugia: iso(addDays(HOY, -9)), plan: 6, hechas: 2, notas: [{ f: iso(addDays(HOY, -2)), txt: "Sesión 2 de 6. Drenaje linfático suave, se indica caminar y buena hidratación." }] },
+    { id: "p4", nom: "Pedro Álvarez", tel: "+56900000004", tipo: "postop", det: "Bypass gástrico", der: "Clínica Ejemplo (demo)", cirugia: iso(addDays(HOY, -21)), plan: 8, hechas: 4, notas: [{ f: iso(addDays(HOY, -5)), txt: "Sesión 4 de 8. Buena evolución, menos edema en abdomen." }] },
+    { id: "p5", nom: "Luis Contreras", tel: "+56900000005", tipo: "postop", det: "Dermolipectomía abdominal", der: "Dr. Ejemplo (demo)", cirugia: iso(addDays(HOY, -7)), plan: 10, hechas: 1, notas: [{ f: iso(addDays(HOY, -6)), txt: "Sesión 1 de 10. Edema importante, masaje muy suave." }] },
+    { id: "p6", nom: "Francisca Vera", tel: "+56900000006", tipo: "postop", det: "Mamoplastia post baja de peso", der: "Clínica Ejemplo (demo)", cirugia: iso(addDays(HOY, -26)), plan: 6, hechas: 2, notas: [{ f: iso(addDays(HOY, -14)), txt: "Sesión 2 de 6. Molestia leve al elevar brazos, movilizaciones suaves." }] },
+    { id: "p7", nom: "Antonia Reyes", tel: "+56900000007", tipo: "postop", det: "Braquioplastia (lifting de brazos)", der: "Dr. Ejemplo (demo)", cirugia: iso(addDays(HOY, -12)), plan: 8, hechas: 1, notas: [{ f: iso(addDays(HOY, -2)), txt: "Sesión 1 de 8. Edema leve en ambos brazos, buena tolerancia al drenaje." }] },
     { id: "p8", nom: "Valentina Díaz", tel: "+56900000008", tipo: "estetica", det: "Drenaje linfático corporal", plan: 6, hechas: 0, notas: [] }
   ],
   citas: [
@@ -423,9 +423,12 @@ var S = {
     { id: "t5", nom: "Esguince de tobillo", txt: "Hola 😊 Tus ejercicios en casa:\n• Hielo 15 minutos, 3 veces al día\n• Movilidad del tobillo: abecedario con el pie, 2 series\n• Equilibrio en un pie, 3 x 30 segundos\n• Elevar la pierna al descansar\nSi aumenta el dolor, me escribes.\n" + FIRMA },
     { id: "t6", nom: "Lumbago", txt: "Hola 😊 Para tu lumbago:\n• Calor local 20 minutos en la mañana\n• Ejercicios suaves: báscula pelviana y gato-camello, 10 repeticiones\n• Caminar 20 minutos diarios\n• Evitar estar sentada más de una hora seguida\nNos vemos en la próxima sesión.\n" + FIRMA },
     { id: "t7", nom: "Recordatorio de hora", txt: "Hola 😊 Te recuerdo tu hora de mañana. Te espero puntual, trae tu faja o ropa cómoda.\n" + FIRMA },
-    { id: "t8", nom: "Confirmación de hora", txt: "Hola 😊 ¿Me confirmas tu hora? Si no puedes, avísame y la movemos sin problema.\n" + FIRMA }
+    { id: "t8", nom: "Confirmación de hora", txt: "Hola 😊 ¿Me confirmas tu hora? Si no puedes, avísame y la movemos sin problema.\n" + FIRMA },
+    { id: "t9", nom: "Después de la sesión", txt: "Hola 😊 Gracias por venir hoy. Para que tu sesión rinda más:\n• Camina hoy al menos 20 minutos, en tramos cortos\n• Toma harta agua, unos 2 litros en el día\n• Usa tu faja como te indicaron\nCualquier duda me escribes.\n" + FIRMA },
+    { id: "t10", nom: "Elongaciones post cirugía", txt: "Hola 😊 Te dejo tus ejercicios para la casa. Hazlos suave, sin dolor y sin estirar la zona operada:\n• Respiración: inhala lento por la nariz inflando la guata y bota por la boca. 10 veces, 3 veces al día\n• Tobillos: sentada, mueve los pies arriba y abajo y haz círculos. 20 veces cada pie, varias veces al día\n• Hombros: súbelos hacia las orejas y bájalos lento, luego círculos hacia atrás. 10 veces\n• Cuello: lleva la oreja hacia el hombro y sostén 15 segundos por lado\n• Caminar: paseos cortos varias veces al día, aumentando de a poco\nRecuerda tomar harta agua y usar tu faja. Si sientes dolor fuerte o algo raro, avísame.\n" + FIRMA }
   ]
 };
+var DEF_T = S.plantillas.slice();
 S.hoy = HOY_ISO;
 try { var raw = localStorage.getItem("essencia2"); if (raw) { var o = JSON.parse(raw); if (o && o.citas && o.pacientes) {
   /* Datos guardados se conservan siempre (antes solo cargaban el mismo día). */
@@ -436,6 +439,10 @@ try { var raw = localStorage.getItem("essencia2"); if (raw) { var o = JSON.parse
 } } } catch (e) {}
 (S.pacientes || []).forEach(function (p) { if (p.id === "p1" && p.nom === "María Soto" && (p.tel === "+56900000001" || p.tel === "+56951388164")) p.tel = "+56941324372"; });
 S.vista = "agenda"; S.dia = HOY_ISO;
+/* plantillas nuevas de fábrica: se agregan una sola vez (si después la borra, no vuelve) */
+(function () { var nuevas = ["t9", "t10"], ya = S.tplAdd || [], base = { t9: 1, t10: 1 };
+  nuevas.forEach(function (id) { if (ya.indexOf(id) >= 0) return; if (!S.plantillas.some(function (t) { return t.id === id; })) { var d = DEF_T.filter(function (t) { return t.id === id; })[0]; if (d) S.plantillas.push(JSON.parse(JSON.stringify(d))); } ya.push(id); });
+  S.tplAdd = ya; })();
 (S.plantillas || []).forEach(function (t) { t.txt = conFirma(t.txt); });
 
 var DIAS_L = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
@@ -509,7 +516,7 @@ function listaPac() {
 }
 
 var CATS = { est: "Estética", kine: "Kinesiología", gen: "General" };
-var CAT_DEF = { t1: "est", t2: "est", t3: "est", t4: "est", t5: "kine", t6: "kine", t7: "gen", t8: "gen" };
+var CAT_DEF = { t1: "est", t2: "est", t3: "est", t4: "est", t5: "kine", t6: "kine", t7: "gen", t8: "gen", t9: "est", t10: "est" };
 function catDe(t) { return t.cat || CAT_DEF[t.id] || "gen"; }
 V.plantillas = function () {
   var f = S.fcat || "todas";
@@ -941,7 +948,7 @@ function hojaPac(id) {
   hoja(esc(p.nom), '<p class="x-meta">' + badge(p.tipo) + " " + esc(p.det) + "</p>" +
     '<dl class="x-dl"><dt>Teléfono</dt><dd><a class="link" href="tel:' + p.tel + '">' + p.tel + "</a></dd><dt>" + (p.tipo === "postop" ? "Cirugía" : p.tipo === "lesion" ? "Lesión" : "Tratamiento") + "</dt><dd>" + esc(p.det) + "</dd>" +
     (dias !== null ? "<dt>Fecha cirugía</dt><dd>" + fechaCorta(p.cirugia) + " · <b>Día " + dias + " de recuperación</b></dd>" : "") +
-    "<dt>Próxima hora</dt><dd>" + (c ? fechaCorta(c.fecha) + " " + c.hora + " " + estadoChip(c.estado) : "Sin agendar") + "</dd><dt>Plan</dt><dd>" + p.hechas + " de " + p.plan + " sesiones" + plan(p) + "</dd></dl>" +
+    (p.der ? "<dt>Derivado por</dt><dd>" + esc(p.der) + "</dd>" : "") + "<dt>Próxima hora</dt><dd>" + (c ? fechaCorta(c.fecha) + " " + c.hora + " " + estadoChip(c.estado) : "Sin agendar") + "</dd><dt>Plan</dt><dd>" + p.hechas + " de " + p.plan + " sesiones" + plan(p) + "</dd></dl>" +
     '<button class="x-btn" data-act="editpac" data-id="' + p.id + '">✏️ Editar datos</button>' +
     '<section class="x-evo" id="evo" data-pid="' + p.id + '" aria-label="Evolución"><p class="x-label">Evolución</p><p class="x-fine">Cargando fotos…</p></section>' +
     '<p class="x-label">Historial de notas</p>' + (p.notas.map(function (nt) { return '<div class="x-note"><span class="x-label">' + fechaCorta(nt.f) + "</span>" + esc(nt.txt) + "</div>"; }).join("") || '<p class="x-fine">Aún sin notas.</p>') +
@@ -999,6 +1006,7 @@ function llenarFicha(txt) {
 }
 function ferr(msg) { var e = el("ferr"); if (!e) return; e.textContent = msg; e.hidden = !msg; }
 function fmic() { ferr(""); var h = el("fhint"); if (h) { h.classList.remove("is-flash"); void h.offsetWidth; h.classList.add("is-flash"); } enfocar("fvoz"); }
+function derLista() { var v = {}; S.pacientes.forEach(function (p) { if (p.der) v[p.der] = 1; }); return '<datalist id="derl">' + Object.keys(v).sort().map(function (d) { return '<option value="' + esc(d) + '">'; }).join("") + "</datalist>"; }
 function hojaFicha() {
   hoja("Nuevo paciente",
     hintHTML("fhint") +
@@ -1010,6 +1018,7 @@ function hojaFicha() {
     '<div class="x-two"><label class="x-field">Tipo<select id="ftipo"><option value="postop">Post-op</option><option value="lesion">Lesión</option><option value="estetica">Estética</option></select></label><label class="x-field">Plan de sesiones<input id="fplan" type="number" inputmode="numeric" min="1" max="60" value="8"></label></div>' +
     '<label class="x-field">Cirugía o lesión<input id="fdet" placeholder="Post lipoescultura, esguince de tobillo…"></label>' +
     '<label class="x-field">Fecha de cirugía (opcional)<input id="fcir" type="date" max="' + HOY_ISO + '"></label>' +
+    '<label class="x-field">Derivado por (opcional)<input id="fder" list="derl" autocomplete="off" placeholder="Dr. Pérez, Clínica…"></label>' + derLista() +
     '<p class="x-warn" id="ferr" hidden></p><button class="x-btn x-btn--accent x-btn--big" data-act="nuevopac-ok">Guardar paciente</button>');
   enfocar("fvoz");
 }
@@ -1149,7 +1158,7 @@ function hojaStats() {
   var M = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"][hoy.getMonth()];
   var st = function (v, t) { return '<div class="x-stat"><b>' + v + "</b><span>" + t + "</span></div>"; };
   hoja("Estadísticas · " + M, '<div class="x-stats">' + st(cs.length, "horas agendadas") + st(pct, "asistencia") + st(asis, "asistieron") + st(falto, "no asistieron") + st(canc, "canceladas") + st(venir, "por atender") + st(pg("pagado"), "pagadas") + st(pg("abono") + " · " + pg("falta"), "con abono · falta pago") + "</div>" +
-    '<dl class="x-dl"><dt>Día con más pacientes</dt><dd>' + top(dias) + "</dd><dt>Hora más pedida</dt><dd>" + top(horas) + "</dd><dt>Pacientes en tu lista</dt><dd>" + S.pacientes.length + "</dd></dl>" +
+    '<dl class="x-dl"><dt>Día con más pacientes</dt><dd>' + top(dias) + "</dd><dt>Hora más pedida</dt><dd>" + top(horas) + "</dd><dt>Pacientes en tu lista</dt><dd>" + S.pacientes.length + "</dd>" + (function () { var d = {}; S.pacientes.forEach(function (p) { if (p.der) d[p.der] = (d[p.der] || 0) + 1; }); var k = Object.keys(d).sort(function (a, b) { return d[b] - d[a]; }); return k.length ? "<dt>Quién te deriva más</dt><dd>" + k.slice(0, 3).map(function (x) { return esc(x) + " (" + d[x] + ")"; }).join(", ") + "</dd>" : ""; })() + "</dl>" +
     '<p class="x-fine">La asistencia se calcula con las horas que marcas como Asistió o No asistió.</p>');
 }
 function hojaEditar(id) {
@@ -1160,6 +1169,7 @@ function hojaEditar(id) {
     '<div class="x-two"><label class="x-field">Tipo<select id="etipo">' + o("postop", "Post-op") + o("lesion", "Lesión") + o("estetica", "Estética") + '</select></label><label class="x-field">Plan de sesiones<input id="eplan" type="number" inputmode="numeric" min="1" max="60" value="' + p.plan + '"></label></div>' +
     '<label class="x-field">Cirugía o lesión<input id="edet" value="' + esc(p.det) + '"></label>' +
     '<label class="x-field">Fecha de cirugía (opcional)<input id="ecir" type="date" max="' + HOY_ISO + '" value="' + (p.cirugia || "") + '"></label>' +
+    '<label class="x-field">Derivado por (opcional)<input id="eder" list="derl" autocomplete="off" placeholder="Dr. Pérez, Clínica…" value="' + esc(p.der || "") + '"></label>' + derLista() +
     '<p class="x-warn" id="eerr" hidden></p><button class="x-btn x-btn--accent x-btn--big" data-act="editpac-ok" data-id="' + p.id + '">Guardar cambios</button>' +
     '<button class="x-btn" data-act="pac" data-id="' + p.id + '">Volver sin guardar</button>');
 }
@@ -1195,7 +1205,7 @@ var ACT = {
     if (!/^\+569\d{8}$/.test(tel)) { ferr("Revisa el teléfono: debe quedar como +569 y 8 dígitos, por ejemplo 9 1234 5678."); return; }
     if (!(n >= 1)) { ferr("Indica cuántas sesiones tiene el plan."); return; }
     pararVoz();
-    var p = { id: "p" + Date.now(), nom: nom, tel: tel, tipo: el("ftipo").value, det: el("fdet").value.trim() || "Por definir", cirugia: el("fcir").value || null, plan: n, hechas: 0, notas: [] };
+    var p = { id: "p" + Date.now(), nom: nom, tel: tel, tipo: el("ftipo").value, det: el("fdet").value.trim() || "Por definir", cirugia: el("fcir").value || null, der: el("fder").value.trim().replace(/\s+/g, " ") || "", plan: n, hechas: 0, notas: [] };
     S.pacientes.push(p); S.np = p.id; render(); hojaCreado(p.id); toast("Ficha de " + nom.split(" ")[0] + " creada");
   },
   primera: function (b) { var f = MAN_ISO; hojaNueva(horaLibre(f), b.dataset.id); },
@@ -1228,7 +1238,7 @@ var ACT = {
     if (!nom) { err("Falta el nombre."); return; }
     if (!/^\+569\d{8}$/.test(tel)) { err("Revisa el teléfono: debe quedar como +569 y 8 dígitos, por ejemplo 9 1234 5678."); return; }
     if (!(n >= 1)) { err("Indica cuántas sesiones tiene el plan."); return; }
-    p.nom = nom; p.tel = tel; p.tipo = el("etipo").value; p.plan = n; p.det = el("edet").value.trim() || "Por definir"; p.cirugia = el("ecir").value || null;
+    p.nom = nom; p.tel = tel; p.tipo = el("etipo").value; p.plan = n; p.det = el("edet").value.trim() || "Por definir"; p.cirugia = el("ecir").value || null; p.der = el("eder").value.trim().replace(/\s+/g, " ");
     render(); hojaPac(p.id); toast("Datos de " + nom.split(" ")[0] + " guardados");
   },
   estado: function (b) {
