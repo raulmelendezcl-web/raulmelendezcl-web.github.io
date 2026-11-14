@@ -345,11 +345,21 @@ var MIC_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke
 var FOTO_ISABEL = "data:image/jpeg;base64,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";
 function pad(n) { return n < 10 ? "0" + n : "" + n; }
 /* agenda: largo del bloque en minutos (más adelante, 15 según tratamiento) */
+/* ---------- Mi centro (datos del centro, guardados aparte de la agenda) ---------- */
+var C_DEF = { centro: "Essencia", prof: "Isabel Pizarro", titulo: "Kinesióloga", lema: "Kinesiología Integral, Estética y Salud", dir: "Joaquín del Pino 823, San Carlos", saludo: "Un abrazo,", ini: "09:00", fin: "19:00", slot: 30, foto: "", logo: "", ok: false };
+var C = (function () { var o = {}; try { o = JSON.parse(localStorage.getItem("essencia-centro")) || {}; } catch (e) {} for (var k in C_DEF) if (!(k in o)) o[k] = C_DEF[k]; return o; })();
+function saveC() { try { localStorage.setItem("essencia-centro", JSON.stringify(C)); } catch (e) { toast("No se pudo guardar: la foto o el logo pesan mucho"); } }
+function fotoPerfil() { if (C.foto === "-") return ""; return C.foto || (C.prof === C_DEF.prof ? FOTO_ISABEL : ""); }
+function iniciales(n) { return String(n || "").trim().split(/\s+/).slice(0, 2).map(function (w) { return w.charAt(0).toUpperCase(); }).join("") || "★"; }
+function primerNombre() { return String(C.prof || "").trim().split(/\s+/)[0] || ""; }
+/* agenda: largo del bloque en minutos, hora de inicio y término (se cambian en Mi centro) */
 var SLOT_MIN = 30, DIA_INI = 9 * 60, DIA_FIN = 19 * 60;
+function aplicarHorario() { SLOT_MIN = +C.slot || 30; DIA_INI = aMin(C.ini || "09:00"); DIA_FIN = aMin(C.fin || "19:00"); if (DIA_FIN - DIA_INI < SLOT_MIN) { DIA_INI = 540; DIA_FIN = 1140; } }
 function aMin(h) { var p = String(h).split(":"); return (+p[0] || 0) * 60 + (+p[1] || 0); }
 function deMin(m) { return pad(Math.floor(m / 60)) + ":" + pad(m % 60); }
 function bloques() { var a = []; for (var m = DIA_INI; m + SLOT_MIN <= DIA_FIN; m += SLOT_MIN) a.push(deMin(m)); return a; }
 function redondear(m) { var s = DIA_INI + Math.round((m - DIA_INI) / SLOT_MIN) * SLOT_MIN; return Math.max(DIA_INI, Math.min(DIA_FIN - SLOT_MIN, s)); }
+aplicarHorario();
 function iso(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
 function addDays(d, n) { var x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() + n); return x; }
 function parseISO(s) { var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
@@ -372,12 +382,14 @@ function waApp(u) { return String(u).replace("https://api.whatsapp.com/send?", "
 function toast(msg) { var t = el("toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(function () { t.hidden = true; }, 3200); }
 
 var HOY = new Date(), HOY_ISO = iso(HOY), MAN_ISO = iso(addDays(HOY, 1));
-var CIERRE = "Un abrazo,\nIsabel Pizarro · Essencia";
-var FIRMA = CIERRE + "\nJoaquín del Pino 823, San Carlos";
+function cierreDe(c) { return (c.saludo ? c.saludo + "\n" : "") + c.prof + " · " + c.centro; }
+function firmaDe(c) { return cierreDe(c) + (c.dir ? "\n" + c.dir : ""); }
+var CIERRE = cierreDe(C);
+var FIRMA = firmaDe(C);
 /* agrega el cierre de Isabel una sola vez (también a plantillas guardadas con la firma anterior) */
 function conFirma(t) {
   t = String(t == null ? "" : t);
-  if (t.indexOf("Isabel Pizarro") >= 0) return t;
+  if (C.prof && t.indexOf(C.prof) >= 0) return t;
   var viejo = "Essencia – Joaquín del Pino 823, San Carlos";
   if (t.indexOf(viejo) >= 0) return t.replace(viejo, FIRMA);
   return t.replace(/\s+$/, "") + "\n" + CIERRE;
@@ -479,9 +491,10 @@ V.agenda = function () {
   var man = citasDe(MAN_ISO), pend = man.filter(function (c) { return c.estado === "pend"; }).length;
   var hd = new Date(), hola = DIAS_L[hd.getDay()] + " " + hd.getDate() + " de " + ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"][hd.getMonth()];
   /* Foto de perfil incrustada (FOTO_ISABEL, más abajo). Si falla, quedan las iniciales. */
-  var h = '<div class="x-hola"><span class="x-avatar" role="img" aria-label="Isabel"><span class="x-avatar__in" aria-hidden="true">IP' +
-    (FOTO_ISABEL ? '<img src="' + FOTO_ISABEL + '" alt="" onerror="this.remove()" />' : "") + "</span></span>" +
-    '<div class="x-hola__txt"><h2>Hola, Isabel</h2><p class="x-fine">Hoy es ' + hola + " · " + subHoy() + "</p></div></div>" + resumenHoy();
+  var fp = fotoPerfil(), pn = primerNombre();
+  var h = '<div class="x-hola"><span class="x-avatar" role="img" aria-label="' + esc(pn) + '"><span class="x-avatar__in" aria-hidden="true">' + esc(iniciales(C.prof)) +
+    (fp ? '<img src="' + fp + '" alt="" onerror="this.remove()" />' : "") + "</span></span>" +
+    '<div class="x-hola__txt"><h2>Hola' + (pn ? ", " + esc(pn) : "") + '</h2><p class="x-fine">Hoy es ' + hola + " · " + subHoy() + "</p></div></div>" + resumenHoy();
   if (!S.bannerOk) h += '<div class="x-banner"><span>📲 Agrégala a tu pantalla de inicio: en Safari toca Compartir → Agregar a inicio.</span><button class="x-icon" data-act="banner" aria-label="Cerrar aviso">✕</button></div>';
   h += '<section class="x-card x-sum"><p><b>Mañana: ' + man.length + " pacientes</b> · " + pend + " por confirmar</p>" +
     '<button class="x-btn x-btn--accent x-btn--big" data-act="recordatorios">Enviar recordatorios de mañana</button></section>';
@@ -539,7 +552,7 @@ V.plantillas = function () {
 };
 
 function hojaMas() {
-  hoja("Más", '<button class="x-btn x-btn--accent x-btn--big" data-act="stats">📊 Estadísticas del mes</button><p class="x-label" style="margin-top:14px">Respaldo</p><p class="x-fine">Guarda una copia de pacientes, horas y plantillas. Hazlo cada semana y antes de cambiar de celular.</p><div class="x-row"><button class="x-btn x-btn--ok" data-act="bk-save">💾 Guardar respaldo</button><button class="x-btn" data-act="bk-load">📂 Restaurar</button></div><input type="file" id="bkfile" accept=".json,application/json" hidden><section class="x-about"><img src="' + document.querySelector(".x-top img").getAttribute("src") + '" alt="Logo Essencia"><b>Essencia</b><p class="x-about__who">Isabel Pizarro, Kinesióloga</p><hr class="x-rule"><p class="x-fine">Kinesiología Integral, Estética y Salud<br>Joaquín del Pino 823, San Carlos</p><p class="x-fine">Para enviar por WhatsApp, abre esta página en Safari y agrégala a tu pantalla de inicio.</p><button class="x-btn" data-act="reset">Restablecer datos de demostración</button><p class="x-fine">Prototipo de demostración · datos ficticios</p></section>');
+  hoja("Más", '<button class="x-btn x-btn--accent x-btn--big" data-act="centro">🏠 Mi centro</button><button class="x-btn x-btn--big" data-act="stats">📊 Estadísticas del mes</button><p class="x-label" style="margin-top:14px">Respaldo</p><p class="x-fine">Guarda una copia de pacientes, horas y plantillas. Hazlo cada semana y antes de cambiar de celular.</p><div class="x-row"><button class="x-btn x-btn--ok" data-act="bk-save">💾 Guardar respaldo</button><button class="x-btn" data-act="bk-load">📂 Restaurar</button></div><input type="file" id="bkfile" accept=".json,application/json" hidden><section class="x-about"><img src="' + document.querySelector(".x-top img").getAttribute("src") + '" alt="Logo"><b>' + esc(C.centro) + '</b><p class="x-about__who">' + esc(C.prof) + (C.titulo ? ", " + esc(C.titulo) : "") + '</p><hr class="x-rule"><p class="x-fine">' + esc(C.lema) + (C.dir ? "<br>" + esc(C.dir) : "") + '</p><p class="x-fine">Para enviar por WhatsApp, abre esta página en Safari y agrégala a tu pantalla de inicio.</p><button class="x-btn" data-act="reset">Restablecer datos de demostración</button><p class="x-fine">Prototipo de demostración · datos ficticios</p></section>');
 }
 
 /* ---------- dictado ---------- */
@@ -1024,9 +1037,9 @@ function hojaFicha() {
 }
 function msgBienvenida(p) {
   var c = proxima(p.id);
-  return "Hola " + p.nom.split(" ")[0] + " 😊 ¡Te doy la más cariñosa bienvenida a Essencia! Será un gusto acompañarte en tu plan de " + p.plan + " sesiones." +
+  return "Hola " + p.nom.split(" ")[0] + " 😊 ¡Te doy la más cariñosa bienvenida a " + C.centro + "! Será un gusto acompañarte en tu plan de " + p.plan + " sesiones." +
     (c ? " Tu primera hora es el " + fechaMsg(c.fecha) + " a las " + c.hora + "." : "") +
-    "\nTe espero en Joaquín del Pino 823, San Carlos. Ven con ropa cómoda" + (p.tipo === "postop" ? " y tu faja" : "") + ". Cualquier duda, escríbeme por aquí cuando quieras.\n" + CIERRE;
+    (C.dir ? "\nTe espero en " + C.dir + "." : "") + " Ven con ropa cómoda" + (p.tipo === "postop" ? " y tu faja" : "") + ". Cualquier duda, escríbeme por aquí cuando quieras.\n" + CIERRE;
 }
 function hojaCreado(pid) {
   var p = pac(pid), c = proxima(pid);
@@ -1175,6 +1188,81 @@ function hojaEditar(id) {
 }
 
 /* ---------- render y eventos ---------- */
+/* ---------- hoja Mi centro ---------- */
+var CEN = {};
+function hojaCentro(primera) {
+  CEN = { foto: C.foto, logo: C.logo };
+  var hs = []; for (var m = 6 * 60; m <= 23 * 60; m += 15) hs.push(deMin(m));
+  var op = function (v, sel) { return '<option' + (v === sel ? " selected" : "") + ">" + v + "</option>"; };
+  var f = function (id, lab, val, ph) { return '<label class="x-field">' + lab + '<input id="' + id + '" autocomplete="off" value="' + esc(val || "") + '" placeholder="' + esc(ph || "") + '"></label>'; };
+  hoja("Mi centro",
+    (primera ? '<p class="x-fine">Bienvenida. Revisa los datos de tu centro: se usan en el saludo, la firma de WhatsApp y las imágenes que compartes. Puedes cambiarlos cuando quieras en Más → Mi centro.</p>' : '<p class="x-fine">Estos datos salen en el saludo, la firma de WhatsApp y las imágenes que compartes.</p>') +
+    f("cnom", "Nombre del centro", C.centro, "Essencia") +
+    f("cprof", "Tu nombre", C.prof, "Nombre y apellido") +
+    f("ctit", "Profesión", C.titulo, "Kinesióloga") +
+    f("clema", "Lema (opcional)", C.lema, "Kinesiología Integral, Estética y Salud") +
+    f("cdir", "Dirección", C.dir, "Calle 123, Ciudad") +
+    '<p class="x-label">Foto y logo</p><div class="x-row" id="cimgs"></div>' +
+    '<input type="file" id="cfotof" accept="image/*" hidden><input type="file" id="clogof" accept="image/*" hidden>' +
+    '<p class="x-label">Firma de WhatsApp</p>' + f("csal", "Despedida", C.saludo, "Un abrazo,") +
+    '<p class="x-fine" id="cfprev"></p>' +
+    '<p class="x-label">Horario de la agenda</p><div class="x-two"><label class="x-field">Desde<select id="cini">' + hs.map(function (v) { return op(v, C.ini); }).join("") + '</select></label><label class="x-field">Hasta<select id="cfin">' + hs.map(function (v) { return op(v, C.fin); }).join("") + "</select></label></div>" +
+    '<label class="x-field">Largo de cada bloque<select id="cslot">' + [15, 30, 45, 60].map(function (v) { return '<option value="' + v + '"' + (+C.slot === v ? " selected" : "") + ">" + v + " min</option>"; }).join("") + "</select></label>" +
+    '<p class="x-warn" id="cerr" hidden></p><button class="x-btn x-btn--accent x-btn--big" data-act="centro-ok">Guardar</button>');
+  pintarCentroImgs();
+  ["cnom", "cprof", "csal", "cdir"].forEach(function (id) { el(id).addEventListener("input", prevFirma); });
+  prevFirma();
+}
+function prevFirma() { var t = { saludo: el("csal").value.trim(), prof: el("cprof").value.trim() || "Tu nombre", centro: el("cnom").value.trim() || "Tu centro", dir: el("cdir").value.trim() }; el("cfprev").innerHTML = "Así firmarás: <br>" + esc(firmaDe(t)).replace(/\n/g, "<br>"); }
+function pintarCentroImgs() {
+  var box = el("cimgs"); if (!box) return;
+  var fp = CEN.foto === "-" ? "" : (CEN.foto || (el("cprof") && el("cprof").value.trim() === C_DEF.prof ? FOTO_ISABEL : "")), lg = CEN.logo || "logo_essencia_hd.jpg";
+  var img = function (src, r) { return src ? '<img src="' + src + '" alt="" style="width:72px;height:72px;object-fit:cover;border-radius:' + r + ';display:block;margin:0 auto 6px">' : '<span style="width:72px;height:72px;border-radius:' + r + ';display:grid;place-items:center;margin:0 auto 6px;background:var(--x-accent-soft);color:var(--x-accent);font-weight:600">' + esc(iniciales(el("cprof") ? el("cprof").value : C.prof)) + "</span>"; };
+  box.innerHTML = '<div style="flex:1;text-align:center">' + img(fp, "50%") + '<button class="x-btn" data-act="centro-foto">Cambiar foto</button>' + (fp ? '<button class="x-btn" data-act="centro-sinfoto" style="margin-top:6px">Quitar</button>' : "") + "</div>" +
+    '<div style="flex:1;text-align:center">' + img(lg, "14px") + '<button class="x-btn" data-act="centro-logo">Cambiar logo</button>' + (CEN.logo ? '<button class="x-btn" data-act="centro-sinlogo" style="margin-top:6px">Logo original</button>' : "") + "</div>";
+}
+/* lee una imagen del celular y la achica para guardarla en el teléfono */
+function leerImagen(inputId, max, listo) {
+  var inp = el(inputId); if (!inp) return;
+  inp.onchange = function () {
+    var f = inp.files && inp.files[0]; inp.value = ""; if (!f) return;
+    var r = new FileReader();
+    r.onload = function () {
+      var im = new Image();
+      im.onload = function () {
+        var k = Math.min(1, max / Math.max(im.width, im.height)), cv = document.createElement("canvas");
+        cv.width = Math.round(im.width * k); cv.height = Math.round(im.height * k);
+        var x = cv.getContext("2d"); x.fillStyle = "#fff"; x.fillRect(0, 0, cv.width, cv.height); x.drawImage(im, 0, 0, cv.width, cv.height);
+        listo(cv.toDataURL("image/jpeg", 0.85));
+      };
+      im.onerror = function () { toast("No se pudo leer esa imagen"); };
+      im.src = r.result;
+    };
+    r.readAsDataURL(f);
+  };
+  inp.click();
+}
+function guardarCentro() {
+  var v = function (id) { return el(id).value.trim(); }, err = el("cerr");
+  var n = { centro: v("cnom"), prof: v("cprof"), titulo: v("ctit"), lema: v("clema"), dir: v("cdir"), saludo: v("csal"), ini: el("cini").value, fin: el("cfin").value, slot: +el("cslot").value };
+  if (!n.centro || !n.prof) { err.textContent = "Falta el nombre del centro y tu nombre."; err.hidden = false; return; }
+  if (aMin(n.fin) - aMin(n.ini) < n.slot) { err.textContent = "La hora de término debe ser después del inicio."; err.hidden = false; return; }
+  var viejaF = FIRMA, viejoC = CIERRE;
+  n.foto = CEN.foto; n.logo = CEN.logo; n.ok = true;
+  for (var k in n) C[k] = n[k];
+  saveC(); aplicarHorario(); CIERRE = cierreDe(C); FIRMA = firmaDe(C);
+  /* actualiza la firma en las plantillas guardadas */
+  (S.plantillas || []).forEach(function (t) { if (viejaF && t.txt.indexOf(viejaF) >= 0) t.txt = t.txt.split(viejaF).join(FIRMA); else if (viejoC && t.txt.indexOf(viejoC) >= 0) t.txt = t.txt.split(viejoC).join(CIERRE); });
+  aplicarMarca(); cerrar(); render(); toast("Mi centro guardado ✓");
+}
+/* nombre, lema y logo en el encabezado y la pantalla de inicio */
+function aplicarMarca() {
+  var top = document.querySelector(".x-top__t b"); if (top) top.textContent = C.centro;
+  var lm = document.querySelector(".x-lema"); if (lm) { lm.textContent = C.lema || ""; lm.hidden = !C.lema; }
+  var sp = document.querySelector("#splash p"); if (sp) sp.textContent = C.lema || C.centro;
+  var src = C.logo || "logo_essencia_hd.jpg";
+  document.querySelectorAll(".x-top img, #splash img").forEach(function (i) { if (i.getAttribute("src") !== src) i.setAttribute("src", src); });
+}
 function render() {
   el("hdate").textContent = "Hoy, " + fechaCorta(HOY_ISO);
   document.querySelectorAll(".x-tab").forEach(function (b) { if (b.dataset.v === S.vista) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); });
@@ -1249,12 +1337,18 @@ var ACT = {
   },
   borrar: function (b) { if (!confirm("¿Borrar esta hora de la agenda?")) return; S.citas = S.citas.filter(function (x) { return x.id !== b.dataset.id; }); cerrar(); render(); toast("Hora borrada"); },
   stats: hojaStats,
+  centro: function () { hojaCentro(false); },
+  "centro-foto": function () { leerImagen("cfotof", 360, function (u) { CEN.foto = u; pintarCentroImgs(); }); },
+  "centro-logo": function () { leerImagen("clogof", 600, function (u) { CEN.logo = u; pintarCentroImgs(); }); },
+  "centro-sinfoto": function () { CEN.foto = "-"; pintarCentroImgs(); },
+  "centro-sinlogo": function () { CEN.logo = ""; pintarCentroImgs(); },
+  "centro-ok": guardarCentro,
   fcat: function (b) { S.fcat = b.dataset.v; S.editT = null; render(); },
   pago: function (b) { var c = S.citas.filter(function (x) { return x.id === b.dataset.id; })[0]; if (!c) return; c.pago = b.dataset.v; render(); hojaCita(c.id); toast(PAGO[c.pago].t); },
   "kpi-conf": function () { hojaRecordatorios(); },
   "bk-save": function () {
     var dt = new Date(), nombre = "Essencia-respaldo-" + iso(dt) + ".json";
-    var blob = new Blob([JSON.stringify({ app: "essencia", ver: 1, fecha: dt.toISOString(), datos: S })], { type: "application/json" });
+    var blob = new Blob([JSON.stringify({ app: "essencia", ver: 1, fecha: dt.toISOString(), datos: S, centro: C })], { type: "application/json" });
     try { localStorage.setItem("essencia-bk-fecha", iso(dt)); } catch (e) {}
     var file = null; try { file = new File([blob], nombre, { type: "application/json" }); } catch (e) {}
     if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
@@ -1277,6 +1371,7 @@ var ACT = {
           try { localStorage.setItem("essencia2-prev", JSON.stringify(S)); } catch (e) {}
           for (var k in S) if (!(k in d)) d[k] = S[k];
           d.hoy = HOY_ISO; d.dia = HOY_ISO; d.vista = "agenda";
+          if (o.centro && o.centro.prof) { for (var kc in C_DEF) if (!(kc in o.centro)) o.centro[kc] = C_DEF[kc]; C = o.centro; C.ok = true; saveC(); aplicarHorario(); CIERRE = cierreDe(C); FIRMA = firmaDe(C); aplicarMarca(); }
           S = d; save(); cerrar(); render(); toast("Respaldo restaurado ✓");
         } catch (e) { alert("No se pudo leer el archivo."); }
       };
@@ -1488,7 +1583,7 @@ function lienzoComparar(a, d) {
       x.fillStyle = ink2; x.font = "400 28px " + FONT; x.fillText(fechaFoto(f.fecha), px + PW / 2, py + PH + 94);
     });
     x.strokeStyle = tk("--x-mauve", "#9c4f86"); x.lineWidth = 2; x.beginPath(); x.moveTo(M, H - 80); x.lineTo(W - M, H - 80); x.stroke();
-    var pie = "Essencia · Isabel Pizarro, Kinesióloga", logo = document.querySelector(".x-top img"), LS = 52, LG = 14;
+    var pie = C.centro + " · " + C.prof + (C.titulo ? ", " + C.titulo : ""), logo = document.querySelector(".x-top img"), LS = 52, LG = 14;
     x.fillStyle = acc; x.font = "600 28px " + FONT;
     var tw = x.measureText(pie).width, conLogo = logo && logo.complete && logo.naturalWidth > 0;
     var gx = W / 2 - (tw + (conLogo ? LS + LG : 0)) / 2;
@@ -1610,7 +1705,9 @@ document.addEventListener("change", function (e) {
   }
 });
 document.addEventListener("keydown", function (e) { if (e.key === "Escape") { if (!el("visor").hidden) cerrarVisor(); else cerrar(); } });
+aplicarMarca();
 render();
+if (!C.ok) setTimeout(function () { hojaCentro(true); }, 1100);
 /* ?dictado=<texto> o #dictado=<texto>: abre Dictar con el texto y la vista previa (para un Atajo de Siri) */
 (function () {
   var t = null;
