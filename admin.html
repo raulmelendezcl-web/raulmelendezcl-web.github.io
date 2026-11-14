@@ -136,33 +136,53 @@
     }).join("") || '<p class="mut">Aún no hay centros.</p>';
   }
 
+
+  function pedir(msg, conInput, val) {
+    return new Promise(function (res) {
+      var w = document.createElement("div");
+      w.style.cssText = "position:fixed;inset:0;background:rgba(60,40,30,.35);display:flex;align-items:center;justify-content:center;z-index:99;padding:20px";
+      w.innerHTML = '<div style="background:#fffaf4;border-radius:18px;padding:20px;max-width:360px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,.15)">' +
+        '<p style="margin:0 0 12px;color:#4a3426;font-size:16px;line-height:1.4">' + esc(msg) + '</p>' +
+        (conInput ? '<input id="pdIn" style="width:100%;box-sizing:border-box;padding:12px;border:1px solid #e6d8c8;border-radius:12px;font-size:16px;margin-bottom:12px" value="' + esc(val || "") + '">' : '') +
+        '<div style="display:flex;gap:10px;justify-content:flex-end"><button id="pdNo" type="button">Cancelar</button><button id="pdSi" type="button" style="background:#b5674b;color:#fff;border-color:#b5674b">Aceptar</button></div></div>';
+      document.body.appendChild(w);
+      var inp = w.querySelector("#pdIn"); if (inp) setTimeout(function () { inp.focus(); }, 50);
+      function fin(v) { document.body.removeChild(w); res(v); }
+      w.querySelector("#pdNo").onclick = function () { fin(null); };
+      w.querySelector("#pdSi").onclick = function () { fin(inp ? inp.value : true); };
+    });
+  }
   $("lista").addEventListener("click", function (ev) {
     var b = ev.target.closest("button[data-a]"); if (!b) return;
-    var f = filas[+b.dataset.i], a = b.dataset.a, p;
-    if (a === "fecha") {
-      var t = prompt("Nueva fecha de vencimiento (dd-mm-aaaa). Puede ser antes de la actual.", f.vence ? fmt(f.vence) : "");
-      if (t === null) return;
-      var m = t.trim().match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{4})$/);
-      if (!m) { toast("Escribe la fecha así: 31-12-2026"); return; }
-      var nf = m[3] + "-" + ("0" + m[2]).slice(-2) + "-" + ("0" + m[1]).slice(-2);
-      if (isNaN(new Date(nf + "T12:00:00"))) { toast("Fecha no válida"); return; }
-      p = rpc("admin_cambiar", { p_user: f.user_id, p_activa: true, p_vence: nf, p_sin_vence: false }).then(function () { toast(f.centro + ": vence " + fmt(nf)); });
-    }
-    if (a === "mas") {
-      var nv = sumar(f.vence, +b.dataset.d);
-      p = rpc("admin_cambiar", { p_user: f.user_id, p_activa: true, p_vence: nv, p_sin_vence: false }).then(function () { toast(f.centro + ": vence " + fmt(nv)); });
-    } else if (a === "sinv") {
-      if (!confirm("¿Dejar " + f.centro + " sin vencimiento?")) return;
-      p = rpc("admin_cambiar", { p_user: f.user_id, p_activa: true, p_vence: null, p_sin_vence: true }).then(function () { toast(f.centro + ": sin vencimiento"); });
-    } else if (a === "act") {
-      var on = b.dataset.v === "1";
-      if (!on && !confirm("¿Suspender " + f.centro + "? La agenda se bloqueará la próxima vez que la abra con internet.")) return;
-      p = rpc("admin_cambiar", { p_user: f.user_id, p_activa: on, p_vence: null, p_sin_vence: false }).then(function () { toast(f.centro + (on ? " reactivada" : " suspendida")); });
-    } else if (a === "clave") {
-      var c = prompt("Nueva clave para " + f.email + " (mínimo 8):"); if (!c) return;
-      p = rpc("admin_clave", { p_user: f.user_id, p_clave: c }).then(function () { toast("Clave cambiada. Envíasela por WhatsApp."); });
-    }
-    if (p) { b.disabled = true; p.then(cargar).catch(function (e) { toast(errTxt(e)); b.disabled = false; }); }
+    var f = filas[+b.dataset.i], a = b.dataset.a, q = Promise.resolve(true);
+    function cambia(args, txt) { return rpc("admin_cambiar", Object.assign({ p_user: f.user_id }, args)).then(function () { toast(txt); }); }
+    if (a === "fecha") q = pedir("Nueva fecha de vencimiento (dd-mm-aaaa). Puede ser antes de la actual.", true, f.vence ? fmt(f.vence) : "");
+    else if (a === "sinv") q = pedir("¿Dejar " + f.centro + " sin vencimiento?");
+    else if (a === "act" && b.dataset.v !== "1") q = pedir("¿Suspender " + f.centro + "? La agenda se bloqueará la próxima vez que la abra con internet.");
+    else if (a === "clave") q = pedir("Nueva clave para " + f.email + " (mínimo 8):", true, "");
+    q.then(function (r) {
+      if (r === null || r === false) return;
+      var p;
+      if (a === "fecha") {
+        var m = String(r).trim().match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{4})$/);
+        if (!m) { toast("Escribe la fecha así: 31-12-2026"); return; }
+        var nf = m[3] + "-" + ("0" + m[2]).slice(-2) + "-" + ("0" + m[1]).slice(-2);
+        if (isNaN(new Date(nf + "T12:00:00"))) { toast("Fecha no válida"); return; }
+        p = cambia({ p_activa: true, p_vence: nf, p_sin_vence: false }, f.centro + ": vence " + fmt(nf));
+      } else if (a === "mas") {
+        var nv = sumar(f.vence, +b.dataset.d);
+        p = cambia({ p_activa: true, p_vence: nv, p_sin_vence: false }, f.centro + ": vence " + fmt(nv));
+      } else if (a === "sinv") {
+        p = cambia({ p_activa: true, p_vence: null, p_sin_vence: true }, f.centro + ": sin vencimiento");
+      } else if (a === "act") {
+        var on = b.dataset.v === "1";
+        p = cambia({ p_activa: on, p_vence: null, p_sin_vence: false }, f.centro + (on ? " reactivada" : " suspendida"));
+      } else if (a === "clave") {
+        if (String(r).length < 8) { toast("La clave debe tener al menos 8 caracteres."); return; }
+        p = rpc("admin_clave", { p_user: f.user_id, p_clave: String(r) }).then(function () { toast("Clave cambiada. Envíasela por WhatsApp."); });
+      }
+      if (p) { b.disabled = true; p.then(cargar).catch(function (e) { toast(errTxt(e)); b.disabled = false; }); }
+    });
   });
 
   $("fNuevo").addEventListener("submit", function (ev) {
