@@ -128,6 +128,7 @@
         '<div class="row">' +
           '<button data-a="mas" data-d="30" data-i="' + i + '">+30 días</button>' +
           '<button data-a="mas" data-d="14" data-i="' + i + '">+14 días</button>' +
+          '<button data-a="fecha" data-i="' + i + '">Elegir fecha</button>' +
           '<button data-a="sinv" data-i="' + i + '">Sin vencimiento</button>' +
           (f.activa ? '<button data-a="act" data-v="0" data-i="' + i + '" style="color:var(--no)">Suspender</button>' : '<button data-a="act" data-v="1" data-i="' + i + '" style="color:var(--ok)">Reactivar</button>') +
           '<button data-a="clave" data-i="' + i + '">Cambiar clave</button>' +
@@ -138,6 +139,15 @@
   $("lista").addEventListener("click", function (ev) {
     var b = ev.target.closest("button[data-a]"); if (!b) return;
     var f = filas[+b.dataset.i], a = b.dataset.a, p;
+    if (a === "fecha") {
+      var t = prompt("Nueva fecha de vencimiento (dd-mm-aaaa). Puede ser antes de la actual.", f.vence ? fmt(f.vence) : "");
+      if (t === null) return;
+      var m = t.trim().match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{4})$/);
+      if (!m) { toast("Escribe la fecha así: 31-12-2026"); return; }
+      var nf = m[3] + "-" + ("0" + m[2]).slice(-2) + "-" + ("0" + m[1]).slice(-2);
+      if (isNaN(new Date(nf + "T12:00:00"))) { toast("Fecha no válida"); return; }
+      p = rpc("admin_cambiar", { p_user: f.user_id, p_activa: true, p_vence: nf, p_sin_vence: false }).then(function () { toast(f.centro + ": vence " + fmt(nf)); });
+    }
     if (a === "mas") {
       var nv = sumar(f.vence, +b.dataset.d);
       p = rpc("admin_cambiar", { p_user: f.user_id, p_activa: true, p_vence: nv, p_sin_vence: false }).then(function () { toast(f.centro + ": vence " + fmt(nv)); });
