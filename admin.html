@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Licencias">
+<link rel="apple-touch-icon" href="essencia_icon_512.jpg">
+<title>Panel de licencias</title>
+<style>
+  :root { --bg:#f6efe6; --card:#fffaf4; --line:#e6d8c8; --txt:#4a3426; --mut:#8a7262; --acc:#b5654a; --ok:#2f7a4f; --no:#b23a3a; --warn:#a07a12; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--txt); font:16px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; padding: env(safe-area-inset-top) 16px 40px; }
+  h1 { font-size:22px; margin:18px 0 2px; }
+  h2 { font-size:17px; margin:0 0 10px; }
+  .mut { color:var(--mut); font-size:14px; margin:0 0 14px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:16px; margin:12px 0; }
+  label { display:block; font-size:14px; margin:0 0 10px; }
+  input, select { display:block; width:100%; margin-top:4px; padding:12px; border:1px solid var(--line); border-radius:12px; font-size:16px; background:#fff; color:var(--txt); }
+  button { font:inherit; border:1px solid var(--line); background:#fff; color:var(--txt); border-radius:999px; padding:10px 14px; font-size:15px; }
+  button.pri { background:var(--acc); color:#fff; border:0; width:100%; padding:14px; font-weight:600; }
+  button:disabled { opacity:.5; }
+  .row { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+  .top { display:flex; justify-content:space-between; align-items:center; gap:8px; }
+  .chip { font-size:13px; font-weight:600; padding:3px 10px; border-radius:999px; white-space:nowrap; }
+  .c-ok { background:#e3f1e8; color:var(--ok); } .c-no { background:#f6e1e1; color:var(--no); } .c-warn { background:#f7efd6; color:var(--warn); }
+  .mail { font-size:14px; color:var(--mut); word-break:break-all; }
+  .toast { position:fixed; left:16px; right:16px; bottom:24px; background:var(--txt); color:#fff; padding:12px 16px; border-radius:14px; text-align:center; display:none; }
+  .err { color:var(--no); font-size:14px; min-height:18px; margin:4px 0 8px; }
+  .hd { display:flex; justify-content:space-between; align-items:center; }
+</style>
+</head>
+<body>
+<div id="vLogin">
+  <h1>Panel de licencias</h1>
+  <p class="mut">Solo para Raúl. Entra con el mismo correo y clave de la agenda.</p>
+  <form id="fLogin" class="card" autocomplete="on">
+    <label>Correo<input id="lMail" type="email" autocomplete="username" required></label>
+    <label>Clave<input id="lPass" type="password" autocomplete="current-password" required></label>
+    <p class="err" id="lErr"></p>
+    <button class="pri" id="lBtn" type="submit">Entrar</button>
+  </form>
+</div>
+
+<div id="vPanel" hidden>
+  <div class="hd"><h1>Licencias</h1><button id="bSalir">Salir</button></div>
+  <p class="mut" id="resumen">Cargando…</p>
+
+  <form id="fNuevo" class="card" autocomplete="off">
+    <h2>+ Nuevo centro</h2>
+    <label>Nombre del centro<input id="nCentro" required placeholder="Ej: Podología Sonrisa"></label>
+    <label>Correo de la profesional<input id="nMail" type="email" required placeholder="correo@cliente.cl"></label>
+    <label>Clave inicial (mínimo 8)<input id="nPass" type="text" required minlength="8" autocapitalize="off" autocorrect="off" spellcheck="false"></label>
+    <label>Acceso<select id="nDias"><option value="14">Prueba 14 días</option><option value="30">30 días (pagado)</option><option value="">Sin vencimiento</option></select></label>
+    <p class="err" id="nErr"></p>
+    <button class="pri" id="nBtn" type="submit">Crear centro</button>
+  </form>
+
+  <div id="lista"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function () {
+  var SB_URL = "https://vijjrxujlzxrhadmpkpe.supabase.co", SB_KEY = "sb_publishable_UskqNSULFYoZXHlK2yWtLQ_4KohQHkY";
+  var K = "essencia_admin", S = null, filas = [];
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function toast(t) { var e = $("toast"); e.textContent = t; e.style.display = "block"; clearTimeout(toast.t); toast.t = setTimeout(function () { e.style.display = "none"; }, 2800); }
+  function hoy() { var d = new Date(); return iso(d); }
+  function iso(d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
+  function fmt(f) { return f ? f.split("-").reverse().join("-") : "sin vencimiento"; }
+  function sumar(base, dias) { var b = base && base > hoy() ? base : hoy(); var d = new Date(b + "T12:00:00"); d.setDate(d.getDate() + dias); return iso(d); }
+  function diasRest(f) { if (!f) return null; return Math.round((new Date(f + "T12:00:00") - new Date(hoy() + "T12:00:00")) / 864e5); }
+
+  function tok(body) {
+    var gt = body.refresh_token ? "refresh_token" : "password";
+    return fetch(SB_URL + "/auth/v1/token?grant_type=" + gt, { method: "POST", headers: { apikey: SB_KEY, "Content-Type": "application/json" }, body: JSON.stringify(body) })
+      .then(function (r) { return r.json().then(function (j) { if (!r.ok) throw { auth: true, j: j }; return j; }); });
+  }
+  function guardar(s) { S = { access: s.access_token, refresh: s.refresh_token, exp: Date.now() + (s.expires_in || 3600) * 1000 - 60000 }; localStorage.setItem(K, JSON.stringify({ refresh: S.refresh })); }
+  function sesion() {
+    if (S && S.exp > Date.now()) return Promise.resolve(S);
+    var g = null; try { g = JSON.parse(localStorage.getItem(K)); } catch (e) {}
+    if (!g || !g.refresh) return Promise.reject({ auth: true });
+    return tok({ refresh_token: g.refresh }).then(function (s) { guardar(s); return S; });
+  }
+  function rpc(fn, args) {
+    return sesion().then(function (s) {
+      return fetch(SB_URL + "/rest/v1/rpc/" + fn, { method: "POST", headers: { apikey: SB_KEY, Authorization: "Bearer " + s.access, "Content-Type": "application/json" }, body: JSON.stringify(args || {}) });
+    }).then(function (r) { return r.text().then(function (t) { var j = null; try { j = t ? JSON.parse(t) : null; } catch (e) {} if (!r.ok) throw { msg: (j && (j.message || j.msg)) || ("Error " + r.status) }; return j; }); });
+  }
+  function errTxt(e) {
+    var m = (e && e.msg) || "";
+    if (/no autorizado/.test(m)) return "Esta cuenta no es administradora.";
+    if (/correo ya existe/.test(m)) return "Ese correo ya tiene cuenta.";
+    if (/clave muy corta/.test(m)) return "La clave debe tener al menos 8 caracteres.";
+    if (/Could not find the function|does not exist/.test(m)) return "Falta correr el SQL del panel en Supabase.";
+    if (e && e.auth) return "Tu sesión expiró. Entra de nuevo.";
+    return m || "No pude conectarme. Revisa tu internet.";
+  }
+
+  function mostrar(panel) { $("vLogin").hidden = panel; $("vPanel").hidden = !panel; }
+
+  function cargar() {
+    return rpc("admin_lista").then(function (rows) { filas = rows || []; pintar(); })
+      .catch(function (e) { if (e && e.auth) { salir(); return; } $("resumen").textContent = errTxt(e); });
+  }
+
+  function estado(f) {
+    if (!f.activa) return ["Suspendida", "c-no"];
+    var d = diasRest(f.vence);
+    if (d === null) return ["Activa", "c-ok"];
+    if (d < 0) return ["Vencida", "c-no"];
+    if (d <= 3) return ["Vence en " + d + (d === 1 ? " día" : " días"), "c-warn"];
+    return ["Activa · " + d + " días", "c-ok"];
+  }
+
+  function pintar() {
+    var act = filas.filter(function (f) { var e = estado(f)[1]; return e !== "c-no"; }).length;
+    $("resumen").textContent = filas.length + (filas.length === 1 ? " centro" : " centros") + " · " + act + " con acceso";
+    $("lista").innerHTML = filas.map(function (f, i) {
+      var e = estado(f);
+      return '<div class="card"><div class="top"><b>' + esc(f.centro) + '</b><span class="chip ' + e[1] + '">' + e[0] + '</span></div>' +
+        '<div class="mail">' + esc(f.email) + '</div><div class="mut" style="margin:4px 0 0">Vence: ' + fmt(f.vence) + '</div>' +
+        '<div class="row">' +
+          '<button data-a="mas" data-d="30" data-i="' + i + '">+30 días</button>' +
+          '<button data-a="mas" data-d="14" data-i="' + i + '">+14 días</button>' +
+          '<button data-a="sinv" data-i="' + i + '">Sin vencimiento</button>' +
+          (f.activa ? '<button data-a="act" data-v="0" data-i="' + i + '" style="color:var(--no)">Suspender</button>' : '<button data-a="act" data-v="1" data-i="' + i + '" style="color:var(--ok)">Reactivar</button>') +
+          '<button data-a="clave" data-i="' + i + '">Cambiar clave</button>' +
+        '</div></div>';
+    }).join("") || '<p class="mut">Aún no hay centros.</p>';
+  }
+
+  $("lista").addEventListener("click", function (ev) {
+    var b = ev.target.closest("button[data-a]"); if (!b) return;
+    var f = filas[+b.dataset.i], a = b.dataset.a, p;
+    if (a === "mas") {
+      var nv = sumar(f.vence, +b.dataset.d);
+      p = rpc("admin_cambiar", { p_user: f.user_id, p_activa: true, p_vence: nv, p_sin_vence: false }).then(function () { toast(f.centro + ": vence " + fmt(nv)); });
+    } else if (a === "sinv") {
+      if (!confirm("¿Dejar " + f.centro + " sin vencimiento?")) return;
+      p = rpc("admin_cambiar", { p_user: f.user_id, p_activa: true, p_vence: null, p_sin_vence: true }).then(function () { toast(f.centro + ": sin vencimiento"); });
+    } else if (a === "act") {
+      var on = b.dataset.v === "1";
+      if (!on && !confirm("¿Suspender " + f.centro + "? La agenda se bloqueará la próxima vez que la abra con internet.")) return;
+      p = rpc("admin_cambiar", { p_user: f.user_id, p_activa: on, p_vence: null, p_sin_vence: false }).then(function () { toast(f.centro + (on ? " reactivada" : " suspendida")); });
+    } else if (a === "clave") {
+      var c = prompt("Nueva clave para " + f.email + " (mínimo 8):"); if (!c) return;
+      p = rpc("admin_clave", { p_user: f.user_id, p_clave: c }).then(function () { toast("Clave cambiada. Envíasela por WhatsApp."); });
+    }
+    if (p) { b.disabled = true; p.then(cargar).catch(function (e) { toast(errTxt(e)); b.disabled = false; }); }
+  });
+
+  $("fNuevo").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var b = $("nBtn"), d = $("nDias").value, centro = $("nCentro").value.trim(), mail = $("nMail").value.trim().toLowerCase(), clave = $("nPass").value;
+    $("nErr").textContent = "";
+    if (clave.length < 8) { $("nErr").textContent = "La clave debe tener al menos 8 caracteres."; return; }
+    b.disabled = true; b.textContent = "Creando…";
+    rpc("admin_crear", { p_email: mail, p_clave: clave, p_centro: centro, p_dias: d === "" ? null : +d })
+      .then(function () { toast(centro + " creado. Envíale su correo y clave."); $("fNuevo").reset(); return cargar(); })
+      .catch(function (e) { $("nErr").textContent = errTxt(e); })
+      .then(function () { b.disabled = false; b.textContent = "Crear centro"; });
+  });
+
+  $("fLogin").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var b = $("lBtn"); $("lErr").textContent = ""; b.disabled = true; b.textContent = "Entrando…";
+    tok({ email: $("lMail").value.trim().toLowerCase(), password: $("lPass").value })
+      .then(function (s) { guardar(s); return rpc("es_admin"); })
+      .then(function (ok) { if (ok !== true) { salir(); $("lErr").textContent = "Esta cuenta no es administradora."; return; } mostrar(true); return cargar(); })
+      .catch(function (e) { $("lErr").textContent = e && e.auth ? "Correo o clave incorrectos." : errTxt(e); })
+      .then(function () { b.disabled = false; b.textContent = "Entrar"; });
+  });
+
+  function salir() { S = null; localStorage.removeItem(K); mostrar(false); }
+  $("bSalir").addEventListener("click", salir);
+
+  if (localStorage.getItem(K)) { mostrar(true); cargar(); } else mostrar(false);
+})();
+</script>
+</body>
+</html>
