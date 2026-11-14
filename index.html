@@ -379,6 +379,16 @@ function waTexto(texto) {
 }
 function wa(tel, texto) { return "https://api.whatsapp.com/send?phone=" + String(tel).replace(/\D/g, "") + "&text=" + encodeURIComponent(waTexto(texto)); }
 function waApp(u) { return String(u).replace("https://api.whatsapp.com/send?", "whatsapp://send?"); }
+/* confirmación propia (el visor de algunas apps bloquea confirm/alert) */
+function preguntar(msg, si, txtSi) {
+  var o = document.createElement("div");
+  o.setAttribute("style", "position:fixed;inset:0;z-index:9999;background:rgba(60,40,30,.45);display:flex;align-items:center;justify-content:center;padding:24px");
+  o.innerHTML = '<div style="background:#fbf6f0;color:#4a3427;border-radius:18px;padding:20px;max-width:340px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,.2)"><p style="margin:0 0 16px;font-size:16px;line-height:1.4"></p><div style="display:flex;gap:10px"><button type="button" class="x-btn" style="flex:1">Volver</button><button type="button" class="x-btn x-btn--accent" style="flex:1"></button></div></div>';
+  o.querySelector("p").textContent = msg; var bs = o.querySelectorAll("button"); bs[1].textContent = txtSi || "Sí";
+  bs[0].onclick = function () { o.remove(); }; bs[1].onclick = function () { o.remove(); si(); };
+  o.onclick = function (e) { if (e.target === o) o.remove(); };
+  document.body.appendChild(o);
+}
 function toast(msg) { var t = el("toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(function () { t.hidden = true; }, 3200); }
 
 var HOY = new Date(), HOY_ISO = iso(HOY), MAN_ISO = iso(addDays(HOY, 1));
@@ -552,7 +562,7 @@ V.plantillas = function () {
 };
 
 function hojaMas() {
-  hoja("Más", '<button class="x-btn x-btn--accent x-btn--big" data-act="centro">🏠 Mi centro</button><button class="x-btn x-btn--big" data-act="stats">📊 Estadísticas del mes</button><p class="x-label" style="margin-top:14px">Respaldo</p><p class="x-fine">Guarda una copia de pacientes, horas y plantillas. Hazlo cada semana y antes de cambiar de celular.</p><div class="x-row"><button class="x-btn x-btn--ok" data-act="bk-save">💾 Guardar respaldo</button><button class="x-btn" data-act="bk-load">📂 Restaurar</button></div><input type="file" id="bkfile" accept=".json,application/json" hidden><section class="x-about"><img src="' + document.querySelector(".x-top img").getAttribute("src") + '" alt="Logo"><b>' + esc(C.centro) + '</b><p class="x-about__who">' + esc(C.prof) + (C.titulo ? ", " + esc(C.titulo) : "") + '</p><hr class="x-rule"><p class="x-fine">' + esc(C.lema) + (C.dir ? "<br>" + esc(C.dir) : "") + '</p><p class="x-fine">Para enviar por WhatsApp, abre esta página en Safari y agrégala a tu pantalla de inicio.</p><button class="x-btn" data-act="reset">Restablecer datos de demostración</button><p class="x-fine">Prototipo de demostración · datos ficticios</p></section>');
+  hoja("Más", '<button class="x-btn x-btn--accent x-btn--big" data-act="centro">🏠 Mi centro</button><button class="x-btn x-btn--big" data-act="guia">📲 Cómo empezar</button><button class="x-btn x-btn--big" data-act="stats">📊 Estadísticas del mes</button><p class="x-label" style="margin-top:14px">Respaldo</p><p class="x-fine">Guarda una copia de pacientes, horas y plantillas. Hazlo cada semana y antes de cambiar de celular.</p><div class="x-row"><button class="x-btn x-btn--ok" data-act="bk-save">💾 Guardar respaldo</button><button class="x-btn" data-act="bk-load">📂 Restaurar</button></div><input type="file" id="bkfile" accept=".json,application/json" hidden><section class="x-about"><img src="' + document.querySelector(".x-top img").getAttribute("src") + '" alt="Logo"><b>' + esc(C.centro) + '</b><p class="x-about__who">' + esc(C.prof) + (C.titulo ? ", " + esc(C.titulo) : "") + '</p><hr class="x-rule"><p class="x-fine">' + esc(C.lema) + (C.dir ? "<br>" + esc(C.dir) : "") + '</p><p class="x-fine">Para enviar por WhatsApp, abre esta página en Safari y agrégala a tu pantalla de inicio.</p><button class="x-btn" data-act="reset">Restablecer datos de demostración</button><p class="x-fine">Prototipo de demostración · datos ficticios</p></section>');
 }
 
 /* ---------- dictado ---------- */
@@ -1188,6 +1198,34 @@ function hojaEditar(id) {
 }
 
 /* ---------- render y eventos ---------- */
+/* ---------- hoja Cómo empezar (guía de bienvenida) ---------- */
+function esApp() { try { return !!(navigator.standalone || (window.matchMedia && matchMedia("(display-mode: standalone)").matches)); } catch (e) { return false; } }
+function hojaGuia(primera, so) {
+  var ua = navigator.userAgent || "", ios = /iPhone|iPad|iPod/i.test(ua) || (/Macintosh/.test(ua) && "ontouchend" in document);
+  so = so || (ios ? "ios" : "and");
+  var paso = function (n, t, d) { return '<div style="display:flex;gap:12px;align-items:flex-start;margin:0 0 12px"><span style="flex:none;width:28px;height:28px;border-radius:50%;background:var(--x-accent);color:#fff;display:grid;place-items:center;font-weight:600">' + n + '</span><div><b>' + t + '</b>' + (d ? '<p class="x-fine" style="margin:2px 0 0">' + d + "</p>" : "") + "</div></div>"; };
+  var tab = function (id, t) { return '<button class="x-btn' + (so === id ? " x-btn--accent" : "") + '" style="flex:1" data-act="guia-tab" data-so="' + id + '">' + t + "</button>"; };
+  var icono = so === "ios"
+    ? paso(1, "Abre este link en Safari", "Si lo abriste desde WhatsApp u otra app, toca los tres puntos o la brújula y elige Abrir en Safari.") +
+      paso(2, "Toca el botón Compartir", "El cuadrado con la flecha hacia arriba, abajo en la pantalla (o arriba en iPad).") +
+      paso(3, "Elige “Agregar a inicio”", "Si no lo ves, desliza la lista hacia arriba.") +
+      paso(4, "Toca “Agregar”", "Aparece el ícono de " + esc(C.centro) + " en tu pantalla de inicio.")
+    : paso(1, "Abre este link en Chrome", "Si lo abriste desde WhatsApp, toca los tres puntos y elige Abrir en Chrome.") +
+      paso(2, "Toca los tres puntos ⋮", "Arriba a la derecha.") +
+      paso(3, "Elige “Agregar a pantalla principal” o “Instalar app”") +
+      paso(4, "Confirma con “Agregar” o “Instalar”", "Aparece el ícono de " + esc(C.centro) + " en tu pantalla de inicio.");
+  hoja("Cómo empezar",
+    (primera ? '<p class="x-fine">¡Listo tu centro! Ahora deja la agenda como ícono en tu celular: se abre al instante, funciona sin internet y así WhatsApp se abre con el mensaje listo.</p>' : '<p class="x-fine">Deja la agenda como ícono en tu celular y empieza en minutos.</p>') +
+    (esApp() ? '<p class="x-card" style="margin:0 0 14px">✅ Ya la estás usando desde el ícono. ¡Perfecto!</p>' :
+      '<p class="x-label">1 · Deja el ícono en tu celular</p><div class="x-row" style="margin:0 0 14px">' + tab("ios", "iPhone") + tab("and", "Android") + "</div>" + icono) +
+    '<p class="x-label" style="margin-top:14px">2 · Primeros pasos</p>' +
+    paso("🏠", "Revisa Mi centro", "Tu nombre, foto, logo, horario y la despedida de WhatsApp. Está en Más → Mi centro.") +
+    paso("👤", "Agrega tus pacientes", "En Pacientes, con su teléfono para enviarles mensajes.") +
+    paso("📅", "Agenda tus horas", "En Agenda toca un bloque libre, o usa Dictar para armar el día con la voz.") +
+    paso("💬", "Confirma el día anterior", "En Inicio, “Confirmar mañana”: un toque por paciente y WhatsApp se abre con el mensaje listo. Tú tocas enviar.") +
+    paso("💾", "Guarda un respaldo cada semana", "En Más → Guardar respaldo. Tus datos viven en este celular.") +
+    '<button class="x-btn x-btn--accent x-btn--big" data-act="close">Empezar</button>');
+}
 /* ---------- hoja Mi centro ---------- */
 var CEN = {};
 function hojaCentro(primera) {
@@ -1247,13 +1285,14 @@ function guardarCentro() {
   var n = { centro: v("cnom"), prof: v("cprof"), titulo: v("ctit"), lema: v("clema"), dir: v("cdir"), saludo: v("csal"), ini: el("cini").value, fin: el("cfin").value, slot: +el("cslot").value };
   if (!n.centro || !n.prof) { err.textContent = "Falta el nombre del centro y tu nombre."; err.hidden = false; return; }
   if (aMin(n.fin) - aMin(n.ini) < n.slot) { err.textContent = "La hora de término debe ser después del inicio."; err.hidden = false; return; }
-  var viejaF = FIRMA, viejoC = CIERRE;
+  var viejaF = FIRMA, viejoC = CIERRE, primera = !C.ok;
   n.foto = CEN.foto; n.logo = CEN.logo; n.ok = true;
   for (var k in n) C[k] = n[k];
   saveC(); aplicarHorario(); CIERRE = cierreDe(C); FIRMA = firmaDe(C);
   /* actualiza la firma en las plantillas guardadas */
   (S.plantillas || []).forEach(function (t) { if (viejaF && t.txt.indexOf(viejaF) >= 0) t.txt = t.txt.split(viejaF).join(FIRMA); else if (viejoC && t.txt.indexOf(viejoC) >= 0) t.txt = t.txt.split(viejoC).join(CIERRE); });
   aplicarMarca(); cerrar(); render(); toast("Mi centro guardado ✓");
+  if (primera) setTimeout(function () { hojaGuia(true); }, 700);
 }
 /* nombre, lema y logo en el encabezado y la pantalla de inicio */
 function aplicarMarca() {
@@ -1317,7 +1356,7 @@ var ACT = {
     render(); hojaAvisar(lista); toast(lista.length + (lista.length === 1 ? " hora atrasada " : " horas atrasadas ") + A.min + " min");
   },
   avisado: function (b) { var r = AV[+b.dataset.i]; if (r) r.ok = true; b.classList.add("is-avisado"); b.textContent = "Avisado ✓"; },
-  cancelar: function (b) { if (!confirm("¿Cancelar esta hora?")) return; S.citas = S.citas.filter(function (x) { return x.id !== b.dataset.id; }); cerrar(); render(); toast("Hora cancelada"); },
+  cancelar: function (b) { preguntar("¿Cancelar esta hora?", function () { S.citas = S.citas.filter(function (x) { return x.id !== b.dataset.id; }); cerrar(); render(); toast("Hora cancelada"); }); },
   pac: function (b) { hojaPac(b.dataset.id); },
   editpac: function (b) { hojaEditar(b.dataset.id); },
   "editpac-ok": function (b) {
@@ -1335,7 +1374,7 @@ var ACT = {
     if (b.dataset.keep === "rec") hojaRecordatorios(); else cerrar();
     toast(EST_TOAST[c.estado] || "Listo");
   },
-  borrar: function (b) { if (!confirm("¿Borrar esta hora de la agenda?")) return; S.citas = S.citas.filter(function (x) { return x.id !== b.dataset.id; }); cerrar(); render(); toast("Hora borrada"); },
+  borrar: function (b) { preguntar("¿Borrar esta hora de la agenda?", function () { S.citas = S.citas.filter(function (x) { return x.id !== b.dataset.id; }); cerrar(); render(); toast("Hora borrada"); }); },
   stats: hojaStats,
   centro: function () { hojaCentro(false); },
   "centro-foto": function () { leerImagen("cfotof", 360, function (u) { CEN.foto = u; pintarCentroImgs(); }); },
@@ -1343,6 +1382,8 @@ var ACT = {
   "centro-sinfoto": function () { CEN.foto = "-"; pintarCentroImgs(); },
   "centro-sinlogo": function () { CEN.logo = ""; pintarCentroImgs(); },
   "centro-ok": guardarCentro,
+  guia: function () { hojaGuia(false); },
+  "guia-tab": function (b) { hojaGuia(false, b.dataset.so); },
   fcat: function (b) { S.fcat = b.dataset.v; S.editT = null; render(); },
   pago: function (b) { var c = S.citas.filter(function (x) { return x.id === b.dataset.id; })[0]; if (!c) return; c.pago = b.dataset.v; render(); hojaCita(c.id); toast(PAGO[c.pago].t); },
   "kpi-conf": function () { hojaRecordatorios(); },
@@ -1366,14 +1407,15 @@ var ACT = {
       r.onload = function () {
         try {
           var o = JSON.parse(r.result), d = o && o.datos;
-          if (!d || !d.citas || !d.pacientes) { alert("Este archivo no es un respaldo de Essencia."); return; }
-          if (!confirm("¿Restaurar el respaldo del " + String(o.fecha || "").slice(0, 10) + "? Reemplaza lo que hay ahora en este celular (" + d.pacientes.length + " pacientes, " + d.citas.length + " horas).")) return;
+          if (!d || !d.citas || !d.pacientes) { toast("Este archivo no es un respaldo de Essencia."); return; }
+          preguntar("¿Restaurar el respaldo del " + String(o.fecha || "").slice(0, 10) + "? Reemplaza lo que hay ahora en este celular (" + d.pacientes.length + " pacientes, " + d.citas.length + " horas).", function () {
           try { localStorage.setItem("essencia2-prev", JSON.stringify(S)); } catch (e) {}
           for (var k in S) if (!(k in d)) d[k] = S[k];
           d.hoy = HOY_ISO; d.dia = HOY_ISO; d.vista = "agenda";
           if (o.centro && o.centro.prof) { for (var kc in C_DEF) if (!(kc in o.centro)) o.centro[kc] = C_DEF[kc]; C = o.centro; C.ok = true; saveC(); aplicarHorario(); CIERRE = cierreDe(C); FIRMA = firmaDe(C); aplicarMarca(); }
           S = d; save(); cerrar(); render(); toast("Respaldo restaurado ✓");
-        } catch (e) { alert("No se pudo leer el archivo."); }
+          }, "Restaurar");
+        } catch (e) { toast("No se pudo leer el archivo."); }
       };
       r.readAsText(f); inp.value = "";
     };
@@ -1406,7 +1448,7 @@ var ACT = {
   tsave: function (b) { S.plantillas.forEach(function (t) { if (t.id === b.dataset.id) { t.nom = el("tnom").value.trim() || "Sin nombre"; t.cat = el("tcat").value; t.txt = conFirma(el("ttxt").value); } }); S.editT = null; render(); toast("Plantilla guardada"); },
   tnew: function () { var id = "t" + Date.now(); S.plantillas.push({ id: id, nom: "Nueva plantilla", cat: S.fcat && S.fcat !== "todas" ? S.fcat : "gen", txt: "Hola 😊 \n" + FIRMA }); S.editT = id; render(); setTimeout(function () { el("tnom").focus(); el("tnom").select(); }, 0); },
   tsend: function (b) { hojaEnviarA(b.dataset.id); },
-  reset: function () { if (!confirm("¿Volver a los datos de demostración?")) return; try { localStorage.removeItem("essencia2"); } catch (e) {} location.reload(); }
+  reset: function () { preguntar("¿Volver a los datos de demostración?", function () { try { localStorage.removeItem("essencia2"); } catch (e) {} location.reload(); }); }
 };
 /* ---------- fotos / evolución (IndexedDB, con respaldo en memoria) ---------- */
 var ETQ = { antes: { t: "Antes", c: "x-s--pend" }, durante: { t: "Durante", c: "x-s--sent" }, despues: { t: "Después", c: "x-s--ok" } };
@@ -1664,9 +1706,10 @@ ACT.evosend = function (b) {
 };
 ACT.evosave = function (b) { var f = fotoPorId(b.dataset.id), p = pac(E.pid); if (!f || !p) return; descargar(f.blob, nombreArchivo(p, f.fecha)); toast("Imagen guardada"); };
 ACT.evodel = function (b) {
-  if (!confirm("¿Eliminar esta foto? No se puede deshacer.")) return;
+  preguntar("¿Eliminar esta foto? No se puede deshacer.", function () {
   var pid = E.pid;
   fotoBorrar(b.dataset.id).then(function () { cerrarVisor(); toast("Foto eliminada"); cargarEvo(pid); });
+  }, "Eliminar");
 };
 ACT.evocmpsend = function () {
   var a = fotoPorId(E.cmpA), d = fotoPorId(E.cmpD), p = pac(E.pid); if (!E.cmpBlob || !a || !d || !p) return;
