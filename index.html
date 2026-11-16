@@ -323,11 +323,11 @@
       </header>
       <main id="view" class="x-view" aria-live="polite"></main>
       <nav class="x-tabs" aria-label="Secciones">
+        <button class="x-tab" data-act="tab" data-v="inicio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Inicio</button>
         <button class="x-tab" data-act="tab" data-v="agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Agenda</button>
-        <button class="x-tab" data-act="tab" data-v="pacientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4.5 4.5-6.5 8-6.5s7 2 8 6.5"/></svg>Pacientes</button>
         <button class="x-tab x-tab--mic" data-act="dictar" data-v="dictar" aria-label="Dictar atención"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></span>Dictar</button>
+        <button class="x-tab" data-act="tab" data-v="pacientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4.5 4.5-6.5 8-6.5s7 2 8 6.5"/></svg>Pacientes</button>
         <button class="x-tab" data-act="tab" data-v="plantillas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M6 3h9l4 4v14H6z"/><path d="M9 11h7M9 15h7"/></svg>Plantillas</button>
-        <button class="x-tab" data-act="mas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>Más</button>
       </nav>
       <div id="sheet" class="x-sheet" hidden>
         <button class="x-sheet__bg" data-act="close" aria-label="Cerrar"></button>
@@ -460,7 +460,7 @@ try { var raw = localStorage.getItem("essencia2"); if (raw) { var o = JSON.parse
   S = o; save();
 } } } catch (e) {}
 (S.pacientes || []).forEach(function (p) { if (p.id === "p1" && p.nom === "María Soto" && (p.tel === "+56900000001" || p.tel === "+56951388164")) p.tel = "+56941324372"; });
-S.vista = "agenda"; S.dia = HOY_ISO;
+S.vista = "inicio"; S.dia = HOY_ISO;
 /* plantillas nuevas de fábrica: se agregan una sola vez (si después la borra, no vuelve) */
 (function () { var nuevas = ["t9", "t10"], ya = S.tplAdd || [], base = { t9: 1, t10: 1 };
   nuevas.forEach(function (id) { if (ya.indexOf(id) >= 0) return; if (!S.plantillas.some(function (t) { return t.id === id; })) { var d = DEF_T.filter(function (t) { return t.id === id; })[0]; if (d) S.plantillas.push(JSON.parse(JSON.stringify(d))); } ya.push(id); });
@@ -497,18 +497,21 @@ function plan(p) { return '<div class="x-bar" role="img" aria-label="' + p.hecha
 
 /* ---------- vistas ---------- */
 var V = {};
-V.agenda = function () {
+V.inicio = function () {
   var man = citasDe(MAN_ISO), pend = man.filter(function (c) { return c.estado === "pend"; }).length;
   var hd = new Date(), hola = DIAS_L[hd.getDay()] + " " + hd.getDate() + " de " + ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"][hd.getMonth()];
   /* Foto de perfil incrustada (FOTO_ISABEL, más abajo). Si falla, quedan las iniciales. */
   var fp = fotoPerfil(), pn = primerNombre();
   var h = '<div class="x-hola"><span class="x-avatar" role="img" aria-label="' + esc(pn) + '"><span class="x-avatar__in" aria-hidden="true">' + esc(iniciales(C.prof)) +
     (fp ? '<img src="' + fp + '" alt="" onerror="this.remove()" />' : "") + "</span></span>" +
-    '<div class="x-hola__txt"><h2>Hola' + (pn ? ", " + esc(pn) : "") + '</h2><p class="x-fine">Hoy es ' + hola + " · " + subHoy() + "</p></div></div>" + resumenHoy();
+    '<div class="x-hola__txt"><h2>Hola' + (pn ? ", " + esc(pn) : "") + '</h2><p class="x-fine">Hoy es ' + hola + " · " + subHoy() + "</p></div></div>" + '<button class="x-btn x-btn--accent x-btn--big" data-act="ir-agenda" style="margin:2px 0 12px">+ Agendar hora</button>' + resumenHoy();
   if (!S.bannerOk) h += '<div class="x-banner"><span>📲 Agrégala a tu pantalla de inicio: en Safari toca Compartir → Agregar a inicio.</span><button class="x-icon" data-act="banner" aria-label="Cerrar aviso">✕</button></div>';
   h += '<section class="x-card x-sum"><p><b>Mañana: ' + man.length + " pacientes</b> · " + pend + " por confirmar</p>" +
     '<button class="x-btn x-btn--accent x-btn--big" data-act="recordatorios">Enviar recordatorios de mañana</button></section>';
-  h += '<div class="x-days" role="group" aria-label="Día">';
+  return h;
+};
+V.agenda = function () {
+  var h = '<h2 style="margin:4px 0 10px">Agenda</h2><div class="x-days" role="group" aria-label="Día">';
   for (var i = 0; i < 7; i++) { var f = iso(addDays(HOY, i)); h += '<button data-act="dia" data-f="' + f + '" aria-pressed="' + (f === S.dia) + '">' + (i === 0 ? "Hoy" : i === 1 ? "Mañana" : fechaCorta(f)) + "</button>"; }
   h += "</div>";
   var cs = citasDe(S.dia), csT = citasDe(S.dia, true);
@@ -1387,6 +1390,7 @@ var ACT = {
   fcat: function (b) { S.fcat = b.dataset.v; S.editT = null; render(); },
   pago: function (b) { var c = S.citas.filter(function (x) { return x.id === b.dataset.id; })[0]; if (!c) return; c.pago = b.dataset.v; render(); hojaCita(c.id); toast(PAGO[c.pago].t); },
   "kpi-conf": function () { hojaRecordatorios(); },
+  "ir-agenda": function () { S.vista = "agenda"; S.dia = HOY_ISO; cerrar(); render(); window.scrollTo(0, 0); },
   "bk-save": function () {
     var dt = new Date(), nombre = "Essencia-respaldo-" + iso(dt) + ".json";
     var blob = new Blob([JSON.stringify({ app: "essencia", ver: 1, fecha: dt.toISOString(), datos: S, centro: C })], { type: "application/json" });
